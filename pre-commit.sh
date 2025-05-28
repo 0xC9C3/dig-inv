@@ -1,0 +1,1 @@
+docker compose run --build --entrypoint "just pre-commit" --rm watch-dev

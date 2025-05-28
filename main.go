@@ -26,7 +26,12 @@ func main() {
 
 func initTest() {
 	logger, _ := zap.NewProduction()
-	defer logger.Sync() // flushes buffer, if any
+	defer func(logger *zap.Logger) {
+		err := logger.Sync()
+		if err != nil {
+			fmt.Printf("Error syncing logger: %v\n", err)
+		}
+	}(logger) // flushes buffer, if any
 	sugar := logger.Sugar()
 	sugar.Infow("failed to fetch URL",
 		"attempt", 3,

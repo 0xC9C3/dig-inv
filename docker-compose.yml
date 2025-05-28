@@ -20,6 +20,9 @@ services:
   watch-test:
     <<: *app-common
     entrypoint: "just watch-tests"
- 
+  watch-lint:
+    <<: *app-common
+    entrypoint: "just watch-lint"
+
 volumes:
   go-pkg-cache:
