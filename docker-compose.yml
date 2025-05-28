@@ -1,0 +1,25 @@
+x-app-common:
+  &app-common
+  build:
+    context: .
+    target: dev
+    dockerfile: Dockerfile
+  volumes:
+    - ./:/app
+    - go-pkg-cache:/go/pkg/mod
+
+
+services:
+  watch-dev:
+    <<: *app-common
+    entrypoint: "just watch-dev"
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+  watch-test:
+    <<: *app-common
+    entrypoint: "just watch-tests"
+ 
+volumes:
+  go-pkg-cache:
