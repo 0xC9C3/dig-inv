@@ -1,41 +1,47 @@
 package main
 
 import (
-	"fmt"
-	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
-	"net/http"
-	"time"
+	"dig-inv/gateway"
+	"dig-inv/log"
+	"github.com/alecthomas/kong"
+	"google.golang.org/grpc/grpclog"
 )
 
-func main() {
-	initTest()
+// https://github.com/alecthomas/kong
+// https://entgo.io/
 
-	r := gin.Default()
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	err := r.Run()
-	if err != nil {
-		fmt.Printf("Error starting server: %v\n", err)
-		return
-	} // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
+var CLI struct {
+	Server struct {
+	} `cmd:"" help:"Run the server."`
+
+	Worker struct {
+	} `cmd:"" help:"Run the worker."`
 }
 
-func initTest() {
-	logger, _ := zap.NewProduction()
-	defer func(logger *zap.Logger) {
-		err := logger.Sync()
-		if err != nil {
-			fmt.Printf("Error syncing logger: %v\n", err)
-		}
-	}(logger) // flushes buffer, if any
-	sugar := logger.Sugar()
-	sugar.Infow("failed to fetch URL",
-		"attempt", 3,
-		"backoff", time.Second,
-	)
-	sugar.Infof("Failed to fetch URL: %s", "test")
+func main() {
+	log.S().Info("Starting dig-inv")
+
+	ctx := kong.Parse(&CLI)
+
+	log.S().Debugw("Parsed CLI context", "command", ctx.Command(), "args", ctx.Args)
+
+	switch ctx.Command() {
+	case "server":
+		server()
+	case "worker":
+		worker()
+	}
+
+}
+
+func server() {
+	log.S().Info("Running server")
+
+	if err := gateway.Run(); err != nil {
+		grpclog.Fatal(err)
+	}
+}
+
+func worker() {
+	log.S().Info("Running worker")
 }

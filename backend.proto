@@ -1,0 +1,11 @@
+syntax = "proto3";
+package your.service.v1;
+option go_package = "dig-inv/gen/go";
+
+message StringMessage {
+  string value = 1;
+}
+
+service YourService {
+  rpc Echo(StringMessage) returns (StringMessage) {}
+}

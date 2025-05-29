@@ -1,0 +1,18 @@
+x-frontend-common: &frontend-common
+  build:
+    context: ../../frontend
+    dockerfile: Dockerfile
+  volumes:
+    - ../../:/app
+  working_dir: /app/frontend
+
+
+services:
+  frontend:
+    <<: *frontend-common
+    ports:
+      - "${FRONTEND_PORT:-5173}:5173"
+    entrypoint: "npm run dev-docker"
+  watch-openapi:
+    <<: *frontend-common
+    entrypoint: "npm run openapi:watch"

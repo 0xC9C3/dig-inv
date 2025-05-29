@@ -1,0 +1,41 @@
+x-env-common:
+  &env-common
+  DEVELOPMENT: "true"
+x-app-common:
+  &app-common
+  build:
+    context: ../../
+    target: dev
+    dockerfile: Dockerfile
+  environment:
+    <<: *env-common
+  volumes:
+    - ../../:/app
+    - go-pkg-cache:/go/pkg/mod
+
+
+
+services:
+  watch-dev-server:
+    <<: *app-common
+    entrypoint: "just watch-dev-server"
+    ports:
+      - "${DEV_SERVER_PORT:-3001}:3001"
+    environment:
+      <<: *env-common
+      PORT: 3001
+  watch-dev-worker:
+    <<: *app-common
+    entrypoint: "just watch-dev-worker"
+  watch-test:
+    <<: *app-common
+    entrypoint: "just watch-tests"
+  watch-lint:
+    <<: *app-common
+    entrypoint: "just watch-lint"
+  watch-grpc-buf-generate:
+    <<: *app-common
+    entrypoint: "just watch-grpc-buf-generate"
+
+volumes:
+  go-pkg-cache:

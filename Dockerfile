@@ -1,6 +1,10 @@
 ARG BASE_IMAGE=golang:1.24.3-bookworm
 
+FROM bufbuild/buf:1 AS buf
+
 FROM $BASE_IMAGE AS dev
+
+COPY --from=buf /usr/local/bin/buf /usr/local/bin/buf
 
 # just
 RUN curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
