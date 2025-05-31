@@ -2,6 +2,7 @@
     import '../../app.css';
     import {DarkMode} from "flowbite-svelte";
     import {m} from '$lib/paraglide/messages.js';
+    import Credits from "$lib/components/Credits.svelte";
 
     let { children } = $props();
 </script>
@@ -15,4 +16,5 @@
     <img alt="Logo" class="mb-4 w-24 h-24" src="/favicon.png" />
     <DarkMode />
     {@render children()}
+    <Credits />
 </div>

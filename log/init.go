@@ -11,14 +11,27 @@ var L *zap.Logger
 var S *zap.SugaredLogger
 
 func init() {
-	err := initLogger()
+	newLoggerInitializer().setupLogging()
+}
 
-	if err != nil {
+type loggerInitializer struct {
+	instanceInitializer func() error
+}
+
+func newLoggerInitializer() *loggerInitializer {
+	return &loggerInitializer{
+		instanceInitializer: zapInit,
+	}
+}
+
+func (l *loggerInitializer) setupLogging() {
+	if err := l.instanceInitializer(); err != nil {
 		panic(err)
 	}
+
 	S = L.Sugar()
 
-	// Ensure the logger is flushed before the program exits
+	// Ensure the logger is flushed before the program exits @todo
 	/*defer func() {
 		if err := logger.Sync(); err != nil {
 			sugar.Errorw("Error syncing logger", "error", err)
@@ -30,7 +43,7 @@ func init() {
 	)
 }
 
-func initLogger() error {
+func zapInit() error {
 	var err error
 
 	if env.GetIsDevelopmentMode() {

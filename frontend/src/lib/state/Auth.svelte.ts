@@ -1,6 +1,8 @@
 import {goto} from "$app/navigation";
 import {Configuration, DefaultConfig, OpenIdAuthServiceApi} from "$lib/api";
 import {PUBLIC_BACKEND_URL} from '$env/static/public';
+import toasts from "$lib/state/Toast.svelte";
+import {m} from '$lib/paraglide/messages.js';
 
 const EmptyBody = {
     body: {
@@ -8,6 +10,7 @@ const EmptyBody = {
 };
 
 class Auth {
+    public loading: boolean = $state(true);
     private readonly authServiceApi: OpenIdAuthServiceApi;
     private subject: string | undefined;
 
@@ -21,10 +24,13 @@ class Auth {
         this.initialize()
             .catch(async (error) => {
                 console.error('Error during Auth initialization:', error);
+                toasts.addToast(
+                    m.generic_authentication_error(),
+                    'error'
+                )
                 await this.toLogin();
             });
     }
-
 
     async initialize() {
         const urlParams = new URLSearchParams(window.location.search);
@@ -38,7 +44,7 @@ class Auth {
             const userInfo = await this.authServiceApi.openIdAuthServiceGetUserInfo(EmptyBody)
 
             this.subject = userInfo.subject;
-
+            this.loading = false;
             return this.toDashboard();
         }
         catch (error) {
@@ -52,20 +58,22 @@ class Auth {
         const authUrl = await this.authServiceApi.openIdAuthServiceBeginAuth(EmptyBody)
         console.log('Redirecting to auth URL:', authUrl.url);
         if (!authUrl.url) {
-            // @todo feedback
             console.error('Auth URL is empty');
+            toasts.addToast(
+                m.generic_authentication_error(),
+                'error'
+            );
             return;
         }
 
-        // @ts-expect-error @todo
-        window.location = authUrl.url.replace('http://dex', 'http://localhost');
+        window.location.href = authUrl.url.replace('http://dex', 'http://localhost');
     }
 
     async exchangeCode(code: string, state: string): Promise<void> {
         const url = new URL(window.location.href);
         url.searchParams.delete('code');
         url.searchParams.delete('state');
-        goto(url, {
+        await goto(url, {
             replaceState: true,
         })
 
@@ -81,9 +89,27 @@ class Auth {
         }
         catch (error) {
             console.error('Error exchanging code:', error);
-            // @todo feedback
+            toasts.addToast(
+                m.generic_authentication_error(),
+                'error'
+            );
             return;
         }
+    }
+
+    async logout(): Promise<void> {
+        try {
+            await this.authServiceApi.openIdAuthServiceLogout(EmptyBody);
+        } catch (error) {
+            console.error('Error during logout:', error);
+            toasts.addToast(
+                m.generic_authentication_error(),
+                'error'
+            );
+        }
+
+        this.subject = undefined;
+        await this.toLogin();
     }
 
     async toLogin(): Promise<void> {

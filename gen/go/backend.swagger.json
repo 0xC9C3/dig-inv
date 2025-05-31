@@ -111,6 +111,38 @@
           "OpenIdAuthService"
         ]
       }
+    },
+    "/your.service.v1.OpenIdAuthService/Logout": {
+      "post": {
+        "operationId": "OpenIdAuthService_Logout",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EmptyMessage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1EmptyMessage"
+            }
+          }
+        ],
+        "tags": [
+          "OpenIdAuthService"
+        ]
+      }
     }
   },
   "definitions": {

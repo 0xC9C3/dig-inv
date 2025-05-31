@@ -22,6 +22,7 @@ const (
 	OpenIdAuthService_GetUserInfo_FullMethodName  = "/your.service.v1.OpenIdAuthService/GetUserInfo"
 	OpenIdAuthService_BeginAuth_FullMethodName    = "/your.service.v1.OpenIdAuthService/BeginAuth"
 	OpenIdAuthService_ExchangeCode_FullMethodName = "/your.service.v1.OpenIdAuthService/ExchangeCode"
+	OpenIdAuthService_Logout_FullMethodName       = "/your.service.v1.OpenIdAuthService/Logout"
 )
 
 // OpenIdAuthServiceClient is the client API for OpenIdAuthService service.
@@ -31,6 +32,7 @@ type OpenIdAuthServiceClient interface {
 	GetUserInfo(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserSubjectMessage, error)
 	BeginAuth(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*AuthUrlMessage, error)
 	ExchangeCode(ctx context.Context, in *ExchangeCodeMessage, opts ...grpc.CallOption) (*EmptyMessage, error)
+	Logout(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*EmptyMessage, error)
 }
 
 type openIdAuthServiceClient struct {
@@ -71,6 +73,16 @@ func (c *openIdAuthServiceClient) ExchangeCode(ctx context.Context, in *Exchange
 	return out, nil
 }
 
+func (c *openIdAuthServiceClient) Logout(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, OpenIdAuthService_Logout_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // OpenIdAuthServiceServer is the server API for OpenIdAuthService service.
 // All implementations must embed UnimplementedOpenIdAuthServiceServer
 // for forward compatibility.
@@ -78,6 +90,7 @@ type OpenIdAuthServiceServer interface {
 	GetUserInfo(context.Context, *EmptyMessage) (*UserSubjectMessage, error)
 	BeginAuth(context.Context, *EmptyMessage) (*AuthUrlMessage, error)
 	ExchangeCode(context.Context, *ExchangeCodeMessage) (*EmptyMessage, error)
+	Logout(context.Context, *EmptyMessage) (*EmptyMessage, error)
 	mustEmbedUnimplementedOpenIdAuthServiceServer()
 }
 
@@ -96,6 +109,9 @@ func (UnimplementedOpenIdAuthServiceServer) BeginAuth(context.Context, *EmptyMes
 }
 func (UnimplementedOpenIdAuthServiceServer) ExchangeCode(context.Context, *ExchangeCodeMessage) (*EmptyMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ExchangeCode not implemented")
+}
+func (UnimplementedOpenIdAuthServiceServer) Logout(context.Context, *EmptyMessage) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Logout not implemented")
 }
 func (UnimplementedOpenIdAuthServiceServer) mustEmbedUnimplementedOpenIdAuthServiceServer() {}
 func (UnimplementedOpenIdAuthServiceServer) testEmbeddedByValue()                           {}
@@ -172,6 +188,24 @@ func _OpenIdAuthService_ExchangeCode_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
+func _OpenIdAuthService_Logout_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenIdAuthServiceServer).Logout(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OpenIdAuthService_Logout_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenIdAuthServiceServer).Logout(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // OpenIdAuthService_ServiceDesc is the grpc.ServiceDesc for OpenIdAuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -190,6 +224,10 @@ var OpenIdAuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ExchangeCode",
 			Handler:    _OpenIdAuthService_ExchangeCode_Handler,
+		},
+		{
+			MethodName: "Logout",
+			Handler:    _OpenIdAuthService_Logout_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

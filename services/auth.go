@@ -27,7 +27,7 @@ func NewOpenIdAuthServer() gw.OpenIdAuthServiceServer {
 	return new(openidAuthServer)
 }
 
-func (s *openidAuthServer) GetUserInfo(ctx context.Context, msg *gw.EmptyMessage) (*gw.UserSubjectMessage, error) {
+func (s *openidAuthServer) GetUserInfo(ctx context.Context, _ *gw.EmptyMessage) (*gw.UserSubjectMessage, error) {
 	_, provider, _, err := getOAuth2Context(ctx)
 
 	if err != nil {
@@ -132,6 +132,19 @@ func (s *openidAuthServer) BeginAuth(ctx context.Context, _ *gw.EmptyMessage) (*
 	}
 
 	return &gw.AuthUrlMessage{Url: authURL}, nil
+}
+
+func (s *openidAuthServer) Logout(ctx context.Context, _ *gw.EmptyMessage) (*gw.EmptyMessage, error) {
+	cookiesToClear := []string{"token", "refresh_token", "verifier", "state"}
+
+	for _, cookie := range cookiesToClear {
+		if err := setCookie(ctx, cookie, ""); err != nil {
+			grpclog.Errorf("Failed to clear cookie %s: %v", cookie, err)
+			return nil, status.Errorf(codes.Internal, "failed to clear cookies")
+		}
+	}
+
+	return &gw.EmptyMessage{}, nil
 }
 
 func getOAuth2Context(

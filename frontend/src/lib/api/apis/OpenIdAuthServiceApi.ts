@@ -43,6 +43,10 @@ export interface OpenIdAuthServiceGetUserInfoRequest {
     body: object;
 }
 
+export interface OpenIdAuthServiceLogoutRequest {
+    body: object;
+}
+
 /**
  * 
  */
@@ -147,6 +151,40 @@ export class OpenIdAuthServiceApi extends runtime.BaseAPI {
      */
     async openIdAuthServiceGetUserInfo(requestParameters: OpenIdAuthServiceGetUserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1UserSubjectMessage> {
         const response = await this.openIdAuthServiceGetUserInfoRaw(requestParameters, initOverrides);
+        return await response.value();
+    }
+
+    /**
+     */
+    async openIdAuthServiceLogoutRaw(requestParameters: OpenIdAuthServiceLogoutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<object>> {
+        if (requestParameters['body'] == null) {
+            throw new runtime.RequiredError(
+                'body',
+                'Required parameter "body" was null or undefined when calling openIdAuthServiceLogout().'
+            );
+        }
+
+        const queryParameters: any = {};
+
+        const headerParameters: runtime.HTTPHeaders = {};
+
+        headerParameters['Content-Type'] = 'application/json';
+
+        const response = await this.request({
+            path: `/your.service.v1.OpenIdAuthService/Logout`,
+            method: 'POST',
+            headers: headerParameters,
+            query: queryParameters,
+            body: requestParameters['body'] as any,
+        }, initOverrides);
+
+        return new runtime.JSONApiResponse<any>(response);
+    }
+
+    /**
+     */
+    async openIdAuthServiceLogout(requestParameters: OpenIdAuthServiceLogoutRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<object> {
+        const response = await this.openIdAuthServiceLogoutRaw(requestParameters, initOverrides);
         return await response.value();
     }
 

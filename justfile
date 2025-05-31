@@ -1,4 +1,5 @@
-go-tests := "go test ./..."
+go-tests := "go test -coverprofile=coverage.profile ./..."
+go-coverage := "go tool cover -html=coverage.profile -o coverage.html"
 go-lint := "GOFLAGS=-buildvcs=false golangci-lint run"
 
 watch-dev-server:
@@ -10,7 +11,7 @@ watch-dev-worker:
    watchexec -r -e go 'go run main.go worker'
 
 watch-tests:
-   watchexec -e go '{{go-tests}}'
+   watchexec -e go '{{go-tests}} && {{go-coverage}}'
 
 watch-lint:
    watchexec -e go '{{go-lint}}'

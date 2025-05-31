@@ -17,15 +17,18 @@
     import {
         ArrowRightToBracketOutline,
         ChartOutline,
-        EditSolid,
         GridSolid,
+        InfoCircleOutline,
         MailBoxSolid,
+        OpenDoorOutline,
         SearchOutline,
         ShoppingBagSolid,
         UserSolid
     } from "flowbite-svelte-icons";
     import {fade} from "svelte/transition";
     import {page} from "$app/state";
+    import auth from "$lib/state/Auth.svelte";
+    import {m} from '$lib/paraglide/messages.js';
 
     let activeUrl = $state(page.url.pathname);
     const spanClass = "flex-1 ms-3 whitespace-nowrap";
@@ -47,18 +50,24 @@
             <SidebarButton class="mb-2" onclick={sidebar.toggle} />
             <NavBrand href="/">
                 <img src="/favicon.png" alt="Logo" class="h-8 mr-3" />
-                <h1 class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">dig-inv</h1>
+                <h1 class="self-center text-xl font-semibold whitespace-nowrap dark:text-white">{m.app_name()}</h1>
             </NavBrand>
             <div class="flex md:order-2">
-                <div class="mr-3">
-                    <DarkMode />
-                </div>
                 <ToolbarButton class="block md:hidden" onclick={toggle}>
                     <SearchOutline class="h-5 w-5 text-gray-500 dark:text-gray-400" />
                 </ToolbarButton>
                 <div class="hidden md:block">
                     <Search size="md" class="ms-auto" placeholder="Search..." />
                 </div>
+
+                <div class="ml-3">
+                    <DarkMode />
+                </div>
+
+                <ToolbarButton class="block" onclick={() => auth.logout()}>
+                    <OpenDoorOutline class="h-5 w-5 text-gray-500 dark:text-gray-400" />
+                </ToolbarButton>
+
                 <NavHamburger />
             </div>
             {#if !hidden}
@@ -72,11 +81,35 @@
     <div class="relative grow">
         <Sidebar activeClass="p-2" {activeUrl} backdrop={false} class="z-50 h-full" closeSidebar={closeDemoSidebar} isOpen={isDemoOpen} nonActiveClass="p-2" params={{ x: -50, duration: 50 }} position="absolute">
             <SidebarGroup>
-                <SidebarItem label="Dashboard">
+                <SidebarItem href="/" label={m.dashboard()}>
                     {#snippet icon()}
                         <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     {/snippet}
                 </SidebarItem>
+
+                <SidebarDropdownWrapper btnClass="p-2" label="assets">
+                    {#snippet icon()}
+                        <ShoppingBagSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                    {/snippet}
+                    <SidebarItem href="/" label="domains">
+                        {#snippet icon()}
+                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        {/snippet}
+                    </SidebarItem>
+
+                    <SidebarItem href="/" label="servers">
+                        {#snippet icon()}
+                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        {/snippet}
+                    </SidebarItem>
+
+                    <SidebarItem href="/" label="other">
+                        {#snippet icon()}
+                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        {/snippet}
+                    </SidebarItem>
+                </SidebarDropdownWrapper>
+
                 <SidebarDropdownWrapper btnClass="p-2" label="E-commerce">
                     {#snippet icon()}
                         <ShoppingBagSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
@@ -111,15 +144,15 @@
                         <ArrowRightToBracketOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     {/snippet}
                 </SidebarItem>
-                <SidebarItem label="Sign Up">
+                <SidebarItem href="/about" label={m.about()}>
                     {#snippet icon()}
-                        <EditSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        <InfoCircleOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     {/snippet}
                 </SidebarItem>
             </SidebarGroup>
         </Sidebar>
 
-        <div class="h-96 overflow-auto px-4 md:ml-64">
+        <div class="overflow-auto px-4 md:ml-64">
             {@render children()}
         </div>
     </div>

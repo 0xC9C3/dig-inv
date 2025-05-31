@@ -30,12 +30,7 @@ func GetIsDevelopmentMode() bool {
 }
 
 func getOidcEnv(key, defaultValue string) string {
-	value := os.Getenv("OIDC_" + key)
-	if value == "" {
-		return defaultValue
-	}
-
-	return value
+	return getEnv("OIDC_"+key, defaultValue)
 }
 
 func GetOidcClientID() string {
@@ -56,9 +51,5 @@ func GetOidcIssuerURL() string {
 
 func GetOidcScopes() []string {
 	scopes := getOidcEnv("SCOPES", "openid profile email offline_access")
-	if scopes == "" {
-		return []string{}
-	}
-
 	return []string{scopes}
 }

@@ -1,47 +1,55 @@
 package main
 
 import (
+	"dig-inv/cli"
 	"dig-inv/gateway"
 	"dig-inv/log"
-	"github.com/alecthomas/kong"
-	"google.golang.org/grpc/grpclog"
+	"os"
 )
 
 // https://entgo.io/
-// https://github.com/coreos/go-oidc
 
-var CLI struct {
-	Server struct {
-	} `cmd:"" help:"Run the server."`
+const ErrorExitCode = 0xF1
 
-	Worker struct {
-	} `cmd:"" help:"Run the worker."`
+type Entrypoint struct {
+	serverHandler func() error
+	workerHandler func() error
+}
+
+func (e *Entrypoint) Run() int {
+	log.S.Info("Starting dig-inv")
+	if err := cli.NewCLI(e.serverHandler, e.workerHandler).Run(); err != nil {
+		log.S.Errorw("Failed to run CLI", "error", err)
+
+		return ErrorExitCode
+	}
+
+	log.S.Info("Exiting gracefully")
+	return 0
+}
+
+func NewEntrypoint(
+	serverHandler, workerHandler func() error,
+) *Entrypoint {
+	return &Entrypoint{
+		serverHandler: serverHandler,
+		workerHandler: workerHandler,
+	}
 }
 
 func main() {
-	log.S.Info("Starting dig-inv")
-
-	ctx := kong.Parse(&CLI)
-
-	log.S.Debugw("Parsed CLI context", "command", ctx.Command(), "args", ctx.Args)
-
-	switch ctx.Command() {
-	case "server":
-		server()
-	case "worker":
-		worker()
-	}
-
+	os.Exit(run())
 }
 
-func server() {
-	log.S.Info("Running as server")
-
-	if err := gateway.Run(); err != nil {
-		grpclog.Fatal(err)
-	}
+func run() int {
+	return NewEntrypoint(
+		gateway.NewGatewayServer().Run,
+		worker,
+	).Run()
 }
 
-func worker() {
+func worker() error {
 	log.S.Info("Running as worker")
+
+	return nil
 }

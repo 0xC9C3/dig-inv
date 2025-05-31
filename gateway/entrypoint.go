@@ -6,6 +6,7 @@ import (
 	gw "dig-inv/gen/go"
 	"dig-inv/log"
 	"dig-inv/services"
+	"errors"
 	"fmt"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"github.com/rs/cors"
@@ -14,18 +15,64 @@ import (
 	"strings"
 )
 
-func Run() error {
+var serviceInitializer = []func(ctx context.Context, mux *runtime.ServeMux) error{
+	func(ctx context.Context, mux *runtime.ServeMux) error {
+		return gw.RegisterOpenIdAuthServiceHandlerServer(ctx, mux, services.NewOpenIdAuthServer())
+	},
+}
+
+type Server struct {
+	initializer []func(ctx context.Context, mux *runtime.ServeMux) error
+	server      *http.Server
+}
+
+func (gateway *Server) Run() error {
+	server, err := gateway.GetServer()
+	if err != nil {
+		log.S.Errorw("Failed to get server", "error", err)
+		return fmt.Errorf("failed to get server: %w", err)
+	}
+
+	log.S.Infow("Starting HTTP server", "address", server.Addr)
+
+	if err := server.ListenAndServe(); err != nil && !errors.Is(err, http.ErrServerClosed) {
+		log.S.Errorw("Failed to start HTTP server", "error", err)
+		return fmt.Errorf("failed to start HTTP server: %w", err)
+	}
+
+	return nil
+}
+
+func (gateway *Server) GetServer() (*http.Server, error) {
+	if gateway.server != nil {
+		return gateway.server, nil
+	}
+
 	ctx := context.Background()
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
 
+	handler, err := initializeHandler(ctx, gateway.initializer)
+	if err != nil {
+		log.S.Errorw("Failed to initialize handler", "error", err)
+		return nil, fmt.Errorf("failed to initialize handler: %w", err)
+	}
+
+	gateway.server = &http.Server{Addr: fmt.Sprintf("%s:%s", env.GetListenAddress(), env.GetPort()), Handler: handler}
+
+	return gateway.server, nil
+}
+
+func initializeHandler(ctx context.Context, serviceInitializer []func(ctx context.Context, mux *runtime.ServeMux) error) (http.Handler, error) {
 	mux := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(httpCookieResponseModifier),
 	)
 
-	if err := gw.RegisterOpenIdAuthServiceHandlerServer(ctx, mux, services.NewOpenIdAuthServer()); err != nil {
-		log.S.Errorw("Failed to register OpenID Auth service handler", "error", err)
-		return fmt.Errorf("failed to register OpenID Auth service handler: %w", err)
+	for _, initFunc := range serviceInitializer {
+		if err := initFunc(ctx, mux); err != nil {
+			log.S.Errorw("Failed to initialize service handler", "error", err)
+			return nil, fmt.Errorf("failed to initialize service handler: %w", err)
+		}
 	}
 
 	// @todo config
@@ -38,14 +85,11 @@ func Run() error {
 		corsHandler = cors.New(corsOption).Handler(mux)
 	}
 
-	return http.ListenAndServe(
-		fmt.Sprintf("%s:%s", env.GetListenAddress(), env.GetPort()),
-		corsHandler,
-	)
+	return corsHandler, nil
 }
 
-// map cookies headers from gRPC metadata to HTTP headers
-func httpCookieResponseModifier(ctx context.Context, w http.ResponseWriter, p proto.Message) error {
+// map cookie headers from gRPC metadata to HTTP headers
+func httpCookieResponseModifier(ctx context.Context, w http.ResponseWriter, _ proto.Message) error {
 	md, ok := runtime.ServerMetadataFromContext(ctx)
 	if !ok {
 		return nil
@@ -82,22 +126,9 @@ func httpCookieResponseModifier(ctx context.Context, w http.ResponseWriter, p pr
 	return nil
 }
 
-func httpCookieRequestModifier(ctx context.Context, r *http.Request) context.Context {
-	cookies := r.Cookies()
-	if len(cookies) == 0 {
-		return ctx
+func NewGatewayServer() *Server {
+	return &Server{
+		initializer: serviceInitializer,
+		server:      nil,
 	}
-
-	log.S.Debugw("Setting cookies from HTTP request", "cookies", cookies)
-
-	md, ok := runtime.ServerMetadataFromContext(ctx)
-	if !ok {
-		md = runtime.ServerMetadata{}
-	}
-
-	for _, cookie := range cookies {
-		md.HeaderMD.Append("set-cookie", fmt.Sprintf("%s=%s", cookie.Name, cookie.Value))
-	}
-
-	return runtime.NewServerMetadataContext(ctx, md)
 }

@@ -22,4 +22,5 @@ service OpenIdAuthService {
   rpc GetUserInfo(EmptyMessage) returns (UserSubjectMessage) {}
   rpc BeginAuth(EmptyMessage) returns (AuthUrlMessage) {}
   rpc ExchangeCode(ExchangeCodeMessage) returns (EmptyMessage) {}
+  rpc Logout(EmptyMessage) returns (EmptyMessage) {}
 }
