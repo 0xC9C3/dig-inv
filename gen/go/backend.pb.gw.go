@@ -35,63 +35,151 @@ var (
 	_ = metadata.Join
 )
 
-func request_YourService_Echo_0(ctx context.Context, marshaler runtime.Marshaler, client YourServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func request_OpenIdAuthService_GetUserInfo_0(ctx context.Context, marshaler runtime.Marshaler, client OpenIdAuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq StringMessage
+		protoReq EmptyMessage
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := client.Echo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	msg, err := client.GetUserInfo(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
 	return msg, metadata, err
 }
 
-func local_request_YourService_Echo_0(ctx context.Context, marshaler runtime.Marshaler, server YourServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+func local_request_OpenIdAuthService_GetUserInfo_0(ctx context.Context, marshaler runtime.Marshaler, server OpenIdAuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
 	var (
-		protoReq StringMessage
+		protoReq EmptyMessage
 		metadata runtime.ServerMetadata
 	)
 	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
 		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
 	}
-	msg, err := server.Echo(ctx, &protoReq)
+	msg, err := server.GetUserInfo(ctx, &protoReq)
 	return msg, metadata, err
 }
 
-// RegisterYourServiceHandlerServer registers the http handlers for service YourService to "mux".
-// UnaryRPC     :call YourServiceServer directly.
+func request_OpenIdAuthService_BeginAuth_0(ctx context.Context, marshaler runtime.Marshaler, client OpenIdAuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq EmptyMessage
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.BeginAuth(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_OpenIdAuthService_BeginAuth_0(ctx context.Context, marshaler runtime.Marshaler, server OpenIdAuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq EmptyMessage
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.BeginAuth(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_OpenIdAuthService_ExchangeCode_0(ctx context.Context, marshaler runtime.Marshaler, client OpenIdAuthServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq ExchangeCodeMessage
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.ExchangeCode(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_OpenIdAuthService_ExchangeCode_0(ctx context.Context, marshaler runtime.Marshaler, server OpenIdAuthServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq ExchangeCodeMessage
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.ExchangeCode(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+// RegisterOpenIdAuthServiceHandlerServer registers the http handlers for service OpenIdAuthService to "mux".
+// UnaryRPC     :call OpenIdAuthServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
-// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterYourServiceHandlerFromEndpoint instead.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterOpenIdAuthServiceHandlerFromEndpoint instead.
 // GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
-func RegisterYourServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server YourServiceServer) error {
-	mux.Handle(http.MethodPost, pattern_YourService_Echo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+func RegisterOpenIdAuthServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server OpenIdAuthServiceServer) error {
+	mux.Handle(http.MethodPost, pattern_OpenIdAuthService_GetUserInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.YourService/Echo", runtime.WithHTTPPathPattern("/your.service.v1.YourService/Echo"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/GetUserInfo", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/GetUserInfo"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := local_request_YourService_Echo_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		resp, md, err := local_request_OpenIdAuthService_GetUserInfo_0(annotatedContext, inboundMarshaler, server, req, pathParams)
 		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_YourService_Echo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_OpenIdAuthService_GetUserInfo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_OpenIdAuthService_BeginAuth_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/BeginAuth", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/BeginAuth"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_OpenIdAuthService_BeginAuth_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_OpenIdAuthService_BeginAuth_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_OpenIdAuthService_ExchangeCode_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/ExchangeCode", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/ExchangeCode"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_OpenIdAuthService_ExchangeCode_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_OpenIdAuthService_ExchangeCode_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
 }
 
-// RegisterYourServiceHandlerFromEndpoint is same as RegisterYourServiceHandler but
+// RegisterOpenIdAuthServiceHandlerFromEndpoint is same as RegisterOpenIdAuthServiceHandler but
 // automatically dials to "endpoint" and closes the connection when "ctx" gets done.
-func RegisterYourServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+func RegisterOpenIdAuthServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
 	conn, err := grpc.NewClient(endpoint, opts...)
 	if err != nil {
 		return err
@@ -110,45 +198,83 @@ func RegisterYourServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.Se
 			}
 		}()
 	}()
-	return RegisterYourServiceHandler(ctx, mux, conn)
+	return RegisterOpenIdAuthServiceHandler(ctx, mux, conn)
 }
 
-// RegisterYourServiceHandler registers the http handlers for service YourService to "mux".
+// RegisterOpenIdAuthServiceHandler registers the http handlers for service OpenIdAuthService to "mux".
 // The handlers forward requests to the grpc endpoint over "conn".
-func RegisterYourServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
-	return RegisterYourServiceHandlerClient(ctx, mux, NewYourServiceClient(conn))
+func RegisterOpenIdAuthServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterOpenIdAuthServiceHandlerClient(ctx, mux, NewOpenIdAuthServiceClient(conn))
 }
 
-// RegisterYourServiceHandlerClient registers the http handlers for service YourService
-// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "YourServiceClient".
-// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "YourServiceClient"
+// RegisterOpenIdAuthServiceHandlerClient registers the http handlers for service OpenIdAuthService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "OpenIdAuthServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "OpenIdAuthServiceClient"
 // doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
-// "YourServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
-func RegisterYourServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client YourServiceClient) error {
-	mux.Handle(http.MethodPost, pattern_YourService_Echo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+// "OpenIdAuthServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterOpenIdAuthServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client OpenIdAuthServiceClient) error {
+	mux.Handle(http.MethodPost, pattern_OpenIdAuthService_GetUserInfo_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.YourService/Echo", runtime.WithHTTPPathPattern("/your.service.v1.YourService/Echo"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/GetUserInfo", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/GetUserInfo"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		resp, md, err := request_YourService_Echo_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		resp, md, err := request_OpenIdAuthService_GetUserInfo_0(annotatedContext, inboundMarshaler, client, req, pathParams)
 		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
 		if err != nil {
 			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
 			return
 		}
-		forward_YourService_Echo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+		forward_OpenIdAuthService_GetUserInfo_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_OpenIdAuthService_BeginAuth_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/BeginAuth", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/BeginAuth"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_OpenIdAuthService_BeginAuth_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_OpenIdAuthService_BeginAuth_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_OpenIdAuthService_ExchangeCode_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/ExchangeCode", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/ExchangeCode"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_OpenIdAuthService_ExchangeCode_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_OpenIdAuthService_ExchangeCode_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 	return nil
 }
 
 var (
-	pattern_YourService_Echo_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.YourService", "Echo"}, ""))
+	pattern_OpenIdAuthService_GetUserInfo_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.OpenIdAuthService", "GetUserInfo"}, ""))
+	pattern_OpenIdAuthService_BeginAuth_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.OpenIdAuthService", "BeginAuth"}, ""))
+	pattern_OpenIdAuthService_ExchangeCode_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.OpenIdAuthService", "ExchangeCode"}, ""))
 )
 
 var (
-	forward_YourService_Echo_0 = runtime.ForwardResponseMessage
+	forward_OpenIdAuthService_GetUserInfo_0  = runtime.ForwardResponseMessage
+	forward_OpenIdAuthService_BeginAuth_0    = runtime.ForwardResponseMessage
+	forward_OpenIdAuthService_ExchangeCode_0 = runtime.ForwardResponseMessage
 )

@@ -6,7 +6,7 @@
   },
   "tags": [
     {
-      "name": "YourService"
+      "name": "OpenIdAuthService"
     }
   ],
   "consumes": [
@@ -16,14 +16,14 @@
     "application/json"
   ],
   "paths": {
-    "/your.service.v1.YourService/Echo": {
+    "/your.service.v1.OpenIdAuthService/BeginAuth": {
       "post": {
-        "operationId": "YourService_Echo",
+        "operationId": "OpenIdAuthService_BeginAuth",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1StringMessage"
+              "$ref": "#/definitions/v1AuthUrlMessage"
             }
           },
           "default": {
@@ -39,12 +39,76 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1StringMessage"
+              "$ref": "#/definitions/v1EmptyMessage"
             }
           }
         ],
         "tags": [
-          "YourService"
+          "OpenIdAuthService"
+        ]
+      }
+    },
+    "/your.service.v1.OpenIdAuthService/ExchangeCode": {
+      "post": {
+        "operationId": "OpenIdAuthService_ExchangeCode",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1EmptyMessage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1ExchangeCodeMessage"
+            }
+          }
+        ],
+        "tags": [
+          "OpenIdAuthService"
+        ]
+      }
+    },
+    "/your.service.v1.OpenIdAuthService/GetUserInfo": {
+      "post": {
+        "operationId": "OpenIdAuthService_GetUserInfo",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/v1UserSubjectMessage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/v1EmptyMessage"
+            }
+          }
+        ],
+        "tags": [
+          "OpenIdAuthService"
         ]
       }
     }
@@ -78,10 +142,32 @@
         }
       }
     },
-    "v1StringMessage": {
+    "v1AuthUrlMessage": {
       "type": "object",
       "properties": {
-        "value": {
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "v1EmptyMessage": {
+      "type": "object"
+    },
+    "v1ExchangeCodeMessage": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "v1UserSubjectMessage": {
+      "type": "object",
+      "properties": {
+        "subject": {
           "type": "string"
         }
       }

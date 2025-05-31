@@ -1,0 +1,18 @@
+issuer: http://dex:5556/dex
+storage:
+  type: memory
+web:
+  http: 0.0.0.0:5556
+staticClients:
+  - id: dig-inv
+    redirectURIs:
+      - 'http://localhost:5173/login'
+    name: 'dig-inv'
+    secret: ZXhhbXBsZS1hcHAtc2VjcmV0
+enablePasswordDB: true
+staticPasswords:
+  - email: "123"
+    # password is 123
+    hash: "$2a$12$pq6.QfhxC03HSBHnFhkGG.b1E7LLf0Y1C/Qxg8cfR6Z3hXR7GoqJe"
+    username: "admin"
+    userID: "1234"

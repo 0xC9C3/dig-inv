@@ -1,7 +1,7 @@
 <script lang="ts">
-	import '../app.css';
+    import '$lib/state/Auth'
 
-	let { children } = $props();
+    let { children } = $props();
 </script>
 
 {@render children()}

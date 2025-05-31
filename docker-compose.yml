@@ -2,3 +2,4 @@ include:
   - docker/dev/backend.docker-compose.yml
   - docker/dev/frontend.docker-compose.yml
   - docker/dev/nats.docker-compose.yml
+  - docker/dev/dex.docker-compose.yml

@@ -7,8 +7,8 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
-// https://github.com/alecthomas/kong
 // https://entgo.io/
+// https://github.com/coreos/go-oidc
 
 var CLI struct {
 	Server struct {
@@ -19,11 +19,11 @@ var CLI struct {
 }
 
 func main() {
-	log.S().Info("Starting dig-inv")
+	log.S.Info("Starting dig-inv")
 
 	ctx := kong.Parse(&CLI)
 
-	log.S().Debugw("Parsed CLI context", "command", ctx.Command(), "args", ctx.Args)
+	log.S.Debugw("Parsed CLI context", "command", ctx.Command(), "args", ctx.Args)
 
 	switch ctx.Command() {
 	case "server":
@@ -35,7 +35,7 @@ func main() {
 }
 
 func server() {
-	log.S().Info("Running server")
+	log.S.Info("Running as server")
 
 	if err := gateway.Run(); err != nil {
 		grpclog.Fatal(err)
@@ -43,5 +43,5 @@ func server() {
 }
 
 func worker() {
-	log.S().Info("Running worker")
+	log.S.Info("Running as worker")
 }

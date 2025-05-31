@@ -1,8 +1,10 @@
-apis/YourServiceApi.ts
+apis/OpenIdAuthServiceApi.ts
 apis/index.ts
 index.ts
 models/ProtobufAny.ts
 models/RpcStatus.ts
-models/V1StringMessage.ts
+models/V1AuthUrlMessage.ts
+models/V1ExchangeCodeMessage.ts
+models/V1UserSubjectMessage.ts
 models/index.ts
 runtime.ts

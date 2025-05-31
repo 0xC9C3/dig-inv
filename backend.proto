@@ -2,10 +2,24 @@ syntax = "proto3";
 package your.service.v1;
 option go_package = "dig-inv/gen/go";
 
-message StringMessage {
-  string value = 1;
+message UserSubjectMessage {
+  string subject = 1;
 }
 
-service YourService {
-  rpc Echo(StringMessage) returns (StringMessage) {}
+message AuthUrlMessage {
+  string url = 1;
+}
+
+message EmptyMessage {}
+
+message ExchangeCodeMessage {
+  string code = 1;
+  string state = 2;
+}
+
+
+service OpenIdAuthService {
+  rpc GetUserInfo(EmptyMessage) returns (UserSubjectMessage) {}
+  rpc BeginAuth(EmptyMessage) returns (AuthUrlMessage) {}
+  rpc ExchangeCode(ExchangeCodeMessage) returns (EmptyMessage) {}
 }

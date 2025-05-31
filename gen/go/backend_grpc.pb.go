@@ -19,101 +19,177 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	YourService_Echo_FullMethodName = "/your.service.v1.YourService/Echo"
+	OpenIdAuthService_GetUserInfo_FullMethodName  = "/your.service.v1.OpenIdAuthService/GetUserInfo"
+	OpenIdAuthService_BeginAuth_FullMethodName    = "/your.service.v1.OpenIdAuthService/BeginAuth"
+	OpenIdAuthService_ExchangeCode_FullMethodName = "/your.service.v1.OpenIdAuthService/ExchangeCode"
 )
 
-// YourServiceClient is the client API for YourService service.
+// OpenIdAuthServiceClient is the client API for OpenIdAuthService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
-type YourServiceClient interface {
-	Echo(ctx context.Context, in *StringMessage, opts ...grpc.CallOption) (*StringMessage, error)
+type OpenIdAuthServiceClient interface {
+	GetUserInfo(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserSubjectMessage, error)
+	BeginAuth(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*AuthUrlMessage, error)
+	ExchangeCode(ctx context.Context, in *ExchangeCodeMessage, opts ...grpc.CallOption) (*EmptyMessage, error)
 }
 
-type yourServiceClient struct {
+type openIdAuthServiceClient struct {
 	cc grpc.ClientConnInterface
 }
 
-func NewYourServiceClient(cc grpc.ClientConnInterface) YourServiceClient {
-	return &yourServiceClient{cc}
+func NewOpenIdAuthServiceClient(cc grpc.ClientConnInterface) OpenIdAuthServiceClient {
+	return &openIdAuthServiceClient{cc}
 }
 
-func (c *yourServiceClient) Echo(ctx context.Context, in *StringMessage, opts ...grpc.CallOption) (*StringMessage, error) {
+func (c *openIdAuthServiceClient) GetUserInfo(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserSubjectMessage, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(StringMessage)
-	err := c.cc.Invoke(ctx, YourService_Echo_FullMethodName, in, out, cOpts...)
+	out := new(UserSubjectMessage)
+	err := c.cc.Invoke(ctx, OpenIdAuthService_GetUserInfo_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
 	return out, nil
 }
 
-// YourServiceServer is the server API for YourService service.
-// All implementations must embed UnimplementedYourServiceServer
-// for forward compatibility.
-type YourServiceServer interface {
-	Echo(context.Context, *StringMessage) (*StringMessage, error)
-	mustEmbedUnimplementedYourServiceServer()
+func (c *openIdAuthServiceClient) BeginAuth(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*AuthUrlMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AuthUrlMessage)
+	err := c.cc.Invoke(ctx, OpenIdAuthService_BeginAuth_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
-// UnimplementedYourServiceServer must be embedded to have
+func (c *openIdAuthServiceClient) ExchangeCode(ctx context.Context, in *ExchangeCodeMessage, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, OpenIdAuthService_ExchangeCode_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// OpenIdAuthServiceServer is the server API for OpenIdAuthService service.
+// All implementations must embed UnimplementedOpenIdAuthServiceServer
+// for forward compatibility.
+type OpenIdAuthServiceServer interface {
+	GetUserInfo(context.Context, *EmptyMessage) (*UserSubjectMessage, error)
+	BeginAuth(context.Context, *EmptyMessage) (*AuthUrlMessage, error)
+	ExchangeCode(context.Context, *ExchangeCodeMessage) (*EmptyMessage, error)
+	mustEmbedUnimplementedOpenIdAuthServiceServer()
+}
+
+// UnimplementedOpenIdAuthServiceServer must be embedded to have
 // forward compatible implementations.
 //
 // NOTE: this should be embedded by value instead of pointer to avoid a nil
 // pointer dereference when methods are called.
-type UnimplementedYourServiceServer struct{}
+type UnimplementedOpenIdAuthServiceServer struct{}
 
-func (UnimplementedYourServiceServer) Echo(context.Context, *StringMessage) (*StringMessage, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method Echo not implemented")
+func (UnimplementedOpenIdAuthServiceServer) GetUserInfo(context.Context, *EmptyMessage) (*UserSubjectMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
 }
-func (UnimplementedYourServiceServer) mustEmbedUnimplementedYourServiceServer() {}
-func (UnimplementedYourServiceServer) testEmbeddedByValue()                     {}
+func (UnimplementedOpenIdAuthServiceServer) BeginAuth(context.Context, *EmptyMessage) (*AuthUrlMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method BeginAuth not implemented")
+}
+func (UnimplementedOpenIdAuthServiceServer) ExchangeCode(context.Context, *ExchangeCodeMessage) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ExchangeCode not implemented")
+}
+func (UnimplementedOpenIdAuthServiceServer) mustEmbedUnimplementedOpenIdAuthServiceServer() {}
+func (UnimplementedOpenIdAuthServiceServer) testEmbeddedByValue()                           {}
 
-// UnsafeYourServiceServer may be embedded to opt out of forward compatibility for this service.
-// Use of this interface is not recommended, as added methods to YourServiceServer will
+// UnsafeOpenIdAuthServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to OpenIdAuthServiceServer will
 // result in compilation errors.
-type UnsafeYourServiceServer interface {
-	mustEmbedUnimplementedYourServiceServer()
+type UnsafeOpenIdAuthServiceServer interface {
+	mustEmbedUnimplementedOpenIdAuthServiceServer()
 }
 
-func RegisterYourServiceServer(s grpc.ServiceRegistrar, srv YourServiceServer) {
-	// If the following call pancis, it indicates UnimplementedYourServiceServer was
+func RegisterOpenIdAuthServiceServer(s grpc.ServiceRegistrar, srv OpenIdAuthServiceServer) {
+	// If the following call pancis, it indicates UnimplementedOpenIdAuthServiceServer was
 	// embedded by pointer and is nil.  This will cause panics if an
 	// unimplemented method is ever invoked, so we test this at initialization
 	// time to prevent it from happening at runtime later due to I/O.
 	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
 		t.testEmbeddedByValue()
 	}
-	s.RegisterService(&YourService_ServiceDesc, srv)
+	s.RegisterService(&OpenIdAuthService_ServiceDesc, srv)
 }
 
-func _YourService_Echo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(StringMessage)
+func _OpenIdAuthService_GetUserInfo_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(YourServiceServer).Echo(ctx, in)
+		return srv.(OpenIdAuthServiceServer).GetUserInfo(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: YourService_Echo_FullMethodName,
+		FullMethod: OpenIdAuthService_GetUserInfo_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(YourServiceServer).Echo(ctx, req.(*StringMessage))
+		return srv.(OpenIdAuthServiceServer).GetUserInfo(ctx, req.(*EmptyMessage))
 	}
 	return interceptor(ctx, in, info, handler)
 }
 
-// YourService_ServiceDesc is the grpc.ServiceDesc for YourService service.
+func _OpenIdAuthService_BeginAuth_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenIdAuthServiceServer).BeginAuth(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OpenIdAuthService_BeginAuth_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenIdAuthServiceServer).BeginAuth(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _OpenIdAuthService_ExchangeCode_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ExchangeCodeMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(OpenIdAuthServiceServer).ExchangeCode(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: OpenIdAuthService_ExchangeCode_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(OpenIdAuthServiceServer).ExchangeCode(ctx, req.(*ExchangeCodeMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// OpenIdAuthService_ServiceDesc is the grpc.ServiceDesc for OpenIdAuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
-var YourService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "your.service.v1.YourService",
-	HandlerType: (*YourServiceServer)(nil),
+var OpenIdAuthService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "your.service.v1.OpenIdAuthService",
+	HandlerType: (*OpenIdAuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "Echo",
-			Handler:    _YourService_Echo_Handler,
+			MethodName: "GetUserInfo",
+			Handler:    _OpenIdAuthService_GetUserInfo_Handler,
+		},
+		{
+			MethodName: "BeginAuth",
+			Handler:    _OpenIdAuthService_BeginAuth_Handler,
+		},
+		{
+			MethodName: "ExchangeCode",
+			Handler:    _OpenIdAuthService_ExchangeCode_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

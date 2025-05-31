@@ -13,6 +13,8 @@ services:
     ports:
       - "${FRONTEND_PORT:-5173}:5173"
     entrypoint: "npm run dev-docker"
+    environment:
+      PUBLIC_BACKEND_URL: "${BACKEND_URL:-http://localhost:3001}"
   watch-openapi:
     <<: *frontend-common
     entrypoint: "npm run openapi:watch"

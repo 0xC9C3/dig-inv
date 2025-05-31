@@ -7,8 +7,8 @@ import (
 	"google.golang.org/grpc/grpclog"
 )
 
-var logger *zap.Logger
-var sugar *zap.SugaredLogger
+var L *zap.Logger
+var S *zap.SugaredLogger
 
 func init() {
 	err := initLogger()
@@ -16,7 +16,7 @@ func init() {
 	if err != nil {
 		panic(err)
 	}
-	sugar = logger.Sugar()
+	S = L.Sugar()
 
 	// Ensure the logger is flushed before the program exits
 	/*defer func() {
@@ -26,7 +26,7 @@ func init() {
 	}*/
 
 	grpclog.SetLoggerV2(
-		zapgrpc.NewLogger(logger),
+		zapgrpc.NewLogger(L),
 	)
 }
 
@@ -34,18 +34,10 @@ func initLogger() error {
 	var err error
 
 	if env.GetIsDevelopmentMode() {
-		logger, err = zap.NewDevelopment()
+		L, err = zap.NewDevelopment()
 		return err
 	}
 
-	logger, err = zap.NewProduction()
+	L, err = zap.NewProduction()
 	return err
-}
-
-func L() *zap.Logger {
-	return logger
-}
-
-func S() *zap.SugaredLogger {
-	return sugar
 }
