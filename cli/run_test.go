@@ -1,7 +1,6 @@
-package main
+package cli
 
 import (
-	"dig-inv/cli"
 	"os"
 	"testing"
 )
@@ -18,7 +17,7 @@ func TestEntrypoint_RunSuccess(t *testing.T) {
 		)
 
 		entrypoint.Run()
-	}, cli.CommandServer)
+	}, CommandServer)
 }
 
 func TestEntrypoint_RunWithError(t *testing.T) {
@@ -36,18 +35,7 @@ func TestEntrypoint_RunWithError(t *testing.T) {
 		if exitCode != ErrorExitCode {
 			t.Errorf("Expected exit code %d, got %d", ErrorExitCode, exitCode)
 		}
-	}, cli.CommandServer)
-}
-
-func mockCommandlineArgs(t *testing.T, inner func(t *testing.T), args ...string) {
-	originalArgs := os.Args
-	defer func() {
-		os.Args = originalArgs
-	}()
-
-	os.Args = append([]string{"dig-inv"}, args...)
-
-	inner(t)
+	}, CommandServer)
 }
 
 func TestWorker(t *testing.T) {
@@ -59,8 +47,8 @@ func TestWorker(t *testing.T) {
 
 func Test_Run(t *testing.T) {
 	mockCommandlineArgs(t, func(t *testing.T) {
-		run()
-	}, cli.CommandWorker)
+		Run()
+	}, CommandWorker)
 }
 
 func Test_RunWithError(t *testing.T) {
@@ -69,9 +57,9 @@ func Test_RunWithError(t *testing.T) {
 	}
 
 	mockCommandlineArgs(t, func(t *testing.T) {
-		exitCode := run()
+		exitCode := Run()
 		if exitCode != ErrorExitCode {
 			t.Errorf("Expected exit code %d, got %d", ErrorExitCode, exitCode)
 		}
-	}, cli.CommandServer)
+	}, CommandServer)
 }

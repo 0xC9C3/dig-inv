@@ -1,35 +1,15 @@
-package gateway
+package services
 
 import (
 	"context"
 	gen "dig-inv/gen/go"
 	"fmt"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
 )
-
-type mockServerTransportStream struct{}
-
-func (m *mockServerTransportStream) Method() string {
-	return "foo"
-}
-
-func (m *mockServerTransportStream) SetHeader(_ metadata.MD) error {
-	return nil
-}
-
-func (m *mockServerTransportStream) SendHeader(_ metadata.MD) error {
-	return nil
-}
-
-func (m *mockServerTransportStream) SetTrailer(_ metadata.MD) error {
-	return nil
-}
 
 func TestRun(t *testing.T) {
 	ts := http.Server{
@@ -134,10 +114,7 @@ func TestHttpCookieResponseModifier(t *testing.T) {
 	ctx := context.Background()
 	w := httptest.NewRecorder()
 
-	ctx = grpc.NewContextWithServerTransportStream(ctx, &mockServerTransportStream{})
-	ctx = runtime.NewServerMetadataContext(ctx, runtime.ServerMetadata{
-		HeaderMD: metadata.Pairs("set-cookie", "test_cookie=test_value"),
-	})
+	ctx = AddMockServerTransportStreamToContext(ctx, "set-cookie", "test_cookie=test_value")
 
 	err := httpCookieResponseModifier(ctx, w, &gen.UserSubjectMessage{})
 	if err != nil {
@@ -163,10 +140,7 @@ func TestHttpCookieResponseModifierBrokenCookie(t *testing.T) {
 	ctx := context.Background()
 	w := httptest.NewRecorder()
 
-	ctx = grpc.NewContextWithServerTransportStream(ctx, &mockServerTransportStream{})
-	ctx = runtime.NewServerMetadataContext(ctx, runtime.ServerMetadata{
-		HeaderMD: metadata.Pairs("set-cookie", "broken_cookie"),
-	})
+	ctx = AddMockServerTransportStreamToContext(ctx, "set-cookie", "broken_cookie")
 
 	err := httpCookieResponseModifier(ctx, w, &gen.UserSubjectMessage{})
 	if err != nil {

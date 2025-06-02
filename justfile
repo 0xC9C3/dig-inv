@@ -1,4 +1,4 @@
-go-tests := "go test -coverprofile=coverage.profile ./..."
+go-tests := "go test -coverprofile=coverage.profile ./cli ./env ./log ./services"
 go-coverage := "go tool cover -html=coverage.profile -o coverage.html"
 go-lint := "GOFLAGS=-buildvcs=false golangci-lint run"
 

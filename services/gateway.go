@@ -1,11 +1,10 @@
-package gateway
+package services
 
 import (
 	"context"
 	"dig-inv/env"
 	gw "dig-inv/gen/go"
 	"dig-inv/log"
-	"dig-inv/services"
 	"errors"
 	"fmt"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -17,7 +16,7 @@ import (
 
 var serviceInitializer = []func(ctx context.Context, mux *runtime.ServeMux) error{
 	func(ctx context.Context, mux *runtime.ServeMux) error {
-		return gw.RegisterOpenIdAuthServiceHandlerServer(ctx, mux, services.NewOpenIdAuthServer())
+		return gw.RegisterOpenIdAuthServiceHandlerServer(ctx, mux, NewOpenIdAuthServer())
 	},
 }
 

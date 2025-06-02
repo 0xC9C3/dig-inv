@@ -13,26 +13,52 @@ TODO: Screenshots / Demo
 - **Domain Management**: Keep track of your domains, their expiration dates, and associated DNS records.
 - **Server Inventory**: Manage your servers, their IP addresses, and associated metadata.
 - **Asset Tracking**: Record and manage various assets, including hardware and software.
-- **User Management**: Create and manage users with different roles and permissions.
+- **OIDC Authentication**: Secure access to the system using OIDC for authentication.
 - **API Access**: Access your inventory programmatically via a gRPC API.
 - **Web Interface**: A simple web interface to view and manage your inventory.
 - **Exports**: Export your inventory data in various formats for reporting or backup purposes.
+- **Helm Chart**: Deploy the application easily on Kubernetes using a Helm chart.
 
 ## Supported Providers
+
 - **DNS Providers**
-    - Cloudflare
-    - Namecheap
+  - Cloudflare
+  - Namecheap
 - **Server Providers**
-    - Hetzner
-- **Asset Providers**
-    - Custom asset management
+  - Hetzner
+- **Other Providers**
+  - Custom asset (e.g., hardware, software)
+
+
+
+## Quick Start
+
+### docker-compose
+
+TODO
+
+### Helm Chart
+
+TODO
+
+### Standalone
+
+TODO
+
+
 
 
 ## Built with
-- **Go**: The primary language for the backend services.
-- **gRPC**: For efficient communication between services.
-- **Just**: For task automation and scripting.
-- **Docker**: For containerization and development.
-- **SvelteKit**: For the web interface.
-- **Typescript**: For type safety in the web interface.
-- **Tailwind CSS**: For styling the web interface.
+
+- **DX**
+  - **Just**: For task automation and scripting.
+  - **Docker**: For containerization and dependency management.
+- **Backend**
+  - **Go**: The primary language for the backend services.
+  - **gRPC**: For efficient communication between services. Using grpc-gateway for HTTP/JSON support.
+  - **Nats**: For the worker queue.
+- **Frontend**
+  - **SvelteKit**: For the web interface.
+  - **Typescript**: For type safety in the web interface.
+  - **Tailwind CSS**: For styling the web interface.
+  - **Flowbite Svelte**: For UI components.

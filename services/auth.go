@@ -19,22 +19,32 @@ import (
 	"net/http"
 )
 
+const (
+	TokenCookieName        = "token"
+	RefreshTokenCookieName = "refresh_token"
+	VerifierCookieName     = "verifier"
+	StateCookieName        = "state"
+)
+
 type openidAuthServer struct {
 	gw.UnimplementedOpenIdAuthServiceServer
+	getOAuth2ContextImpl func(ctx context.Context) (*oauth2.Config, *oidc.Provider, string, error)
 }
 
 func NewOpenIdAuthServer() gw.OpenIdAuthServiceServer {
-	return new(openidAuthServer)
+	return &openidAuthServer{
+		getOAuth2ContextImpl: getOAuth2Context,
+	}
 }
 
 func (s *openidAuthServer) GetUserInfo(ctx context.Context, _ *gw.EmptyMessage) (*gw.UserSubjectMessage, error) {
-	_, provider, _, err := getOAuth2Context(ctx)
+	_, provider, _, err := s.getOAuth2ContextImpl(ctx)
 
 	if err != nil {
 		return nil, oauth2ConfigErrorResponse(err)
 	}
 
-	accessToken, err := getCookie(ctx, "token")
+	accessToken, err := getCookie(ctx, TokenCookieName)
 	if err != nil {
 		grpclog.Errorf("Failed to get access token cookie: %v", err)
 		return nil, status.Errorf(codes.Unauthenticated, "failed to get access token cookie")
@@ -53,18 +63,18 @@ func (s *openidAuthServer) GetUserInfo(ctx context.Context, _ *gw.EmptyMessage) 
 }
 
 func (s *openidAuthServer) ExchangeCode(ctx context.Context, msg *gw.ExchangeCodeMessage) (*gw.EmptyMessage, error) {
-	oauth2Config, _, _, err := getOAuth2Context(ctx)
+	oauth2Config, _, _, err := s.getOAuth2ContextImpl(ctx)
 	if err != nil {
 		return nil, oauth2ConfigErrorResponse(err)
 	}
 
-	verifier, err := getCookie(ctx, "verifier")
+	verifier, err := getCookie(ctx, VerifierCookieName)
 	if err != nil {
 		grpclog.Errorf("Failed to get verifier cookie: %v", err)
 		return nil, status.Errorf(codes.Unauthenticated, "failed to get verifier cookie")
 	}
 
-	state, err := getCookie(ctx, "state")
+	state, err := getCookie(ctx, StateCookieName)
 	if err != nil {
 		grpclog.Errorf("Failed to get state cookie: %v", err)
 		return nil, status.Errorf(codes.Unauthenticated, "failed to get state cookie")
@@ -83,39 +93,28 @@ func (s *openidAuthServer) ExchangeCode(ctx context.Context, msg *gw.ExchangeCod
 		return nil, status.Errorf(codes.Unauthenticated, "failed to exchange token")
 	}
 
-	if token.RefreshToken != "" {
-		if err := setCookie(ctx, "refresh_token", token.RefreshToken); err != nil {
-			grpclog.Errorf("Failed to set refresh token cookie: %v", err)
-			return nil, status.Errorf(codes.Internal, "failed to set refresh token cookie")
-		}
-	}
-	log.S.Debugw("Exchanged token", "access_token", token.AccessToken, "refresh_token", token.RefreshToken)
-
-	if err := setCookie(ctx, "token", token.AccessToken); err != nil {
-		grpclog.Errorf("Failed to set access token cookie: %v", err)
-		return nil, status.Errorf(codes.Internal, "failed to set access token cookie")
+	if err := setCookies(ctx, []string{TokenCookieName, token.AccessToken},
+		[]string{RefreshTokenCookieName, token.RefreshToken},
+		[]string{VerifierCookieName, ""},
+		[]string{StateCookieName, ""}); err != nil {
+		grpclog.Errorf("Failed to set cookies: %v", err)
+		return nil, status.Errorf(codes.Internal, "failed to set cookies")
 	}
 
 	return &gw.EmptyMessage{}, nil
 }
 
 func (s *openidAuthServer) BeginAuth(ctx context.Context, _ *gw.EmptyMessage) (*gw.AuthUrlMessage, error) {
-	oauth2Config, _, verifier, err := getOAuth2Context(ctx)
+	oauth2Config, _, verifier, err := s.getOAuth2ContextImpl(ctx)
 
 	if err != nil {
 		return nil, oauth2ConfigErrorResponse(err)
 	}
 
-	state := make([]byte, 16)
-	if _, err := rand.Read(state); err != nil {
-		grpclog.Errorf("Failed to generate random state: %v", err)
-		return nil, status.Errorf(codes.Internal, "failed to generate random state")
-	}
-
-	stateString := base64.RawURLEncoding.EncodeToString(state)
+	state := generateState()
 
 	authURL := oauth2Config.AuthCodeURL(
-		stateString,
+		state,
 		oauth2.AccessTypeOffline,
 		oauth2.ApprovalForce,
 		oauth2.S256ChallengeOption(verifier),
@@ -123,19 +122,16 @@ func (s *openidAuthServer) BeginAuth(ctx context.Context, _ *gw.EmptyMessage) (*
 
 	grpclog.Infof("Generated auth URL: %s", authURL)
 
-	if err := setCookie(ctx, "verifier", verifier); err != nil {
-		return nil, err
-	}
-
-	if err := setCookie(ctx, "state", stateString); err != nil {
-		return nil, err
+	if err := setCookies(ctx, []string{VerifierCookieName, verifier}, []string{StateCookieName, state}); err != nil {
+		grpclog.Errorf("Failed to set cookies: %v", err)
+		return nil, status.Errorf(codes.Internal, "failed to set cookies")
 	}
 
 	return &gw.AuthUrlMessage{Url: authURL}, nil
 }
 
 func (s *openidAuthServer) Logout(ctx context.Context, _ *gw.EmptyMessage) (*gw.EmptyMessage, error) {
-	cookiesToClear := []string{"token", "refresh_token", "verifier", "state"}
+	cookiesToClear := []string{TokenCookieName, RefreshTokenCookieName, VerifierCookieName, StateCookieName}
 
 	for _, cookie := range cookiesToClear {
 		if err := setCookie(ctx, cookie, ""); err != nil {
@@ -183,6 +179,21 @@ func setCookie(ctx context.Context, key string, value string) error {
 	return nil
 }
 
+func setCookies(ctx context.Context, cookies ...[]string) error {
+	if len(cookies) == 0 {
+		return nil
+	}
+
+	for _, cookie := range cookies {
+		if err := setCookie(ctx, cookie[0], cookie[1]); err != nil {
+			grpclog.Errorf("Failed to set cookie %s: %v", cookie[0], err)
+			return status.Errorf(codes.Internal, "failed to set cookie %s", cookie[0])
+		}
+	}
+
+	return nil
+}
+
 func getCookie(ctx context.Context, key string) (string, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
@@ -196,8 +207,6 @@ func getCookie(ctx context.Context, key string) (string, error) {
 	}
 
 	log.S.Debugw("Retrieved cookies from metadata", "cookies", cookies)
-
-	// parse header cookie string
 
 	for _, cookie := range cookies {
 		parsedCookies, err := http.ParseCookie(cookie)
@@ -215,4 +224,14 @@ func getCookie(ctx context.Context, key string) (string, error) {
 
 	grpclog.Errorf("Cookie not found: %s", key)
 	return "", status.Errorf(codes.NotFound, "cookie not found")
+}
+
+func generateState() string {
+	state := make([]byte, 16)
+
+	// ignoring the error since
+	//  "Read calls [io.ReadFull] on [Reader] and crashes the program irrecoverably if
+	//  an error is returned."
+	_, _ = rand.Read(state)
+	return base64.RawURLEncoding.EncodeToString(state)
 }
