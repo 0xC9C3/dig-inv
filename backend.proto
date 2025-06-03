@@ -17,10 +17,72 @@ message ExchangeCodeMessage {
   string state = 2;
 }
 
-
 service OpenIdAuthService {
   rpc GetUserInfo(EmptyMessage) returns (UserSubjectMessage) {}
   rpc BeginAuth(EmptyMessage) returns (AuthUrlMessage) {}
   rpc ExchangeCode(ExchangeCodeMessage) returns (EmptyMessage) {}
   rpc Logout(EmptyMessage) returns (EmptyMessage) {}
+}
+
+message ElementId {
+  string id = 1;
+}
+
+message Item {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message Items {
+  repeated Item items = 1;
+}
+
+service ItemService {
+  rpc GetItem(EmptyMessage) returns (Item) {}
+  rpc GetItems(EmptyMessage) returns (Items) {}
+  rpc CreateItem(Item) returns (Item) {}
+  rpc UpdateItem(Item) returns (Item) {}
+  rpc DeleteItem(ElementId) returns (EmptyMessage) {}
+}
+
+message UserGroup {
+  string id = 1;
+  string name = 2;
+}
+
+message UserGroups {
+  repeated UserGroup groups = 1;
+}
+
+service UserGroupService {
+  rpc GetGroup(EmptyMessage) returns (UserGroup) {}
+  rpc GetGroups(EmptyMessage) returns (UserGroup) {}
+  rpc CreateGroup(UserGroup) returns (UserGroup) {}
+  rpc UpdateGroup(UserGroup) returns (UserGroup) {}
+  rpc DeleteGroup(ElementId) returns (EmptyMessage) {}
+  rpc AddItemToGroup(ElementId) returns (EmptyMessage) {}
+}
+
+service HealthService {
+  rpc HealthCheck(EmptyMessage) returns (EmptyMessage) {}
+}
+
+
+message Tag {
+  string id = 1;
+  string name = 2;
+}
+
+message Tags {
+  repeated Tag tags = 1;
+}
+
+service TagService {
+  rpc GetTag(EmptyMessage) returns (Tag) {}
+  rpc GetTags(EmptyMessage) returns (Tags) {}
+  rpc CreateTag(Tag) returns (Tag) {}
+  rpc UpdateTag(Tag) returns (Tag) {}
+  rpc DeleteTag(ElementId) returns (EmptyMessage) {}
+  rpc AddItemToTag(ElementId) returns (EmptyMessage) {}
 }

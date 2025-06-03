@@ -1,4 +1,4 @@
-go-tests := "go test -coverprofile=coverage.profile ./cli ./env ./log ./services"
+go-tests := "go test -coverprofile=coverage.profile ./cli ./store ./env ./log ./services"
 go-coverage := "go tool cover -html=coverage.profile -o coverage.html"
 go-lint := "GOFLAGS=-buildvcs=false golangci-lint run"
 
@@ -33,6 +33,9 @@ init:
 
 install-tools:
     go install tool
+
+ent-gen:
+    go generate ./ent
 
 init-git-hooks:
     cp pre-commit.sh .git/hooks/pre-commit

@@ -17,9 +17,7 @@
     import {
         ArrowRightToBracketOutline,
         ChartOutline,
-        GridSolid,
         InfoCircleOutline,
-        MailBoxSolid,
         OpenDoorOutline,
         SearchOutline,
         ShoppingBagSolid,
@@ -87,7 +85,7 @@
                     {/snippet}
                 </SidebarItem>
 
-                <SidebarDropdownWrapper btnClass="p-2" label="assets">
+                <SidebarDropdownWrapper btnClass="p-2"  label="assets">
                     {#snippet icon()}
                         <ShoppingBagSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     {/snippet}
@@ -110,15 +108,30 @@
                     </SidebarItem>
                 </SidebarDropdownWrapper>
 
-                <SidebarDropdownWrapper btnClass="p-2" label="E-commerce">
+                <SidebarDropdownWrapper btnClass="p-2" label="configuration">
                     {#snippet icon()}
                         <ShoppingBagSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     {/snippet}
-                    <SidebarItem href="/docs/components/sidebar" label="Sidebar" />
-                    <SidebarItem label="Billing" />
-                    <SidebarItem label="Invoice" />
+                    <SidebarItem href="/" label="groups">
+                        {#snippet icon()}
+                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        {/snippet}
+                    </SidebarItem>
+
+                    <SidebarItem href="/" label="providers">
+                        {#snippet icon()}
+                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        {/snippet}
+                    </SidebarItem>
+
+                    <SidebarItem href="/" label="about">
+                        {#snippet icon()}
+                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        {/snippet}
+                    </SidebarItem>
                 </SidebarDropdownWrapper>
-                <SidebarItem href="/" label="Kanban" {spanClass}>
+
+                <!-- <SidebarItem href="/" label="Kanban" {spanClass}>
                     {#snippet icon()}
                         <GridSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     {/snippet}
@@ -133,13 +146,13 @@
                     {#snippet subtext()}
                         <span class="bg-primary-200 text-primary-600 dark:bg-primary-900 dark:text-primary-200 ms-3 inline-flex h-3 w-3 items-center justify-center rounded-full p-3 text-sm font-medium">3</span>
                     {/snippet}
-                </SidebarItem>
+                </SidebarItem> -->
                 <SidebarItem label="Users">
                     {#snippet icon()}
                         <UserSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     {/snippet}
                 </SidebarItem>
-                <SidebarItem label="Sign In">
+                <SidebarItem label="sign out">
                     {#snippet icon()}
                         <ArrowRightToBracketOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
                     {/snippet}

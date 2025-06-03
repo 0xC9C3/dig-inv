@@ -75,9 +75,14 @@ func initializeHandler(ctx context.Context, serviceInitializer []func(ctx contex
 	}
 
 	// @todo config
-	corsHandler := cors.Default().Handler(mux)
+	corsOption := cors.Options{
+		AllowedOrigins:   env.GetAllowedCorsOrigins(),
+		AllowCredentials: true,
+	}
+	corsHandler := cors.New(corsOption).Handler(mux)
+
 	if env.GetIsDevelopmentMode() {
-		corsOption := cors.Options{
+		corsOption = cors.Options{
 			AllowedOrigins:   []string{"http://localhost:5173"},
 			AllowCredentials: true,
 		}

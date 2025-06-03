@@ -1,6 +1,9 @@
 package env
 
-import "os"
+import (
+	"os"
+	"strings"
+)
 
 func getEnv(key, defaultValue string) string {
 	value := os.Getenv(key)
@@ -52,4 +55,21 @@ func GetOidcIssuerURL() string {
 func GetOidcScopes() []string {
 	scopes := getOidcEnv("SCOPES", "openid profile email offline_access")
 	return []string{scopes}
+}
+
+func GetAllowedCorsOrigins() []string {
+	allowedOrigins := getEnv("ALLOWED_CORS_ORIGINS", "")
+	if allowedOrigins == "" {
+		return nil
+	}
+
+	origins := make([]string, 0)
+	for _, origin := range strings.Split(allowedOrigins, ",") {
+		origin = strings.TrimSpace(origin)
+		if origin != "" {
+			origins = append(origins, origin)
+		}
+	}
+
+	return origins
 }

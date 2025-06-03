@@ -63,6 +63,13 @@ func TestEnvironmentVariables(t *testing.T) {
 			}
 			return scopes[0]
 		}, "openid profile email offline_access"},
+		{"ALLOWED_CORS_ORIGINS", func() string {
+			origins := GetAllowedCorsOrigins()
+			if len(origins) == 0 {
+				return ""
+			}
+			return origins[0]
+		}, "http://localhost:3000"},
 	}
 
 	for _, envTest := range environmentMapping {
@@ -92,5 +99,14 @@ func TestAlternativeDevelopmentMode(t *testing.T) {
 	developmentMode := GetIsDevelopmentMode()
 	if developmentMode {
 		t.Error("Expected development mode to be false when set to 'foo'")
+	}
+}
+
+func TestGetAllowedCorsOriginsEmpty(t *testing.T) {
+	defer setEnvDeferrable(t, "ALLOWED_CORS_ORIGINS", "")()
+
+	origins := GetAllowedCorsOrigins()
+	if len(origins) != 0 || origins != nil {
+		t.Error("Expected empty allowed CORS origins")
 	}
 }

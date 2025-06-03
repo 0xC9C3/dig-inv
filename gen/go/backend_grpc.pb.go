@@ -233,3 +233,943 @@ var OpenIdAuthService_ServiceDesc = grpc.ServiceDesc{
 	Streams:  []grpc.StreamDesc{},
 	Metadata: "backend.proto",
 }
+
+const (
+	ItemService_GetItem_FullMethodName    = "/your.service.v1.ItemService/GetItem"
+	ItemService_GetItems_FullMethodName   = "/your.service.v1.ItemService/GetItems"
+	ItemService_CreateItem_FullMethodName = "/your.service.v1.ItemService/CreateItem"
+	ItemService_UpdateItem_FullMethodName = "/your.service.v1.ItemService/UpdateItem"
+	ItemService_DeleteItem_FullMethodName = "/your.service.v1.ItemService/DeleteItem"
+)
+
+// ItemServiceClient is the client API for ItemService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type ItemServiceClient interface {
+	GetItem(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*Item, error)
+	GetItems(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*Items, error)
+	CreateItem(ctx context.Context, in *Item, opts ...grpc.CallOption) (*Item, error)
+	UpdateItem(ctx context.Context, in *Item, opts ...grpc.CallOption) (*Item, error)
+	DeleteItem(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error)
+}
+
+type itemServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewItemServiceClient(cc grpc.ClientConnInterface) ItemServiceClient {
+	return &itemServiceClient{cc}
+}
+
+func (c *itemServiceClient) GetItem(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*Item, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Item)
+	err := c.cc.Invoke(ctx, ItemService_GetItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *itemServiceClient) GetItems(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*Items, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Items)
+	err := c.cc.Invoke(ctx, ItemService_GetItems_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *itemServiceClient) CreateItem(ctx context.Context, in *Item, opts ...grpc.CallOption) (*Item, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Item)
+	err := c.cc.Invoke(ctx, ItemService_CreateItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *itemServiceClient) UpdateItem(ctx context.Context, in *Item, opts ...grpc.CallOption) (*Item, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Item)
+	err := c.cc.Invoke(ctx, ItemService_UpdateItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *itemServiceClient) DeleteItem(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, ItemService_DeleteItem_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// ItemServiceServer is the server API for ItemService service.
+// All implementations must embed UnimplementedItemServiceServer
+// for forward compatibility.
+type ItemServiceServer interface {
+	GetItem(context.Context, *EmptyMessage) (*Item, error)
+	GetItems(context.Context, *EmptyMessage) (*Items, error)
+	CreateItem(context.Context, *Item) (*Item, error)
+	UpdateItem(context.Context, *Item) (*Item, error)
+	DeleteItem(context.Context, *ElementId) (*EmptyMessage, error)
+	mustEmbedUnimplementedItemServiceServer()
+}
+
+// UnimplementedItemServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedItemServiceServer struct{}
+
+func (UnimplementedItemServiceServer) GetItem(context.Context, *EmptyMessage) (*Item, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetItem not implemented")
+}
+func (UnimplementedItemServiceServer) GetItems(context.Context, *EmptyMessage) (*Items, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetItems not implemented")
+}
+func (UnimplementedItemServiceServer) CreateItem(context.Context, *Item) (*Item, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateItem not implemented")
+}
+func (UnimplementedItemServiceServer) UpdateItem(context.Context, *Item) (*Item, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateItem not implemented")
+}
+func (UnimplementedItemServiceServer) DeleteItem(context.Context, *ElementId) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteItem not implemented")
+}
+func (UnimplementedItemServiceServer) mustEmbedUnimplementedItemServiceServer() {}
+func (UnimplementedItemServiceServer) testEmbeddedByValue()                     {}
+
+// UnsafeItemServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to ItemServiceServer will
+// result in compilation errors.
+type UnsafeItemServiceServer interface {
+	mustEmbedUnimplementedItemServiceServer()
+}
+
+func RegisterItemServiceServer(s grpc.ServiceRegistrar, srv ItemServiceServer) {
+	// If the following call pancis, it indicates UnimplementedItemServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&ItemService_ServiceDesc, srv)
+}
+
+func _ItemService_GetItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemServiceServer).GetItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ItemService_GetItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemServiceServer).GetItem(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ItemService_GetItems_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemServiceServer).GetItems(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ItemService_GetItems_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemServiceServer).GetItems(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ItemService_CreateItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Item)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemServiceServer).CreateItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ItemService_CreateItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemServiceServer).CreateItem(ctx, req.(*Item))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ItemService_UpdateItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Item)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemServiceServer).UpdateItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ItemService_UpdateItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemServiceServer).UpdateItem(ctx, req.(*Item))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ItemService_DeleteItem_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ElementId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ItemServiceServer).DeleteItem(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ItemService_DeleteItem_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ItemServiceServer).DeleteItem(ctx, req.(*ElementId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// ItemService_ServiceDesc is the grpc.ServiceDesc for ItemService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var ItemService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "your.service.v1.ItemService",
+	HandlerType: (*ItemServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetItem",
+			Handler:    _ItemService_GetItem_Handler,
+		},
+		{
+			MethodName: "GetItems",
+			Handler:    _ItemService_GetItems_Handler,
+		},
+		{
+			MethodName: "CreateItem",
+			Handler:    _ItemService_CreateItem_Handler,
+		},
+		{
+			MethodName: "UpdateItem",
+			Handler:    _ItemService_UpdateItem_Handler,
+		},
+		{
+			MethodName: "DeleteItem",
+			Handler:    _ItemService_DeleteItem_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "backend.proto",
+}
+
+const (
+	UserGroupService_GetGroup_FullMethodName       = "/your.service.v1.UserGroupService/GetGroup"
+	UserGroupService_GetGroups_FullMethodName      = "/your.service.v1.UserGroupService/GetGroups"
+	UserGroupService_CreateGroup_FullMethodName    = "/your.service.v1.UserGroupService/CreateGroup"
+	UserGroupService_UpdateGroup_FullMethodName    = "/your.service.v1.UserGroupService/UpdateGroup"
+	UserGroupService_DeleteGroup_FullMethodName    = "/your.service.v1.UserGroupService/DeleteGroup"
+	UserGroupService_AddItemToGroup_FullMethodName = "/your.service.v1.UserGroupService/AddItemToGroup"
+)
+
+// UserGroupServiceClient is the client API for UserGroupService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type UserGroupServiceClient interface {
+	GetGroup(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserGroup, error)
+	GetGroups(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserGroup, error)
+	CreateGroup(ctx context.Context, in *UserGroup, opts ...grpc.CallOption) (*UserGroup, error)
+	UpdateGroup(ctx context.Context, in *UserGroup, opts ...grpc.CallOption) (*UserGroup, error)
+	DeleteGroup(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error)
+	AddItemToGroup(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error)
+}
+
+type userGroupServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewUserGroupServiceClient(cc grpc.ClientConnInterface) UserGroupServiceClient {
+	return &userGroupServiceClient{cc}
+}
+
+func (c *userGroupServiceClient) GetGroup(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserGroup, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserGroup)
+	err := c.cc.Invoke(ctx, UserGroupService_GetGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userGroupServiceClient) GetGroups(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserGroup, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserGroup)
+	err := c.cc.Invoke(ctx, UserGroupService_GetGroups_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userGroupServiceClient) CreateGroup(ctx context.Context, in *UserGroup, opts ...grpc.CallOption) (*UserGroup, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserGroup)
+	err := c.cc.Invoke(ctx, UserGroupService_CreateGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userGroupServiceClient) UpdateGroup(ctx context.Context, in *UserGroup, opts ...grpc.CallOption) (*UserGroup, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UserGroup)
+	err := c.cc.Invoke(ctx, UserGroupService_UpdateGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userGroupServiceClient) DeleteGroup(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, UserGroupService_DeleteGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *userGroupServiceClient) AddItemToGroup(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, UserGroupService_AddItemToGroup_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// UserGroupServiceServer is the server API for UserGroupService service.
+// All implementations must embed UnimplementedUserGroupServiceServer
+// for forward compatibility.
+type UserGroupServiceServer interface {
+	GetGroup(context.Context, *EmptyMessage) (*UserGroup, error)
+	GetGroups(context.Context, *EmptyMessage) (*UserGroup, error)
+	CreateGroup(context.Context, *UserGroup) (*UserGroup, error)
+	UpdateGroup(context.Context, *UserGroup) (*UserGroup, error)
+	DeleteGroup(context.Context, *ElementId) (*EmptyMessage, error)
+	AddItemToGroup(context.Context, *ElementId) (*EmptyMessage, error)
+	mustEmbedUnimplementedUserGroupServiceServer()
+}
+
+// UnimplementedUserGroupServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedUserGroupServiceServer struct{}
+
+func (UnimplementedUserGroupServiceServer) GetGroup(context.Context, *EmptyMessage) (*UserGroup, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGroup not implemented")
+}
+func (UnimplementedUserGroupServiceServer) GetGroups(context.Context, *EmptyMessage) (*UserGroup, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetGroups not implemented")
+}
+func (UnimplementedUserGroupServiceServer) CreateGroup(context.Context, *UserGroup) (*UserGroup, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateGroup not implemented")
+}
+func (UnimplementedUserGroupServiceServer) UpdateGroup(context.Context, *UserGroup) (*UserGroup, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateGroup not implemented")
+}
+func (UnimplementedUserGroupServiceServer) DeleteGroup(context.Context, *ElementId) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteGroup not implemented")
+}
+func (UnimplementedUserGroupServiceServer) AddItemToGroup(context.Context, *ElementId) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddItemToGroup not implemented")
+}
+func (UnimplementedUserGroupServiceServer) mustEmbedUnimplementedUserGroupServiceServer() {}
+func (UnimplementedUserGroupServiceServer) testEmbeddedByValue()                          {}
+
+// UnsafeUserGroupServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to UserGroupServiceServer will
+// result in compilation errors.
+type UnsafeUserGroupServiceServer interface {
+	mustEmbedUnimplementedUserGroupServiceServer()
+}
+
+func RegisterUserGroupServiceServer(s grpc.ServiceRegistrar, srv UserGroupServiceServer) {
+	// If the following call pancis, it indicates UnimplementedUserGroupServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&UserGroupService_ServiceDesc, srv)
+}
+
+func _UserGroupService_GetGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserGroupServiceServer).GetGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserGroupService_GetGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserGroupServiceServer).GetGroup(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserGroupService_GetGroups_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserGroupServiceServer).GetGroups(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserGroupService_GetGroups_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserGroupServiceServer).GetGroups(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserGroupService_CreateGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserGroup)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserGroupServiceServer).CreateGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserGroupService_CreateGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserGroupServiceServer).CreateGroup(ctx, req.(*UserGroup))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserGroupService_UpdateGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UserGroup)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserGroupServiceServer).UpdateGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserGroupService_UpdateGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserGroupServiceServer).UpdateGroup(ctx, req.(*UserGroup))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserGroupService_DeleteGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ElementId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserGroupServiceServer).DeleteGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserGroupService_DeleteGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserGroupServiceServer).DeleteGroup(ctx, req.(*ElementId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _UserGroupService_AddItemToGroup_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ElementId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(UserGroupServiceServer).AddItemToGroup(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: UserGroupService_AddItemToGroup_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(UserGroupServiceServer).AddItemToGroup(ctx, req.(*ElementId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// UserGroupService_ServiceDesc is the grpc.ServiceDesc for UserGroupService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var UserGroupService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "your.service.v1.UserGroupService",
+	HandlerType: (*UserGroupServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetGroup",
+			Handler:    _UserGroupService_GetGroup_Handler,
+		},
+		{
+			MethodName: "GetGroups",
+			Handler:    _UserGroupService_GetGroups_Handler,
+		},
+		{
+			MethodName: "CreateGroup",
+			Handler:    _UserGroupService_CreateGroup_Handler,
+		},
+		{
+			MethodName: "UpdateGroup",
+			Handler:    _UserGroupService_UpdateGroup_Handler,
+		},
+		{
+			MethodName: "DeleteGroup",
+			Handler:    _UserGroupService_DeleteGroup_Handler,
+		},
+		{
+			MethodName: "AddItemToGroup",
+			Handler:    _UserGroupService_AddItemToGroup_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "backend.proto",
+}
+
+const (
+	HealthService_HealthCheck_FullMethodName = "/your.service.v1.HealthService/HealthCheck"
+)
+
+// HealthServiceClient is the client API for HealthService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type HealthServiceClient interface {
+	HealthCheck(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*EmptyMessage, error)
+}
+
+type healthServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewHealthServiceClient(cc grpc.ClientConnInterface) HealthServiceClient {
+	return &healthServiceClient{cc}
+}
+
+func (c *healthServiceClient) HealthCheck(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, HealthService_HealthCheck_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// HealthServiceServer is the server API for HealthService service.
+// All implementations must embed UnimplementedHealthServiceServer
+// for forward compatibility.
+type HealthServiceServer interface {
+	HealthCheck(context.Context, *EmptyMessage) (*EmptyMessage, error)
+	mustEmbedUnimplementedHealthServiceServer()
+}
+
+// UnimplementedHealthServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedHealthServiceServer struct{}
+
+func (UnimplementedHealthServiceServer) HealthCheck(context.Context, *EmptyMessage) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method HealthCheck not implemented")
+}
+func (UnimplementedHealthServiceServer) mustEmbedUnimplementedHealthServiceServer() {}
+func (UnimplementedHealthServiceServer) testEmbeddedByValue()                       {}
+
+// UnsafeHealthServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to HealthServiceServer will
+// result in compilation errors.
+type UnsafeHealthServiceServer interface {
+	mustEmbedUnimplementedHealthServiceServer()
+}
+
+func RegisterHealthServiceServer(s grpc.ServiceRegistrar, srv HealthServiceServer) {
+	// If the following call pancis, it indicates UnimplementedHealthServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&HealthService_ServiceDesc, srv)
+}
+
+func _HealthService_HealthCheck_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(HealthServiceServer).HealthCheck(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: HealthService_HealthCheck_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(HealthServiceServer).HealthCheck(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// HealthService_ServiceDesc is the grpc.ServiceDesc for HealthService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var HealthService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "your.service.v1.HealthService",
+	HandlerType: (*HealthServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "HealthCheck",
+			Handler:    _HealthService_HealthCheck_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "backend.proto",
+}
+
+const (
+	TagService_GetTag_FullMethodName       = "/your.service.v1.TagService/GetTag"
+	TagService_GetTags_FullMethodName      = "/your.service.v1.TagService/GetTags"
+	TagService_CreateTag_FullMethodName    = "/your.service.v1.TagService/CreateTag"
+	TagService_UpdateTag_FullMethodName    = "/your.service.v1.TagService/UpdateTag"
+	TagService_DeleteTag_FullMethodName    = "/your.service.v1.TagService/DeleteTag"
+	TagService_AddItemToTag_FullMethodName = "/your.service.v1.TagService/AddItemToTag"
+)
+
+// TagServiceClient is the client API for TagService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type TagServiceClient interface {
+	GetTag(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*Tag, error)
+	GetTags(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*Tags, error)
+	CreateTag(ctx context.Context, in *Tag, opts ...grpc.CallOption) (*Tag, error)
+	UpdateTag(ctx context.Context, in *Tag, opts ...grpc.CallOption) (*Tag, error)
+	DeleteTag(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error)
+	AddItemToTag(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error)
+}
+
+type tagServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewTagServiceClient(cc grpc.ClientConnInterface) TagServiceClient {
+	return &tagServiceClient{cc}
+}
+
+func (c *tagServiceClient) GetTag(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*Tag, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Tag)
+	err := c.cc.Invoke(ctx, TagService_GetTag_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) GetTags(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*Tags, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Tags)
+	err := c.cc.Invoke(ctx, TagService_GetTags_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) CreateTag(ctx context.Context, in *Tag, opts ...grpc.CallOption) (*Tag, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Tag)
+	err := c.cc.Invoke(ctx, TagService_CreateTag_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) UpdateTag(ctx context.Context, in *Tag, opts ...grpc.CallOption) (*Tag, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(Tag)
+	err := c.cc.Invoke(ctx, TagService_UpdateTag_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) DeleteTag(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, TagService_DeleteTag_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *tagServiceClient) AddItemToTag(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, TagService_AddItemToTag_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// TagServiceServer is the server API for TagService service.
+// All implementations must embed UnimplementedTagServiceServer
+// for forward compatibility.
+type TagServiceServer interface {
+	GetTag(context.Context, *EmptyMessage) (*Tag, error)
+	GetTags(context.Context, *EmptyMessage) (*Tags, error)
+	CreateTag(context.Context, *Tag) (*Tag, error)
+	UpdateTag(context.Context, *Tag) (*Tag, error)
+	DeleteTag(context.Context, *ElementId) (*EmptyMessage, error)
+	AddItemToTag(context.Context, *ElementId) (*EmptyMessage, error)
+	mustEmbedUnimplementedTagServiceServer()
+}
+
+// UnimplementedTagServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedTagServiceServer struct{}
+
+func (UnimplementedTagServiceServer) GetTag(context.Context, *EmptyMessage) (*Tag, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTag not implemented")
+}
+func (UnimplementedTagServiceServer) GetTags(context.Context, *EmptyMessage) (*Tags, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetTags not implemented")
+}
+func (UnimplementedTagServiceServer) CreateTag(context.Context, *Tag) (*Tag, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateTag not implemented")
+}
+func (UnimplementedTagServiceServer) UpdateTag(context.Context, *Tag) (*Tag, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateTag not implemented")
+}
+func (UnimplementedTagServiceServer) DeleteTag(context.Context, *ElementId) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteTag not implemented")
+}
+func (UnimplementedTagServiceServer) AddItemToTag(context.Context, *ElementId) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddItemToTag not implemented")
+}
+func (UnimplementedTagServiceServer) mustEmbedUnimplementedTagServiceServer() {}
+func (UnimplementedTagServiceServer) testEmbeddedByValue()                    {}
+
+// UnsafeTagServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to TagServiceServer will
+// result in compilation errors.
+type UnsafeTagServiceServer interface {
+	mustEmbedUnimplementedTagServiceServer()
+}
+
+func RegisterTagServiceServer(s grpc.ServiceRegistrar, srv TagServiceServer) {
+	// If the following call pancis, it indicates UnimplementedTagServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&TagService_ServiceDesc, srv)
+}
+
+func _TagService_GetTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).GetTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_GetTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).GetTag(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_GetTags_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).GetTags(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_GetTags_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).GetTags(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_CreateTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Tag)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).CreateTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_CreateTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).CreateTag(ctx, req.(*Tag))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_UpdateTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(Tag)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).UpdateTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_UpdateTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).UpdateTag(ctx, req.(*Tag))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_DeleteTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ElementId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).DeleteTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_DeleteTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).DeleteTag(ctx, req.(*ElementId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _TagService_AddItemToTag_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ElementId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TagServiceServer).AddItemToTag(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: TagService_AddItemToTag_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TagServiceServer).AddItemToTag(ctx, req.(*ElementId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// TagService_ServiceDesc is the grpc.ServiceDesc for TagService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var TagService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "your.service.v1.TagService",
+	HandlerType: (*TagServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetTag",
+			Handler:    _TagService_GetTag_Handler,
+		},
+		{
+			MethodName: "GetTags",
+			Handler:    _TagService_GetTags_Handler,
+		},
+		{
+			MethodName: "CreateTag",
+			Handler:    _TagService_CreateTag_Handler,
+		},
+		{
+			MethodName: "UpdateTag",
+			Handler:    _TagService_UpdateTag_Handler,
+		},
+		{
+			MethodName: "DeleteTag",
+			Handler:    _TagService_DeleteTag_Handler,
+		},
+		{
+			MethodName: "AddItemToTag",
+			Handler:    _TagService_AddItemToTag_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "backend.proto",
+}
