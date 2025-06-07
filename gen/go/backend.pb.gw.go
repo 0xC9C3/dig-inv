@@ -563,6 +563,126 @@ func local_request_TagService_AddItemToTag_0(ctx context.Context, marshaler runt
 	return msg, metadata, err
 }
 
+func request_AssetClassService_GetAssetClass_0(ctx context.Context, marshaler runtime.Marshaler, client AssetClassServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq EmptyMessage
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.GetAssetClass(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_AssetClassService_GetAssetClass_0(ctx context.Context, marshaler runtime.Marshaler, server AssetClassServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq EmptyMessage
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.GetAssetClass(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_AssetClassService_GetAssetClasses_0(ctx context.Context, marshaler runtime.Marshaler, client AssetClassServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq EmptyMessage
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.GetAssetClasses(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_AssetClassService_GetAssetClasses_0(ctx context.Context, marshaler runtime.Marshaler, server AssetClassServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq EmptyMessage
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.GetAssetClasses(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_AssetClassService_CreateAssetClass_0(ctx context.Context, marshaler runtime.Marshaler, client AssetClassServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq AssetClass
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.CreateAssetClass(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_AssetClassService_CreateAssetClass_0(ctx context.Context, marshaler runtime.Marshaler, server AssetClassServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq AssetClass
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.CreateAssetClass(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_AssetClassService_UpdateAssetClass_0(ctx context.Context, marshaler runtime.Marshaler, client AssetClassServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq AssetClass
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.UpdateAssetClass(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_AssetClassService_UpdateAssetClass_0(ctx context.Context, marshaler runtime.Marshaler, server AssetClassServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq AssetClass
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.UpdateAssetClass(ctx, &protoReq)
+	return msg, metadata, err
+}
+
+func request_AssetClassService_DeleteAssetClass_0(ctx context.Context, marshaler runtime.Marshaler, client AssetClassServiceClient, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq ElementId
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := client.DeleteAssetClass(ctx, &protoReq, grpc.Header(&metadata.HeaderMD), grpc.Trailer(&metadata.TrailerMD))
+	return msg, metadata, err
+}
+
+func local_request_AssetClassService_DeleteAssetClass_0(ctx context.Context, marshaler runtime.Marshaler, server AssetClassServiceServer, req *http.Request, pathParams map[string]string) (proto.Message, runtime.ServerMetadata, error) {
+	var (
+		protoReq ElementId
+		metadata runtime.ServerMetadata
+	)
+	if err := marshaler.NewDecoder(req.Body).Decode(&protoReq); err != nil && !errors.Is(err, io.EOF) {
+		return nil, metadata, status.Errorf(codes.InvalidArgument, "%v", err)
+	}
+	msg, err := server.DeleteAssetClass(ctx, &protoReq)
+	return msg, metadata, err
+}
+
 // RegisterOpenIdAuthServiceHandlerServer registers the http handlers for service OpenIdAuthService to "mux".
 // UnaryRPC     :call OpenIdAuthServiceServer directly.
 // StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
@@ -575,7 +695,7 @@ func RegisterOpenIdAuthServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/GetUserInfo", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/GetUserInfo"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.OpenIdAuthService/GetUserInfo", runtime.WithHTTPPathPattern("/dig_inv.OpenIdAuthService/GetUserInfo"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -595,7 +715,7 @@ func RegisterOpenIdAuthServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/BeginAuth", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/BeginAuth"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.OpenIdAuthService/BeginAuth", runtime.WithHTTPPathPattern("/dig_inv.OpenIdAuthService/BeginAuth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -615,7 +735,7 @@ func RegisterOpenIdAuthServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/ExchangeCode", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/ExchangeCode"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.OpenIdAuthService/ExchangeCode", runtime.WithHTTPPathPattern("/dig_inv.OpenIdAuthService/ExchangeCode"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -635,7 +755,7 @@ func RegisterOpenIdAuthServiceHandlerServer(ctx context.Context, mux *runtime.Se
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/Logout", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/Logout"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.OpenIdAuthService/Logout", runtime.WithHTTPPathPattern("/dig_inv.OpenIdAuthService/Logout"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -665,7 +785,7 @@ func RegisterItemServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.ItemService/GetItem", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/GetItem"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.ItemService/GetItem", runtime.WithHTTPPathPattern("/dig_inv.ItemService/GetItem"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -685,7 +805,7 @@ func RegisterItemServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.ItemService/GetItems", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/GetItems"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.ItemService/GetItems", runtime.WithHTTPPathPattern("/dig_inv.ItemService/GetItems"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -705,7 +825,7 @@ func RegisterItemServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.ItemService/CreateItem", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/CreateItem"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.ItemService/CreateItem", runtime.WithHTTPPathPattern("/dig_inv.ItemService/CreateItem"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -725,7 +845,7 @@ func RegisterItemServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.ItemService/UpdateItem", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/UpdateItem"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.ItemService/UpdateItem", runtime.WithHTTPPathPattern("/dig_inv.ItemService/UpdateItem"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -745,7 +865,7 @@ func RegisterItemServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.ItemService/DeleteItem", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/DeleteItem"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.ItemService/DeleteItem", runtime.WithHTTPPathPattern("/dig_inv.ItemService/DeleteItem"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -775,7 +895,7 @@ func RegisterUserGroupServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.UserGroupService/GetGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/GetGroup"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.UserGroupService/GetGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/GetGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -795,7 +915,7 @@ func RegisterUserGroupServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.UserGroupService/GetGroups", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/GetGroups"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.UserGroupService/GetGroups", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/GetGroups"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -815,7 +935,7 @@ func RegisterUserGroupServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.UserGroupService/CreateGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/CreateGroup"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.UserGroupService/CreateGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/CreateGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -835,7 +955,7 @@ func RegisterUserGroupServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.UserGroupService/UpdateGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/UpdateGroup"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.UserGroupService/UpdateGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/UpdateGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -855,7 +975,7 @@ func RegisterUserGroupServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.UserGroupService/DeleteGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/DeleteGroup"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.UserGroupService/DeleteGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/DeleteGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -875,7 +995,7 @@ func RegisterUserGroupServiceHandlerServer(ctx context.Context, mux *runtime.Ser
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.UserGroupService/AddItemToGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/AddItemToGroup"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.UserGroupService/AddItemToGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/AddItemToGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -905,7 +1025,7 @@ func RegisterHealthServiceHandlerServer(ctx context.Context, mux *runtime.ServeM
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.HealthService/HealthCheck", runtime.WithHTTPPathPattern("/your.service.v1.HealthService/HealthCheck"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.HealthService/HealthCheck", runtime.WithHTTPPathPattern("/dig_inv.HealthService/HealthCheck"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -935,7 +1055,7 @@ func RegisterTagServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.TagService/GetTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/GetTag"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.TagService/GetTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/GetTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -955,7 +1075,7 @@ func RegisterTagServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.TagService/GetTags", runtime.WithHTTPPathPattern("/your.service.v1.TagService/GetTags"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.TagService/GetTags", runtime.WithHTTPPathPattern("/dig_inv.TagService/GetTags"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -975,7 +1095,7 @@ func RegisterTagServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.TagService/CreateTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/CreateTag"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.TagService/CreateTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/CreateTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -995,7 +1115,7 @@ func RegisterTagServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.TagService/UpdateTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/UpdateTag"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.TagService/UpdateTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/UpdateTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1015,7 +1135,7 @@ func RegisterTagServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.TagService/DeleteTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/DeleteTag"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.TagService/DeleteTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/DeleteTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1035,7 +1155,7 @@ func RegisterTagServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 		var stream runtime.ServerTransportStream
 		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/your.service.v1.TagService/AddItemToTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/AddItemToTag"))
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.TagService/AddItemToTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/AddItemToTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1048,6 +1168,116 @@ func RegisterTagServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux,
 			return
 		}
 		forward_TagService_AddItemToTag_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+
+	return nil
+}
+
+// RegisterAssetClassServiceHandlerServer registers the http handlers for service AssetClassService to "mux".
+// UnaryRPC     :call AssetClassServiceServer directly.
+// StreamingRPC :currently unsupported pending https://github.com/grpc/grpc-go/issues/906.
+// Note that using this registration option will cause many gRPC library features to stop working. Consider using RegisterAssetClassServiceHandlerFromEndpoint instead.
+// GRPC interceptors will not work for this type of registration. To use interceptors, you must use the "runtime.WithMiddlewares" option in the "runtime.NewServeMux" call.
+func RegisterAssetClassServiceHandlerServer(ctx context.Context, mux *runtime.ServeMux, server AssetClassServiceServer) error {
+	mux.Handle(http.MethodPost, pattern_AssetClassService_GetAssetClass_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.AssetClassService/GetAssetClass", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/GetAssetClass"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_AssetClassService_GetAssetClass_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_GetAssetClass_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_AssetClassService_GetAssetClasses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.AssetClassService/GetAssetClasses", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/GetAssetClasses"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_AssetClassService_GetAssetClasses_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_GetAssetClasses_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_AssetClassService_CreateAssetClass_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.AssetClassService/CreateAssetClass", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/CreateAssetClass"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_AssetClassService_CreateAssetClass_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_CreateAssetClass_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_AssetClassService_UpdateAssetClass_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.AssetClassService/UpdateAssetClass", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/UpdateAssetClass"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_AssetClassService_UpdateAssetClass_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_UpdateAssetClass_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_AssetClassService_DeleteAssetClass_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		var stream runtime.ServerTransportStream
+		ctx = grpc.NewContextWithServerTransportStream(ctx, &stream)
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateIncomingContext(ctx, mux, req, "/dig_inv.AssetClassService/DeleteAssetClass", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/DeleteAssetClass"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := local_request_AssetClassService_DeleteAssetClass_0(annotatedContext, inboundMarshaler, server, req, pathParams)
+		md.HeaderMD, md.TrailerMD = metadata.Join(md.HeaderMD, stream.Header()), metadata.Join(md.TrailerMD, stream.Trailer())
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_DeleteAssetClass_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
 	})
 
 	return nil
@@ -1093,7 +1323,7 @@ func RegisterOpenIdAuthServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/GetUserInfo", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/GetUserInfo"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.OpenIdAuthService/GetUserInfo", runtime.WithHTTPPathPattern("/dig_inv.OpenIdAuthService/GetUserInfo"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1110,7 +1340,7 @@ func RegisterOpenIdAuthServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/BeginAuth", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/BeginAuth"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.OpenIdAuthService/BeginAuth", runtime.WithHTTPPathPattern("/dig_inv.OpenIdAuthService/BeginAuth"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1127,7 +1357,7 @@ func RegisterOpenIdAuthServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/ExchangeCode", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/ExchangeCode"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.OpenIdAuthService/ExchangeCode", runtime.WithHTTPPathPattern("/dig_inv.OpenIdAuthService/ExchangeCode"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1144,7 +1374,7 @@ func RegisterOpenIdAuthServiceHandlerClient(ctx context.Context, mux *runtime.Se
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.OpenIdAuthService/Logout", runtime.WithHTTPPathPattern("/your.service.v1.OpenIdAuthService/Logout"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.OpenIdAuthService/Logout", runtime.WithHTTPPathPattern("/dig_inv.OpenIdAuthService/Logout"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1161,10 +1391,10 @@ func RegisterOpenIdAuthServiceHandlerClient(ctx context.Context, mux *runtime.Se
 }
 
 var (
-	pattern_OpenIdAuthService_GetUserInfo_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.OpenIdAuthService", "GetUserInfo"}, ""))
-	pattern_OpenIdAuthService_BeginAuth_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.OpenIdAuthService", "BeginAuth"}, ""))
-	pattern_OpenIdAuthService_ExchangeCode_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.OpenIdAuthService", "ExchangeCode"}, ""))
-	pattern_OpenIdAuthService_Logout_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.OpenIdAuthService", "Logout"}, ""))
+	pattern_OpenIdAuthService_GetUserInfo_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.OpenIdAuthService", "GetUserInfo"}, ""))
+	pattern_OpenIdAuthService_BeginAuth_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.OpenIdAuthService", "BeginAuth"}, ""))
+	pattern_OpenIdAuthService_ExchangeCode_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.OpenIdAuthService", "ExchangeCode"}, ""))
+	pattern_OpenIdAuthService_Logout_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.OpenIdAuthService", "Logout"}, ""))
 )
 
 var (
@@ -1214,7 +1444,7 @@ func RegisterItemServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.ItemService/GetItem", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/GetItem"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.ItemService/GetItem", runtime.WithHTTPPathPattern("/dig_inv.ItemService/GetItem"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1231,7 +1461,7 @@ func RegisterItemServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.ItemService/GetItems", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/GetItems"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.ItemService/GetItems", runtime.WithHTTPPathPattern("/dig_inv.ItemService/GetItems"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1248,7 +1478,7 @@ func RegisterItemServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.ItemService/CreateItem", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/CreateItem"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.ItemService/CreateItem", runtime.WithHTTPPathPattern("/dig_inv.ItemService/CreateItem"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1265,7 +1495,7 @@ func RegisterItemServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.ItemService/UpdateItem", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/UpdateItem"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.ItemService/UpdateItem", runtime.WithHTTPPathPattern("/dig_inv.ItemService/UpdateItem"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1282,7 +1512,7 @@ func RegisterItemServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.ItemService/DeleteItem", runtime.WithHTTPPathPattern("/your.service.v1.ItemService/DeleteItem"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.ItemService/DeleteItem", runtime.WithHTTPPathPattern("/dig_inv.ItemService/DeleteItem"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1299,11 +1529,11 @@ func RegisterItemServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux
 }
 
 var (
-	pattern_ItemService_GetItem_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.ItemService", "GetItem"}, ""))
-	pattern_ItemService_GetItems_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.ItemService", "GetItems"}, ""))
-	pattern_ItemService_CreateItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.ItemService", "CreateItem"}, ""))
-	pattern_ItemService_UpdateItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.ItemService", "UpdateItem"}, ""))
-	pattern_ItemService_DeleteItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.ItemService", "DeleteItem"}, ""))
+	pattern_ItemService_GetItem_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.ItemService", "GetItem"}, ""))
+	pattern_ItemService_GetItems_0   = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.ItemService", "GetItems"}, ""))
+	pattern_ItemService_CreateItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.ItemService", "CreateItem"}, ""))
+	pattern_ItemService_UpdateItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.ItemService", "UpdateItem"}, ""))
+	pattern_ItemService_DeleteItem_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.ItemService", "DeleteItem"}, ""))
 )
 
 var (
@@ -1354,7 +1584,7 @@ func RegisterUserGroupServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.UserGroupService/GetGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/GetGroup"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.UserGroupService/GetGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/GetGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1371,7 +1601,7 @@ func RegisterUserGroupServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.UserGroupService/GetGroups", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/GetGroups"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.UserGroupService/GetGroups", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/GetGroups"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1388,7 +1618,7 @@ func RegisterUserGroupServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.UserGroupService/CreateGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/CreateGroup"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.UserGroupService/CreateGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/CreateGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1405,7 +1635,7 @@ func RegisterUserGroupServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.UserGroupService/UpdateGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/UpdateGroup"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.UserGroupService/UpdateGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/UpdateGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1422,7 +1652,7 @@ func RegisterUserGroupServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.UserGroupService/DeleteGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/DeleteGroup"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.UserGroupService/DeleteGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/DeleteGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1439,7 +1669,7 @@ func RegisterUserGroupServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.UserGroupService/AddItemToGroup", runtime.WithHTTPPathPattern("/your.service.v1.UserGroupService/AddItemToGroup"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.UserGroupService/AddItemToGroup", runtime.WithHTTPPathPattern("/dig_inv.UserGroupService/AddItemToGroup"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1456,12 +1686,12 @@ func RegisterUserGroupServiceHandlerClient(ctx context.Context, mux *runtime.Ser
 }
 
 var (
-	pattern_UserGroupService_GetGroup_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.UserGroupService", "GetGroup"}, ""))
-	pattern_UserGroupService_GetGroups_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.UserGroupService", "GetGroups"}, ""))
-	pattern_UserGroupService_CreateGroup_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.UserGroupService", "CreateGroup"}, ""))
-	pattern_UserGroupService_UpdateGroup_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.UserGroupService", "UpdateGroup"}, ""))
-	pattern_UserGroupService_DeleteGroup_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.UserGroupService", "DeleteGroup"}, ""))
-	pattern_UserGroupService_AddItemToGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.UserGroupService", "AddItemToGroup"}, ""))
+	pattern_UserGroupService_GetGroup_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.UserGroupService", "GetGroup"}, ""))
+	pattern_UserGroupService_GetGroups_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.UserGroupService", "GetGroups"}, ""))
+	pattern_UserGroupService_CreateGroup_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.UserGroupService", "CreateGroup"}, ""))
+	pattern_UserGroupService_UpdateGroup_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.UserGroupService", "UpdateGroup"}, ""))
+	pattern_UserGroupService_DeleteGroup_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.UserGroupService", "DeleteGroup"}, ""))
+	pattern_UserGroupService_AddItemToGroup_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.UserGroupService", "AddItemToGroup"}, ""))
 )
 
 var (
@@ -1513,7 +1743,7 @@ func RegisterHealthServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.HealthService/HealthCheck", runtime.WithHTTPPathPattern("/your.service.v1.HealthService/HealthCheck"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.HealthService/HealthCheck", runtime.WithHTTPPathPattern("/dig_inv.HealthService/HealthCheck"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1530,7 +1760,7 @@ func RegisterHealthServiceHandlerClient(ctx context.Context, mux *runtime.ServeM
 }
 
 var (
-	pattern_HealthService_HealthCheck_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.HealthService", "HealthCheck"}, ""))
+	pattern_HealthService_HealthCheck_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.HealthService", "HealthCheck"}, ""))
 )
 
 var (
@@ -1577,7 +1807,7 @@ func RegisterTagServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.TagService/GetTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/GetTag"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.TagService/GetTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/GetTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1594,7 +1824,7 @@ func RegisterTagServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.TagService/GetTags", runtime.WithHTTPPathPattern("/your.service.v1.TagService/GetTags"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.TagService/GetTags", runtime.WithHTTPPathPattern("/dig_inv.TagService/GetTags"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1611,7 +1841,7 @@ func RegisterTagServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.TagService/CreateTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/CreateTag"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.TagService/CreateTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/CreateTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1628,7 +1858,7 @@ func RegisterTagServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.TagService/UpdateTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/UpdateTag"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.TagService/UpdateTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/UpdateTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1645,7 +1875,7 @@ func RegisterTagServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.TagService/DeleteTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/DeleteTag"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.TagService/DeleteTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/DeleteTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1662,7 +1892,7 @@ func RegisterTagServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 		ctx, cancel := context.WithCancel(req.Context())
 		defer cancel()
 		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
-		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/your.service.v1.TagService/AddItemToTag", runtime.WithHTTPPathPattern("/your.service.v1.TagService/AddItemToTag"))
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.TagService/AddItemToTag", runtime.WithHTTPPathPattern("/dig_inv.TagService/AddItemToTag"))
 		if err != nil {
 			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
 			return
@@ -1679,12 +1909,12 @@ func RegisterTagServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux,
 }
 
 var (
-	pattern_TagService_GetTag_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.TagService", "GetTag"}, ""))
-	pattern_TagService_GetTags_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.TagService", "GetTags"}, ""))
-	pattern_TagService_CreateTag_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.TagService", "CreateTag"}, ""))
-	pattern_TagService_UpdateTag_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.TagService", "UpdateTag"}, ""))
-	pattern_TagService_DeleteTag_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.TagService", "DeleteTag"}, ""))
-	pattern_TagService_AddItemToTag_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"your.service.v1.TagService", "AddItemToTag"}, ""))
+	pattern_TagService_GetTag_0       = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.TagService", "GetTag"}, ""))
+	pattern_TagService_GetTags_0      = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.TagService", "GetTags"}, ""))
+	pattern_TagService_CreateTag_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.TagService", "CreateTag"}, ""))
+	pattern_TagService_UpdateTag_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.TagService", "UpdateTag"}, ""))
+	pattern_TagService_DeleteTag_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.TagService", "DeleteTag"}, ""))
+	pattern_TagService_AddItemToTag_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.TagService", "AddItemToTag"}, ""))
 )
 
 var (
@@ -1694,4 +1924,144 @@ var (
 	forward_TagService_UpdateTag_0    = runtime.ForwardResponseMessage
 	forward_TagService_DeleteTag_0    = runtime.ForwardResponseMessage
 	forward_TagService_AddItemToTag_0 = runtime.ForwardResponseMessage
+)
+
+// RegisterAssetClassServiceHandlerFromEndpoint is same as RegisterAssetClassServiceHandler but
+// automatically dials to "endpoint" and closes the connection when "ctx" gets done.
+func RegisterAssetClassServiceHandlerFromEndpoint(ctx context.Context, mux *runtime.ServeMux, endpoint string, opts []grpc.DialOption) (err error) {
+	conn, err := grpc.NewClient(endpoint, opts...)
+	if err != nil {
+		return err
+	}
+	defer func() {
+		if err != nil {
+			if cerr := conn.Close(); cerr != nil {
+				grpclog.Errorf("Failed to close conn to %s: %v", endpoint, cerr)
+			}
+			return
+		}
+		go func() {
+			<-ctx.Done()
+			if cerr := conn.Close(); cerr != nil {
+				grpclog.Errorf("Failed to close conn to %s: %v", endpoint, cerr)
+			}
+		}()
+	}()
+	return RegisterAssetClassServiceHandler(ctx, mux, conn)
+}
+
+// RegisterAssetClassServiceHandler registers the http handlers for service AssetClassService to "mux".
+// The handlers forward requests to the grpc endpoint over "conn".
+func RegisterAssetClassServiceHandler(ctx context.Context, mux *runtime.ServeMux, conn *grpc.ClientConn) error {
+	return RegisterAssetClassServiceHandlerClient(ctx, mux, NewAssetClassServiceClient(conn))
+}
+
+// RegisterAssetClassServiceHandlerClient registers the http handlers for service AssetClassService
+// to "mux". The handlers forward requests to the grpc endpoint over the given implementation of "AssetClassServiceClient".
+// Note: the gRPC framework executes interceptors within the gRPC handler. If the passed in "AssetClassServiceClient"
+// doesn't go through the normal gRPC flow (creating a gRPC client etc.) then it will be up to the passed in
+// "AssetClassServiceClient" to call the correct interceptors. This client ignores the HTTP middlewares.
+func RegisterAssetClassServiceHandlerClient(ctx context.Context, mux *runtime.ServeMux, client AssetClassServiceClient) error {
+	mux.Handle(http.MethodPost, pattern_AssetClassService_GetAssetClass_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.AssetClassService/GetAssetClass", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/GetAssetClass"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_AssetClassService_GetAssetClass_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_GetAssetClass_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_AssetClassService_GetAssetClasses_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.AssetClassService/GetAssetClasses", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/GetAssetClasses"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_AssetClassService_GetAssetClasses_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_GetAssetClasses_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_AssetClassService_CreateAssetClass_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.AssetClassService/CreateAssetClass", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/CreateAssetClass"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_AssetClassService_CreateAssetClass_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_CreateAssetClass_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_AssetClassService_UpdateAssetClass_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.AssetClassService/UpdateAssetClass", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/UpdateAssetClass"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_AssetClassService_UpdateAssetClass_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_UpdateAssetClass_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	mux.Handle(http.MethodPost, pattern_AssetClassService_DeleteAssetClass_0, func(w http.ResponseWriter, req *http.Request, pathParams map[string]string) {
+		ctx, cancel := context.WithCancel(req.Context())
+		defer cancel()
+		inboundMarshaler, outboundMarshaler := runtime.MarshalerForRequest(mux, req)
+		annotatedContext, err := runtime.AnnotateContext(ctx, mux, req, "/dig_inv.AssetClassService/DeleteAssetClass", runtime.WithHTTPPathPattern("/dig_inv.AssetClassService/DeleteAssetClass"))
+		if err != nil {
+			runtime.HTTPError(ctx, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		resp, md, err := request_AssetClassService_DeleteAssetClass_0(annotatedContext, inboundMarshaler, client, req, pathParams)
+		annotatedContext = runtime.NewServerMetadataContext(annotatedContext, md)
+		if err != nil {
+			runtime.HTTPError(annotatedContext, mux, outboundMarshaler, w, req, err)
+			return
+		}
+		forward_AssetClassService_DeleteAssetClass_0(annotatedContext, mux, outboundMarshaler, w, req, resp, mux.GetForwardResponseOptions()...)
+	})
+	return nil
+}
+
+var (
+	pattern_AssetClassService_GetAssetClass_0    = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.AssetClassService", "GetAssetClass"}, ""))
+	pattern_AssetClassService_GetAssetClasses_0  = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.AssetClassService", "GetAssetClasses"}, ""))
+	pattern_AssetClassService_CreateAssetClass_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.AssetClassService", "CreateAssetClass"}, ""))
+	pattern_AssetClassService_UpdateAssetClass_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.AssetClassService", "UpdateAssetClass"}, ""))
+	pattern_AssetClassService_DeleteAssetClass_0 = runtime.MustPattern(runtime.NewPattern(1, []int{2, 0, 2, 1}, []string{"dig_inv.AssetClassService", "DeleteAssetClass"}, ""))
+)
+
+var (
+	forward_AssetClassService_GetAssetClass_0    = runtime.ForwardResponseMessage
+	forward_AssetClassService_GetAssetClasses_0  = runtime.ForwardResponseMessage
+	forward_AssetClassService_CreateAssetClass_0 = runtime.ForwardResponseMessage
+	forward_AssetClassService_UpdateAssetClass_0 = runtime.ForwardResponseMessage
+	forward_AssetClassService_DeleteAssetClass_0 = runtime.ForwardResponseMessage
 )

@@ -15,20 +15,20 @@
 
 import * as runtime from '../runtime';
 import type {
+  DigInvAuthUrlMessage,
+  DigInvExchangeCodeMessage,
+  DigInvUserInfoMessage,
   RpcStatus,
-  V1AuthUrlMessage,
-  V1ExchangeCodeMessage,
-  V1UserSubjectMessage,
 } from '../models/index';
 import {
+    DigInvAuthUrlMessageFromJSON,
+    DigInvAuthUrlMessageToJSON,
+    DigInvExchangeCodeMessageFromJSON,
+    DigInvExchangeCodeMessageToJSON,
+    DigInvUserInfoMessageFromJSON,
+    DigInvUserInfoMessageToJSON,
     RpcStatusFromJSON,
     RpcStatusToJSON,
-    V1AuthUrlMessageFromJSON,
-    V1AuthUrlMessageToJSON,
-    V1ExchangeCodeMessageFromJSON,
-    V1ExchangeCodeMessageToJSON,
-    V1UserSubjectMessageFromJSON,
-    V1UserSubjectMessageToJSON,
 } from '../models/index';
 
 export interface OpenIdAuthServiceBeginAuthRequest {
@@ -36,7 +36,7 @@ export interface OpenIdAuthServiceBeginAuthRequest {
 }
 
 export interface OpenIdAuthServiceExchangeCodeRequest {
-    body: V1ExchangeCodeMessage;
+    body: DigInvExchangeCodeMessage;
 }
 
 export interface OpenIdAuthServiceGetUserInfoRequest {
@@ -54,7 +54,7 @@ export class OpenIdAuthServiceApi extends runtime.BaseAPI {
 
     /**
      */
-    async openIdAuthServiceBeginAuthRaw(requestParameters: OpenIdAuthServiceBeginAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1AuthUrlMessage>> {
+    async openIdAuthServiceBeginAuthRaw(requestParameters: OpenIdAuthServiceBeginAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvAuthUrlMessage>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -69,19 +69,19 @@ export class OpenIdAuthServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.OpenIdAuthService/BeginAuth`,
+            path: `/dig_inv.OpenIdAuthService/BeginAuth`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1AuthUrlMessageFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvAuthUrlMessageFromJSON(jsonValue));
     }
 
     /**
      */
-    async openIdAuthServiceBeginAuth(requestParameters: OpenIdAuthServiceBeginAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1AuthUrlMessage> {
+    async openIdAuthServiceBeginAuth(requestParameters: OpenIdAuthServiceBeginAuthRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvAuthUrlMessage> {
         const response = await this.openIdAuthServiceBeginAuthRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -103,11 +103,11 @@ export class OpenIdAuthServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.OpenIdAuthService/ExchangeCode`,
+            path: `/dig_inv.OpenIdAuthService/ExchangeCode`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1ExchangeCodeMessageToJSON(requestParameters['body']),
+            body: DigInvExchangeCodeMessageToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -122,7 +122,7 @@ export class OpenIdAuthServiceApi extends runtime.BaseAPI {
 
     /**
      */
-    async openIdAuthServiceGetUserInfoRaw(requestParameters: OpenIdAuthServiceGetUserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1UserSubjectMessage>> {
+    async openIdAuthServiceGetUserInfoRaw(requestParameters: OpenIdAuthServiceGetUserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvUserInfoMessage>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -137,19 +137,19 @@ export class OpenIdAuthServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.OpenIdAuthService/GetUserInfo`,
+            path: `/dig_inv.OpenIdAuthService/GetUserInfo`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1UserSubjectMessageFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvUserInfoMessageFromJSON(jsonValue));
     }
 
     /**
      */
-    async openIdAuthServiceGetUserInfo(requestParameters: OpenIdAuthServiceGetUserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1UserSubjectMessage> {
+    async openIdAuthServiceGetUserInfo(requestParameters: OpenIdAuthServiceGetUserInfoRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvUserInfoMessage> {
         const response = await this.openIdAuthServiceGetUserInfoRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -171,7 +171,7 @@ export class OpenIdAuthServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.OpenIdAuthService/Logout`,
+            path: `/dig_inv.OpenIdAuthService/Logout`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

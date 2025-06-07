@@ -19,6 +19,9 @@
     },
     {
       "name": "TagService"
+    },
+    {
+      "name": "AssetClassService"
     }
   ],
   "consumes": [
@@ -28,14 +31,14 @@
     "application/json"
   ],
   "paths": {
-    "/your.service.v1.HealthService/HealthCheck": {
+    "/dig_inv.AssetClassService/CreateAssetClass": {
       "post": {
-        "operationId": "HealthService_HealthCheck",
+        "operationId": "AssetClassService_CreateAssetClass",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invAssetClass"
             }
           },
           "default": {
@@ -51,7 +54,167 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invAssetClass"
+            }
+          }
+        ],
+        "tags": [
+          "AssetClassService"
+        ]
+      }
+    },
+    "/dig_inv.AssetClassService/DeleteAssetClass": {
+      "post": {
+        "operationId": "AssetClassService_DeleteAssetClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/dig_invEmptyMessage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dig_invElementId"
+            }
+          }
+        ],
+        "tags": [
+          "AssetClassService"
+        ]
+      }
+    },
+    "/dig_inv.AssetClassService/GetAssetClass": {
+      "post": {
+        "operationId": "AssetClassService_GetAssetClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/dig_invAssetClass"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dig_invEmptyMessage"
+            }
+          }
+        ],
+        "tags": [
+          "AssetClassService"
+        ]
+      }
+    },
+    "/dig_inv.AssetClassService/GetAssetClasses": {
+      "post": {
+        "operationId": "AssetClassService_GetAssetClasses",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/dig_invAssetClasses"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dig_invEmptyMessage"
+            }
+          }
+        ],
+        "tags": [
+          "AssetClassService"
+        ]
+      }
+    },
+    "/dig_inv.AssetClassService/UpdateAssetClass": {
+      "post": {
+        "operationId": "AssetClassService_UpdateAssetClass",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/dig_invAssetClass"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dig_invAssetClass"
+            }
+          }
+        ],
+        "tags": [
+          "AssetClassService"
+        ]
+      }
+    },
+    "/dig_inv.HealthService/HealthCheck": {
+      "post": {
+        "operationId": "HealthService_HealthCheck",
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/dig_invEmptyMessage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/rpcStatus"
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -60,14 +223,14 @@
         ]
       }
     },
-    "/your.service.v1.ItemService/CreateItem": {
+    "/dig_inv.ItemService/CreateItem": {
       "post": {
         "operationId": "ItemService_CreateItem",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Item"
+              "$ref": "#/definitions/dig_invItem"
             }
           },
           "default": {
@@ -83,7 +246,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Item"
+              "$ref": "#/definitions/dig_invItem"
             }
           }
         ],
@@ -92,14 +255,14 @@
         ]
       }
     },
-    "/your.service.v1.ItemService/DeleteItem": {
+    "/dig_inv.ItemService/DeleteItem": {
       "post": {
         "operationId": "ItemService_DeleteItem",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           },
           "default": {
@@ -115,7 +278,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ElementId"
+              "$ref": "#/definitions/dig_invElementId"
             }
           }
         ],
@@ -124,14 +287,14 @@
         ]
       }
     },
-    "/your.service.v1.ItemService/GetItem": {
+    "/dig_inv.ItemService/GetItem": {
       "post": {
         "operationId": "ItemService_GetItem",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Item"
+              "$ref": "#/definitions/dig_invItem"
             }
           },
           "default": {
@@ -147,7 +310,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -156,14 +319,14 @@
         ]
       }
     },
-    "/your.service.v1.ItemService/GetItems": {
+    "/dig_inv.ItemService/GetItems": {
       "post": {
         "operationId": "ItemService_GetItems",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Items"
+              "$ref": "#/definitions/dig_invItems"
             }
           },
           "default": {
@@ -179,7 +342,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -188,14 +351,14 @@
         ]
       }
     },
-    "/your.service.v1.ItemService/UpdateItem": {
+    "/dig_inv.ItemService/UpdateItem": {
       "post": {
         "operationId": "ItemService_UpdateItem",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Item"
+              "$ref": "#/definitions/dig_invItem"
             }
           },
           "default": {
@@ -211,7 +374,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Item"
+              "$ref": "#/definitions/dig_invItem"
             }
           }
         ],
@@ -220,14 +383,14 @@
         ]
       }
     },
-    "/your.service.v1.OpenIdAuthService/BeginAuth": {
+    "/dig_inv.OpenIdAuthService/BeginAuth": {
       "post": {
         "operationId": "OpenIdAuthService_BeginAuth",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1AuthUrlMessage"
+              "$ref": "#/definitions/dig_invAuthUrlMessage"
             }
           },
           "default": {
@@ -243,7 +406,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -252,14 +415,14 @@
         ]
       }
     },
-    "/your.service.v1.OpenIdAuthService/ExchangeCode": {
+    "/dig_inv.OpenIdAuthService/ExchangeCode": {
       "post": {
         "operationId": "OpenIdAuthService_ExchangeCode",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           },
           "default": {
@@ -275,7 +438,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ExchangeCodeMessage"
+              "$ref": "#/definitions/dig_invExchangeCodeMessage"
             }
           }
         ],
@@ -284,14 +447,14 @@
         ]
       }
     },
-    "/your.service.v1.OpenIdAuthService/GetUserInfo": {
+    "/dig_inv.OpenIdAuthService/GetUserInfo": {
       "post": {
         "operationId": "OpenIdAuthService_GetUserInfo",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UserSubjectMessage"
+              "$ref": "#/definitions/dig_invUserInfoMessage"
             }
           },
           "default": {
@@ -307,7 +470,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -316,14 +479,14 @@
         ]
       }
     },
-    "/your.service.v1.OpenIdAuthService/Logout": {
+    "/dig_inv.OpenIdAuthService/Logout": {
       "post": {
         "operationId": "OpenIdAuthService_Logout",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           },
           "default": {
@@ -339,7 +502,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -348,14 +511,14 @@
         ]
       }
     },
-    "/your.service.v1.TagService/AddItemToTag": {
+    "/dig_inv.TagService/AddItemToTag": {
       "post": {
         "operationId": "TagService_AddItemToTag",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           },
           "default": {
@@ -371,7 +534,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ElementId"
+              "$ref": "#/definitions/dig_invElementId"
             }
           }
         ],
@@ -380,14 +543,14 @@
         ]
       }
     },
-    "/your.service.v1.TagService/CreateTag": {
+    "/dig_inv.TagService/CreateTag": {
       "post": {
         "operationId": "TagService_CreateTag",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Tag"
+              "$ref": "#/definitions/dig_invTag"
             }
           },
           "default": {
@@ -403,7 +566,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Tag"
+              "$ref": "#/definitions/dig_invTag"
             }
           }
         ],
@@ -412,14 +575,14 @@
         ]
       }
     },
-    "/your.service.v1.TagService/DeleteTag": {
+    "/dig_inv.TagService/DeleteTag": {
       "post": {
         "operationId": "TagService_DeleteTag",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           },
           "default": {
@@ -435,7 +598,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ElementId"
+              "$ref": "#/definitions/dig_invElementId"
             }
           }
         ],
@@ -444,14 +607,14 @@
         ]
       }
     },
-    "/your.service.v1.TagService/GetTag": {
+    "/dig_inv.TagService/GetTag": {
       "post": {
         "operationId": "TagService_GetTag",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Tag"
+              "$ref": "#/definitions/dig_invTag"
             }
           },
           "default": {
@@ -467,7 +630,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -476,14 +639,14 @@
         ]
       }
     },
-    "/your.service.v1.TagService/GetTags": {
+    "/dig_inv.TagService/GetTags": {
       "post": {
         "operationId": "TagService_GetTags",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Tags"
+              "$ref": "#/definitions/dig_invTags"
             }
           },
           "default": {
@@ -499,7 +662,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -508,14 +671,14 @@
         ]
       }
     },
-    "/your.service.v1.TagService/UpdateTag": {
+    "/dig_inv.TagService/UpdateTag": {
       "post": {
         "operationId": "TagService_UpdateTag",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1Tag"
+              "$ref": "#/definitions/dig_invTag"
             }
           },
           "default": {
@@ -531,7 +694,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1Tag"
+              "$ref": "#/definitions/dig_invTag"
             }
           }
         ],
@@ -540,14 +703,14 @@
         ]
       }
     },
-    "/your.service.v1.UserGroupService/AddItemToGroup": {
+    "/dig_inv.UserGroupService/AddItemToGroup": {
       "post": {
         "operationId": "UserGroupService_AddItemToGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           },
           "default": {
@@ -563,7 +726,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ElementId"
+              "$ref": "#/definitions/dig_invElementId"
             }
           }
         ],
@@ -572,14 +735,14 @@
         ]
       }
     },
-    "/your.service.v1.UserGroupService/CreateGroup": {
+    "/dig_inv.UserGroupService/CreateGroup": {
       "post": {
         "operationId": "UserGroupService_CreateGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UserGroup"
+              "$ref": "#/definitions/dig_invUserGroup"
             }
           },
           "default": {
@@ -595,7 +758,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UserGroup"
+              "$ref": "#/definitions/dig_invUserGroup"
             }
           }
         ],
@@ -604,14 +767,14 @@
         ]
       }
     },
-    "/your.service.v1.UserGroupService/DeleteGroup": {
+    "/dig_inv.UserGroupService/DeleteGroup": {
       "post": {
         "operationId": "UserGroupService_DeleteGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           },
           "default": {
@@ -627,7 +790,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1ElementId"
+              "$ref": "#/definitions/dig_invElementId"
             }
           }
         ],
@@ -636,14 +799,14 @@
         ]
       }
     },
-    "/your.service.v1.UserGroupService/GetGroup": {
+    "/dig_inv.UserGroupService/GetGroup": {
       "post": {
         "operationId": "UserGroupService_GetGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UserGroup"
+              "$ref": "#/definitions/dig_invUserGroup"
             }
           },
           "default": {
@@ -659,7 +822,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -668,14 +831,14 @@
         ]
       }
     },
-    "/your.service.v1.UserGroupService/GetGroups": {
+    "/dig_inv.UserGroupService/GetGroups": {
       "post": {
         "operationId": "UserGroupService_GetGroups",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UserGroup"
+              "$ref": "#/definitions/dig_invUserGroup"
             }
           },
           "default": {
@@ -691,7 +854,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1EmptyMessage"
+              "$ref": "#/definitions/dig_invEmptyMessage"
             }
           }
         ],
@@ -700,14 +863,14 @@
         ]
       }
     },
-    "/your.service.v1.UserGroupService/UpdateGroup": {
+    "/dig_inv.UserGroupService/UpdateGroup": {
       "post": {
         "operationId": "UserGroupService_UpdateGroup",
         "responses": {
           "200": {
             "description": "A successful response.",
             "schema": {
-              "$ref": "#/definitions/v1UserGroup"
+              "$ref": "#/definitions/dig_invUserGroup"
             }
           },
           "default": {
@@ -723,7 +886,7 @@
             "in": "body",
             "required": true,
             "schema": {
-              "$ref": "#/definitions/v1UserGroup"
+              "$ref": "#/definitions/dig_invUserGroup"
             }
           }
         ],
@@ -734,6 +897,139 @@
     }
   },
   "definitions": {
+    "dig_invAssetClass": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "icon": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        }
+      }
+    },
+    "dig_invAssetClasses": {
+      "type": "object",
+      "properties": {
+        "classes": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/dig_invAssetClass"
+          }
+        }
+      }
+    },
+    "dig_invAuthUrlMessage": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      }
+    },
+    "dig_invElementId": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        }
+      }
+    },
+    "dig_invEmptyMessage": {
+      "type": "object"
+    },
+    "dig_invExchangeCodeMessage": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "state": {
+          "type": "string"
+        }
+      }
+    },
+    "dig_invItem": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        }
+      }
+    },
+    "dig_invItems": {
+      "type": "object",
+      "properties": {
+        "items": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/dig_invItem"
+          }
+        }
+      }
+    },
+    "dig_invTag": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "dig_invTags": {
+      "type": "object",
+      "properties": {
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "$ref": "#/definitions/dig_invTag"
+          }
+        }
+      }
+    },
+    "dig_invUserGroup": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "dig_invUserInfoMessage": {
+      "type": "object",
+      "properties": {
+        "subject": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        }
+      }
+    },
     "protobufAny": {
       "type": "object",
       "properties": {
@@ -759,104 +1055,6 @@
             "type": "object",
             "$ref": "#/definitions/protobufAny"
           }
-        }
-      }
-    },
-    "v1AuthUrlMessage": {
-      "type": "object",
-      "properties": {
-        "url": {
-          "type": "string"
-        }
-      }
-    },
-    "v1ElementId": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        }
-      }
-    },
-    "v1EmptyMessage": {
-      "type": "object"
-    },
-    "v1ExchangeCodeMessage": {
-      "type": "object",
-      "properties": {
-        "code": {
-          "type": "string"
-        },
-        "state": {
-          "type": "string"
-        }
-      }
-    },
-    "v1Item": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        },
-        "description": {
-          "type": "string"
-        }
-      }
-    },
-    "v1Items": {
-      "type": "object",
-      "properties": {
-        "items": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Item"
-          }
-        }
-      }
-    },
-    "v1Tag": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "v1Tags": {
-      "type": "object",
-      "properties": {
-        "tags": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "$ref": "#/definitions/v1Tag"
-          }
-        }
-      }
-    },
-    "v1UserGroup": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
-    "v1UserSubjectMessage": {
-      "type": "object",
-      "properties": {
-        "subject": {
-          "type": "string"
         }
       }
     }

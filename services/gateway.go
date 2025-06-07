@@ -5,6 +5,7 @@ import (
 	"dig-inv/env"
 	gw "dig-inv/gen/go"
 	"dig-inv/log"
+	"dig-inv/store"
 	"errors"
 	"fmt"
 	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
@@ -17,6 +18,9 @@ import (
 var serviceInitializer = []func(ctx context.Context, mux *runtime.ServeMux) error{
 	func(ctx context.Context, mux *runtime.ServeMux) error {
 		return gw.RegisterOpenIdAuthServiceHandlerServer(ctx, mux, NewOpenIdAuthServer())
+	},
+	func(ctx context.Context, mux *runtime.ServeMux) error {
+		return gw.RegisterAssetClassServiceHandlerServer(ctx, mux, NewAssetClassServer())
 	},
 }
 
@@ -48,8 +52,12 @@ func (gateway *Server) GetServer() (*http.Server, error) {
 	}
 
 	ctx := context.Background()
-	ctx, cancel := context.WithCancel(ctx)
-	defer cancel()
+
+	err := store.InitializeSchema(ctx)
+	if err != nil {
+		log.S.Errorw("Failed to initialize schema", "error", err)
+		return nil, fmt.Errorf("failed to initialize schema: %w", err)
+	}
 
 	handler, err := initializeHandler(ctx, gateway.initializer)
 	if err != nil {
@@ -65,6 +73,9 @@ func (gateway *Server) GetServer() (*http.Server, error) {
 func initializeHandler(ctx context.Context, serviceInitializer []func(ctx context.Context, mux *runtime.ServeMux) error) (http.Handler, error) {
 	mux := runtime.NewServeMux(
 		runtime.WithForwardResponseOption(httpCookieResponseModifier),
+		runtime.WithMiddlewares(
+			verifyAuthenticationMiddleware,
+		),
 	)
 
 	for _, initFunc := range serviceInitializer {
@@ -74,7 +85,6 @@ func initializeHandler(ctx context.Context, serviceInitializer []func(ctx contex
 		}
 	}
 
-	// @todo config
 	corsOption := cors.Options{
 		AllowedOrigins:   env.GetAllowedCorsOrigins(),
 		AllowCredentials: true,
@@ -120,6 +130,7 @@ func httpCookieResponseModifier(ctx context.Context, w http.ResponseWriter, _ pr
 				Value:    value,
 				HttpOnly: true,
 				Secure:   !env.GetIsDevelopmentMode(),
+				Path:     "/",
 			})
 		}
 

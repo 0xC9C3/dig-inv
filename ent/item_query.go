@@ -5,9 +5,11 @@ package ent
 import (
 	"context"
 	"database/sql/driver"
+	"dig-inv/ent/assetclass"
 	"dig-inv/ent/item"
 	"dig-inv/ent/predicate"
 	"dig-inv/ent/tag"
+	"dig-inv/ent/usergroup"
 	"fmt"
 	"math"
 
@@ -21,12 +23,14 @@ import (
 // ItemQuery is the builder for querying Item entities.
 type ItemQuery struct {
 	config
-	ctx        *QueryContext
-	order      []item.OrderOption
-	inters     []Interceptor
-	predicates []predicate.Item
-	withTags   *TagQuery
-	withFKs    bool
+	ctx            *QueryContext
+	order          []item.OrderOption
+	inters         []Interceptor
+	predicates     []predicate.Item
+	withTags       *TagQuery
+	withUserGroups *UserGroupQuery
+	withAssetClass *AssetClassQuery
+	withFKs        bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -78,6 +82,50 @@ func (iq *ItemQuery) QueryTags() *TagQuery {
 			sqlgraph.From(item.Table, item.FieldID, selector),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, item.TagsTable, item.TagsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryUserGroups chains the current query on the "user_groups" edge.
+func (iq *ItemQuery) QueryUserGroups() *UserGroupQuery {
+	query := (&UserGroupClient{config: iq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := iq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := iq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(item.Table, item.FieldID, selector),
+			sqlgraph.To(usergroup.Table, usergroup.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, item.UserGroupsTable, item.UserGroupsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
+}
+
+// QueryAssetClass chains the current query on the "asset_class" edge.
+func (iq *ItemQuery) QueryAssetClass() *AssetClassQuery {
+	query := (&AssetClassClient{config: iq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := iq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := iq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(item.Table, item.FieldID, selector),
+			sqlgraph.To(assetclass.Table, assetclass.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, item.AssetClassTable, item.AssetClassColumn),
 		)
 		fromU = sqlgraph.SetNeighbors(iq.driver.Dialect(), step)
 		return fromU, nil
@@ -272,12 +320,14 @@ func (iq *ItemQuery) Clone() *ItemQuery {
 		return nil
 	}
 	return &ItemQuery{
-		config:     iq.config,
-		ctx:        iq.ctx.Clone(),
-		order:      append([]item.OrderOption{}, iq.order...),
-		inters:     append([]Interceptor{}, iq.inters...),
-		predicates: append([]predicate.Item{}, iq.predicates...),
-		withTags:   iq.withTags.Clone(),
+		config:         iq.config,
+		ctx:            iq.ctx.Clone(),
+		order:          append([]item.OrderOption{}, iq.order...),
+		inters:         append([]Interceptor{}, iq.inters...),
+		predicates:     append([]predicate.Item{}, iq.predicates...),
+		withTags:       iq.withTags.Clone(),
+		withUserGroups: iq.withUserGroups.Clone(),
+		withAssetClass: iq.withAssetClass.Clone(),
 		// clone intermediate query.
 		sql:  iq.sql.Clone(),
 		path: iq.path,
@@ -292,6 +342,28 @@ func (iq *ItemQuery) WithTags(opts ...func(*TagQuery)) *ItemQuery {
 		opt(query)
 	}
 	iq.withTags = query
+	return iq
+}
+
+// WithUserGroups tells the query-builder to eager-load the nodes that are connected to
+// the "user_groups" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *ItemQuery) WithUserGroups(opts ...func(*UserGroupQuery)) *ItemQuery {
+	query := (&UserGroupClient{config: iq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	iq.withUserGroups = query
+	return iq
+}
+
+// WithAssetClass tells the query-builder to eager-load the nodes that are connected to
+// the "asset_class" edge. The optional arguments are used to configure the query builder of the edge.
+func (iq *ItemQuery) WithAssetClass(opts ...func(*AssetClassQuery)) *ItemQuery {
+	query := (&AssetClassClient{config: iq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	iq.withAssetClass = query
 	return iq
 }
 
@@ -374,8 +446,10 @@ func (iq *ItemQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Item, e
 		nodes       = []*Item{}
 		withFKs     = iq.withFKs
 		_spec       = iq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [3]bool{
 			iq.withTags != nil,
+			iq.withUserGroups != nil,
+			iq.withAssetClass != nil,
 		}
 	)
 	if withFKs {
@@ -403,6 +477,20 @@ func (iq *ItemQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Item, e
 		if err := iq.loadTags(ctx, query, nodes,
 			func(n *Item) { n.Edges.Tags = []*Tag{} },
 			func(n *Item, e *Tag) { n.Edges.Tags = append(n.Edges.Tags, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := iq.withUserGroups; query != nil {
+		if err := iq.loadUserGroups(ctx, query, nodes,
+			func(n *Item) { n.Edges.UserGroups = []*UserGroup{} },
+			func(n *Item, e *UserGroup) { n.Edges.UserGroups = append(n.Edges.UserGroups, e) }); err != nil {
+			return nil, err
+		}
+	}
+	if query := iq.withAssetClass; query != nil {
+		if err := iq.loadAssetClass(ctx, query, nodes,
+			func(n *Item) { n.Edges.AssetClass = []*AssetClass{} },
+			func(n *Item, e *AssetClass) { n.Edges.AssetClass = append(n.Edges.AssetClass, e) }); err != nil {
 			return nil, err
 		}
 	}
@@ -435,6 +523,68 @@ func (iq *ItemQuery) loadTags(ctx context.Context, query *TagQuery, nodes []*Ite
 		node, ok := nodeids[*fk]
 		if !ok {
 			return fmt.Errorf(`unexpected referenced foreign-key "item_tags" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (iq *ItemQuery) loadUserGroups(ctx context.Context, query *UserGroupQuery, nodes []*Item, init func(*Item), assign func(*Item, *UserGroup)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Item)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.UserGroup(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(item.UserGroupsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.item_user_groups
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "item_user_groups" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "item_user_groups" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
+}
+func (iq *ItemQuery) loadAssetClass(ctx context.Context, query *AssetClassQuery, nodes []*Item, init func(*Item), assign func(*Item, *AssetClass)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[uuid.UUID]*Item)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.AssetClass(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(item.AssetClassColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.item_asset_class
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "item_asset_class" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "item_asset_class" returned %v for node %v`, *fk, n.ID)
 		}
 		assign(node, n)
 	}

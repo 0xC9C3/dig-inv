@@ -3,9 +3,11 @@
 package ent
 
 import (
+	"dig-inv/ent/assetclass"
 	"dig-inv/ent/item"
 	"dig-inv/ent/schema"
 	"dig-inv/ent/tag"
+	"dig-inv/ent/usergroup"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,26 +17,38 @@ import (
 // (default values, validators, hooks and policies) and stitches it
 // to their package variables.
 func init() {
+	assetclassFields := schema.AssetClass{}.Fields()
+	_ = assetclassFields
+	// assetclassDescName is the schema descriptor for name field.
+	assetclassDescName := assetclassFields[1].Descriptor()
+	// assetclass.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	assetclass.NameValidator = assetclassDescName.Validators[0].(func(string) error)
+	// assetclassDescCreatedAt is the schema descriptor for created_at field.
+	assetclassDescCreatedAt := assetclassFields[7].Descriptor()
+	// assetclass.DefaultCreatedAt holds the default value on creation for the created_at field.
+	assetclass.DefaultCreatedAt = assetclassDescCreatedAt.Default.(func() time.Time)
+	// assetclassDescUpdatedAt is the schema descriptor for updated_at field.
+	assetclassDescUpdatedAt := assetclassFields[9].Descriptor()
+	// assetclass.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	assetclass.DefaultUpdatedAt = assetclassDescUpdatedAt.Default.(func() time.Time)
+	// assetclass.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	assetclass.UpdateDefaultUpdatedAt = assetclassDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// assetclassDescID is the schema descriptor for id field.
+	assetclassDescID := assetclassFields[0].Descriptor()
+	// assetclass.DefaultID holds the default value on creation for the id field.
+	assetclass.DefaultID = assetclassDescID.Default.(func() uuid.UUID)
 	itemFields := schema.Item{}.Fields()
 	_ = itemFields
 	// itemDescName is the schema descriptor for name field.
 	itemDescName := itemFields[1].Descriptor()
 	// item.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	item.NameValidator = itemDescName.Validators[0].(func(string) error)
-	// itemDescType is the schema descriptor for type field.
-	itemDescType := itemFields[3].Descriptor()
-	// item.TypeValidator is a validator for the "type" field. It is called by the builders before save.
-	item.TypeValidator = itemDescType.Validators[0].(func(string) error)
-	// itemDescProvider is the schema descriptor for provider field.
-	itemDescProvider := itemFields[4].Descriptor()
-	// item.ProviderValidator is a validator for the "provider" field. It is called by the builders before save.
-	item.ProviderValidator = itemDescProvider.Validators[0].(func(string) error)
 	// itemDescCreatedAt is the schema descriptor for created_at field.
-	itemDescCreatedAt := itemFields[6].Descriptor()
+	itemDescCreatedAt := itemFields[4].Descriptor()
 	// item.DefaultCreatedAt holds the default value on creation for the created_at field.
 	item.DefaultCreatedAt = itemDescCreatedAt.Default.(func() time.Time)
 	// itemDescUpdatedAt is the schema descriptor for updated_at field.
-	itemDescUpdatedAt := itemFields[8].Descriptor()
+	itemDescUpdatedAt := itemFields[6].Descriptor()
 	// item.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	item.DefaultUpdatedAt = itemDescUpdatedAt.Default.(func() time.Time)
 	// item.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
@@ -63,4 +77,28 @@ func init() {
 	tagDescID := tagFields[0].Descriptor()
 	// tag.DefaultID holds the default value on creation for the id field.
 	tag.DefaultID = tagDescID.Default.(func() uuid.UUID)
+	usergroupFields := schema.UserGroup{}.Fields()
+	_ = usergroupFields
+	// usergroupDescName is the schema descriptor for name field.
+	usergroupDescName := usergroupFields[1].Descriptor()
+	// usergroup.NameValidator is a validator for the "name" field. It is called by the builders before save.
+	usergroup.NameValidator = usergroupDescName.Validators[0].(func(string) error)
+	// usergroupDescOidcScope is the schema descriptor for oidc_scope field.
+	usergroupDescOidcScope := usergroupFields[3].Descriptor()
+	// usergroup.OidcScopeValidator is a validator for the "oidc_scope" field. It is called by the builders before save.
+	usergroup.OidcScopeValidator = usergroupDescOidcScope.Validators[0].(func(string) error)
+	// usergroupDescCreatedAt is the schema descriptor for created_at field.
+	usergroupDescCreatedAt := usergroupFields[5].Descriptor()
+	// usergroup.DefaultCreatedAt holds the default value on creation for the created_at field.
+	usergroup.DefaultCreatedAt = usergroupDescCreatedAt.Default.(func() time.Time)
+	// usergroupDescUpdatedAt is the schema descriptor for updated_at field.
+	usergroupDescUpdatedAt := usergroupFields[7].Descriptor()
+	// usergroup.DefaultUpdatedAt holds the default value on creation for the updated_at field.
+	usergroup.DefaultUpdatedAt = usergroupDescUpdatedAt.Default.(func() time.Time)
+	// usergroup.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.
+	usergroup.UpdateDefaultUpdatedAt = usergroupDescUpdatedAt.UpdateDefault.(func() time.Time)
+	// usergroupDescID is the schema descriptor for id field.
+	usergroupDescID := usergroupFields[0].Descriptor()
+	// usergroup.DefaultID holds the default value on creation for the id field.
+	usergroup.DefaultID = usergroupDescID.Default.(func() uuid.UUID)
 }

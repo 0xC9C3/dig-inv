@@ -53,8 +53,12 @@ func GetOidcIssuerURL() string {
 }
 
 func GetOidcScopes() []string {
-	scopes := getOidcEnv("SCOPES", "openid profile email offline_access")
+	scopes := getOidcEnv("SCOPES", "openid profile email")
 	return []string{scopes}
+}
+
+func GetOidcScopePrefix() string {
+	return getOidcEnv("SCOPE_PREFIX", "")
 }
 
 func GetAllowedCorsOrigins() []string {

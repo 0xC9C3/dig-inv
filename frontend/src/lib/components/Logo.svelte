@@ -1,0 +1,1 @@
+<img alt="Logo" class="mb-4 w-24 h-24" src="/favicon.png" />

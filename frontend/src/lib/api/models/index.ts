@@ -1,13 +1,15 @@
 /* tslint:disable */
 /* eslint-disable */
+export * from './DigInvAssetClass';
+export * from './DigInvAssetClasses';
+export * from './DigInvAuthUrlMessage';
+export * from './DigInvElementId';
+export * from './DigInvExchangeCodeMessage';
+export * from './DigInvItem';
+export * from './DigInvItems';
+export * from './DigInvTag';
+export * from './DigInvTags';
+export * from './DigInvUserGroup';
+export * from './DigInvUserInfoMessage';
 export * from './ProtobufAny';
 export * from './RpcStatus';
-export * from './V1AuthUrlMessage';
-export * from './V1ElementId';
-export * from './V1ExchangeCodeMessage';
-export * from './V1Item';
-export * from './V1Items';
-export * from './V1Tag';
-export * from './V1Tags';
-export * from './V1UserGroup';
-export * from './V1UserSubjectMessage';

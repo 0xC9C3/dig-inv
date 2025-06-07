@@ -4,9 +4,11 @@ package ent
 
 import (
 	"context"
+	"dig-inv/ent/assetclass"
 	"dig-inv/ent/item"
 	"dig-inv/ent/predicate"
 	"dig-inv/ent/tag"
+	"dig-inv/ent/usergroup"
 	"errors"
 	"fmt"
 	"time"
@@ -61,34 +63,6 @@ func (iu *ItemUpdate) SetNillableDescription(s *string) *ItemUpdate {
 // ClearDescription clears the value of the "description" field.
 func (iu *ItemUpdate) ClearDescription() *ItemUpdate {
 	iu.mutation.ClearDescription()
-	return iu
-}
-
-// SetType sets the "type" field.
-func (iu *ItemUpdate) SetType(s string) *ItemUpdate {
-	iu.mutation.SetType(s)
-	return iu
-}
-
-// SetNillableType sets the "type" field if the given value is not nil.
-func (iu *ItemUpdate) SetNillableType(s *string) *ItemUpdate {
-	if s != nil {
-		iu.SetType(*s)
-	}
-	return iu
-}
-
-// SetProvider sets the "provider" field.
-func (iu *ItemUpdate) SetProvider(s string) *ItemUpdate {
-	iu.mutation.SetProvider(s)
-	return iu
-}
-
-// SetNillableProvider sets the "provider" field if the given value is not nil.
-func (iu *ItemUpdate) SetNillableProvider(s *string) *ItemUpdate {
-	if s != nil {
-		iu.SetProvider(*s)
-	}
 	return iu
 }
 
@@ -181,6 +155,36 @@ func (iu *ItemUpdate) AddTags(t ...*Tag) *ItemUpdate {
 	return iu.AddTagIDs(ids...)
 }
 
+// AddUserGroupIDs adds the "user_groups" edge to the UserGroup entity by IDs.
+func (iu *ItemUpdate) AddUserGroupIDs(ids ...uuid.UUID) *ItemUpdate {
+	iu.mutation.AddUserGroupIDs(ids...)
+	return iu
+}
+
+// AddUserGroups adds the "user_groups" edges to the UserGroup entity.
+func (iu *ItemUpdate) AddUserGroups(u ...*UserGroup) *ItemUpdate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return iu.AddUserGroupIDs(ids...)
+}
+
+// AddAssetClasIDs adds the "asset_class" edge to the AssetClass entity by IDs.
+func (iu *ItemUpdate) AddAssetClasIDs(ids ...uuid.UUID) *ItemUpdate {
+	iu.mutation.AddAssetClasIDs(ids...)
+	return iu
+}
+
+// AddAssetClass adds the "asset_class" edges to the AssetClass entity.
+func (iu *ItemUpdate) AddAssetClass(a ...*AssetClass) *ItemUpdate {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return iu.AddAssetClasIDs(ids...)
+}
+
 // Mutation returns the ItemMutation object of the builder.
 func (iu *ItemUpdate) Mutation() *ItemMutation {
 	return iu.mutation
@@ -205,6 +209,48 @@ func (iu *ItemUpdate) RemoveTags(t ...*Tag) *ItemUpdate {
 		ids[i] = t[i].ID
 	}
 	return iu.RemoveTagIDs(ids...)
+}
+
+// ClearUserGroups clears all "user_groups" edges to the UserGroup entity.
+func (iu *ItemUpdate) ClearUserGroups() *ItemUpdate {
+	iu.mutation.ClearUserGroups()
+	return iu
+}
+
+// RemoveUserGroupIDs removes the "user_groups" edge to UserGroup entities by IDs.
+func (iu *ItemUpdate) RemoveUserGroupIDs(ids ...uuid.UUID) *ItemUpdate {
+	iu.mutation.RemoveUserGroupIDs(ids...)
+	return iu
+}
+
+// RemoveUserGroups removes "user_groups" edges to UserGroup entities.
+func (iu *ItemUpdate) RemoveUserGroups(u ...*UserGroup) *ItemUpdate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return iu.RemoveUserGroupIDs(ids...)
+}
+
+// ClearAssetClass clears all "asset_class" edges to the AssetClass entity.
+func (iu *ItemUpdate) ClearAssetClass() *ItemUpdate {
+	iu.mutation.ClearAssetClass()
+	return iu
+}
+
+// RemoveAssetClasIDs removes the "asset_class" edge to AssetClass entities by IDs.
+func (iu *ItemUpdate) RemoveAssetClasIDs(ids ...uuid.UUID) *ItemUpdate {
+	iu.mutation.RemoveAssetClasIDs(ids...)
+	return iu
+}
+
+// RemoveAssetClass removes "asset_class" edges to AssetClass entities.
+func (iu *ItemUpdate) RemoveAssetClass(a ...*AssetClass) *ItemUpdate {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return iu.RemoveAssetClasIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -250,16 +296,6 @@ func (iu *ItemUpdate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Item.name": %w`, err)}
 		}
 	}
-	if v, ok := iu.mutation.GetType(); ok {
-		if err := item.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Item.type": %w`, err)}
-		}
-	}
-	if v, ok := iu.mutation.Provider(); ok {
-		if err := item.ProviderValidator(v); err != nil {
-			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "Item.provider": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -283,12 +319,6 @@ func (iu *ItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if iu.mutation.DescriptionCleared() {
 		_spec.ClearField(item.FieldDescription, field.TypeString)
-	}
-	if value, ok := iu.mutation.GetType(); ok {
-		_spec.SetField(item.FieldType, field.TypeString, value)
-	}
-	if value, ok := iu.mutation.Provider(); ok {
-		_spec.SetField(item.FieldProvider, field.TypeString, value)
 	}
 	if value, ok := iu.mutation.CreatedBy(); ok {
 		_spec.SetField(item.FieldCreatedBy, field.TypeString, value)
@@ -356,6 +386,96 @@ func (iu *ItemUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
+	if iu.mutation.UserGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.UserGroupsTable,
+			Columns: []string{item.UserGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(usergroup.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.RemovedUserGroupsIDs(); len(nodes) > 0 && !iu.mutation.UserGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.UserGroupsTable,
+			Columns: []string{item.UserGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(usergroup.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.UserGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.UserGroupsTable,
+			Columns: []string{item.UserGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(usergroup.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if iu.mutation.AssetClassCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.AssetClassTable,
+			Columns: []string{item.AssetClassColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assetclass.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.RemovedAssetClassIDs(); len(nodes) > 0 && !iu.mutation.AssetClassCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.AssetClassTable,
+			Columns: []string{item.AssetClassColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assetclass.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iu.mutation.AssetClassIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.AssetClassTable,
+			Columns: []string{item.AssetClassColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assetclass.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, iu.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{item.Label}
@@ -407,34 +527,6 @@ func (iuo *ItemUpdateOne) SetNillableDescription(s *string) *ItemUpdateOne {
 // ClearDescription clears the value of the "description" field.
 func (iuo *ItemUpdateOne) ClearDescription() *ItemUpdateOne {
 	iuo.mutation.ClearDescription()
-	return iuo
-}
-
-// SetType sets the "type" field.
-func (iuo *ItemUpdateOne) SetType(s string) *ItemUpdateOne {
-	iuo.mutation.SetType(s)
-	return iuo
-}
-
-// SetNillableType sets the "type" field if the given value is not nil.
-func (iuo *ItemUpdateOne) SetNillableType(s *string) *ItemUpdateOne {
-	if s != nil {
-		iuo.SetType(*s)
-	}
-	return iuo
-}
-
-// SetProvider sets the "provider" field.
-func (iuo *ItemUpdateOne) SetProvider(s string) *ItemUpdateOne {
-	iuo.mutation.SetProvider(s)
-	return iuo
-}
-
-// SetNillableProvider sets the "provider" field if the given value is not nil.
-func (iuo *ItemUpdateOne) SetNillableProvider(s *string) *ItemUpdateOne {
-	if s != nil {
-		iuo.SetProvider(*s)
-	}
 	return iuo
 }
 
@@ -527,6 +619,36 @@ func (iuo *ItemUpdateOne) AddTags(t ...*Tag) *ItemUpdateOne {
 	return iuo.AddTagIDs(ids...)
 }
 
+// AddUserGroupIDs adds the "user_groups" edge to the UserGroup entity by IDs.
+func (iuo *ItemUpdateOne) AddUserGroupIDs(ids ...uuid.UUID) *ItemUpdateOne {
+	iuo.mutation.AddUserGroupIDs(ids...)
+	return iuo
+}
+
+// AddUserGroups adds the "user_groups" edges to the UserGroup entity.
+func (iuo *ItemUpdateOne) AddUserGroups(u ...*UserGroup) *ItemUpdateOne {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return iuo.AddUserGroupIDs(ids...)
+}
+
+// AddAssetClasIDs adds the "asset_class" edge to the AssetClass entity by IDs.
+func (iuo *ItemUpdateOne) AddAssetClasIDs(ids ...uuid.UUID) *ItemUpdateOne {
+	iuo.mutation.AddAssetClasIDs(ids...)
+	return iuo
+}
+
+// AddAssetClass adds the "asset_class" edges to the AssetClass entity.
+func (iuo *ItemUpdateOne) AddAssetClass(a ...*AssetClass) *ItemUpdateOne {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return iuo.AddAssetClasIDs(ids...)
+}
+
 // Mutation returns the ItemMutation object of the builder.
 func (iuo *ItemUpdateOne) Mutation() *ItemMutation {
 	return iuo.mutation
@@ -551,6 +673,48 @@ func (iuo *ItemUpdateOne) RemoveTags(t ...*Tag) *ItemUpdateOne {
 		ids[i] = t[i].ID
 	}
 	return iuo.RemoveTagIDs(ids...)
+}
+
+// ClearUserGroups clears all "user_groups" edges to the UserGroup entity.
+func (iuo *ItemUpdateOne) ClearUserGroups() *ItemUpdateOne {
+	iuo.mutation.ClearUserGroups()
+	return iuo
+}
+
+// RemoveUserGroupIDs removes the "user_groups" edge to UserGroup entities by IDs.
+func (iuo *ItemUpdateOne) RemoveUserGroupIDs(ids ...uuid.UUID) *ItemUpdateOne {
+	iuo.mutation.RemoveUserGroupIDs(ids...)
+	return iuo
+}
+
+// RemoveUserGroups removes "user_groups" edges to UserGroup entities.
+func (iuo *ItemUpdateOne) RemoveUserGroups(u ...*UserGroup) *ItemUpdateOne {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return iuo.RemoveUserGroupIDs(ids...)
+}
+
+// ClearAssetClass clears all "asset_class" edges to the AssetClass entity.
+func (iuo *ItemUpdateOne) ClearAssetClass() *ItemUpdateOne {
+	iuo.mutation.ClearAssetClass()
+	return iuo
+}
+
+// RemoveAssetClasIDs removes the "asset_class" edge to AssetClass entities by IDs.
+func (iuo *ItemUpdateOne) RemoveAssetClasIDs(ids ...uuid.UUID) *ItemUpdateOne {
+	iuo.mutation.RemoveAssetClasIDs(ids...)
+	return iuo
+}
+
+// RemoveAssetClass removes "asset_class" edges to AssetClass entities.
+func (iuo *ItemUpdateOne) RemoveAssetClass(a ...*AssetClass) *ItemUpdateOne {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return iuo.RemoveAssetClasIDs(ids...)
 }
 
 // Where appends a list predicates to the ItemUpdate builder.
@@ -609,16 +773,6 @@ func (iuo *ItemUpdateOne) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Item.name": %w`, err)}
 		}
 	}
-	if v, ok := iuo.mutation.GetType(); ok {
-		if err := item.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Item.type": %w`, err)}
-		}
-	}
-	if v, ok := iuo.mutation.Provider(); ok {
-		if err := item.ProviderValidator(v); err != nil {
-			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "Item.provider": %w`, err)}
-		}
-	}
 	return nil
 }
 
@@ -659,12 +813,6 @@ func (iuo *ItemUpdateOne) sqlSave(ctx context.Context) (_node *Item, err error) 
 	}
 	if iuo.mutation.DescriptionCleared() {
 		_spec.ClearField(item.FieldDescription, field.TypeString)
-	}
-	if value, ok := iuo.mutation.GetType(); ok {
-		_spec.SetField(item.FieldType, field.TypeString, value)
-	}
-	if value, ok := iuo.mutation.Provider(); ok {
-		_spec.SetField(item.FieldProvider, field.TypeString, value)
 	}
 	if value, ok := iuo.mutation.CreatedBy(); ok {
 		_spec.SetField(item.FieldCreatedBy, field.TypeString, value)
@@ -725,6 +873,96 @@ func (iuo *ItemUpdateOne) sqlSave(ctx context.Context) (_node *Item, err error) 
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if iuo.mutation.UserGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.UserGroupsTable,
+			Columns: []string{item.UserGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(usergroup.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.RemovedUserGroupsIDs(); len(nodes) > 0 && !iuo.mutation.UserGroupsCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.UserGroupsTable,
+			Columns: []string{item.UserGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(usergroup.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.UserGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.UserGroupsTable,
+			Columns: []string{item.UserGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(usergroup.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
+	if iuo.mutation.AssetClassCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.AssetClassTable,
+			Columns: []string{item.AssetClassColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assetclass.FieldID, field.TypeUUID),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.RemovedAssetClassIDs(); len(nodes) > 0 && !iuo.mutation.AssetClassCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.AssetClassTable,
+			Columns: []string{item.AssetClassColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assetclass.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := iuo.mutation.AssetClassIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.AssetClassTable,
+			Columns: []string{item.AssetClassColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assetclass.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

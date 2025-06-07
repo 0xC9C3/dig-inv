@@ -15,32 +15,32 @@
 
 import * as runtime from '../runtime';
 import type {
+  DigInvElementId,
+  DigInvTag,
+  DigInvTags,
   RpcStatus,
-  V1ElementId,
-  V1Tag,
-  V1Tags,
 } from '../models/index';
 import {
+    DigInvElementIdFromJSON,
+    DigInvElementIdToJSON,
+    DigInvTagFromJSON,
+    DigInvTagToJSON,
+    DigInvTagsFromJSON,
+    DigInvTagsToJSON,
     RpcStatusFromJSON,
     RpcStatusToJSON,
-    V1ElementIdFromJSON,
-    V1ElementIdToJSON,
-    V1TagFromJSON,
-    V1TagToJSON,
-    V1TagsFromJSON,
-    V1TagsToJSON,
 } from '../models/index';
 
 export interface TagServiceAddItemToTagRequest {
-    body: V1ElementId;
+    body: DigInvElementId;
 }
 
 export interface TagServiceCreateTagRequest {
-    body: V1Tag;
+    body: DigInvTag;
 }
 
 export interface TagServiceDeleteTagRequest {
-    body: V1ElementId;
+    body: DigInvElementId;
 }
 
 export interface TagServiceGetTagRequest {
@@ -52,7 +52,7 @@ export interface TagServiceGetTagsRequest {
 }
 
 export interface TagServiceUpdateTagRequest {
-    body: V1Tag;
+    body: DigInvTag;
 }
 
 /**
@@ -77,11 +77,11 @@ export class TagServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.TagService/AddItemToTag`,
+            path: `/dig_inv.TagService/AddItemToTag`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1ElementIdToJSON(requestParameters['body']),
+            body: DigInvElementIdToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -96,7 +96,7 @@ export class TagServiceApi extends runtime.BaseAPI {
 
     /**
      */
-    async tagServiceCreateTagRaw(requestParameters: TagServiceCreateTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1Tag>> {
+    async tagServiceCreateTagRaw(requestParameters: TagServiceCreateTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvTag>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -111,19 +111,19 @@ export class TagServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.TagService/CreateTag`,
+            path: `/dig_inv.TagService/CreateTag`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1TagToJSON(requestParameters['body']),
+            body: DigInvTagToJSON(requestParameters['body']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1TagFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvTagFromJSON(jsonValue));
     }
 
     /**
      */
-    async tagServiceCreateTag(requestParameters: TagServiceCreateTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1Tag> {
+    async tagServiceCreateTag(requestParameters: TagServiceCreateTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvTag> {
         const response = await this.tagServiceCreateTagRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -145,11 +145,11 @@ export class TagServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.TagService/DeleteTag`,
+            path: `/dig_inv.TagService/DeleteTag`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1ElementIdToJSON(requestParameters['body']),
+            body: DigInvElementIdToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -164,7 +164,7 @@ export class TagServiceApi extends runtime.BaseAPI {
 
     /**
      */
-    async tagServiceGetTagRaw(requestParameters: TagServiceGetTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1Tag>> {
+    async tagServiceGetTagRaw(requestParameters: TagServiceGetTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvTag>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -179,26 +179,26 @@ export class TagServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.TagService/GetTag`,
+            path: `/dig_inv.TagService/GetTag`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1TagFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvTagFromJSON(jsonValue));
     }
 
     /**
      */
-    async tagServiceGetTag(requestParameters: TagServiceGetTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1Tag> {
+    async tagServiceGetTag(requestParameters: TagServiceGetTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvTag> {
         const response = await this.tagServiceGetTagRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async tagServiceGetTagsRaw(requestParameters: TagServiceGetTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1Tags>> {
+    async tagServiceGetTagsRaw(requestParameters: TagServiceGetTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvTags>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -213,26 +213,26 @@ export class TagServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.TagService/GetTags`,
+            path: `/dig_inv.TagService/GetTags`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1TagsFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvTagsFromJSON(jsonValue));
     }
 
     /**
      */
-    async tagServiceGetTags(requestParameters: TagServiceGetTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1Tags> {
+    async tagServiceGetTags(requestParameters: TagServiceGetTagsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvTags> {
         const response = await this.tagServiceGetTagsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async tagServiceUpdateTagRaw(requestParameters: TagServiceUpdateTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1Tag>> {
+    async tagServiceUpdateTagRaw(requestParameters: TagServiceUpdateTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvTag>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -247,19 +247,19 @@ export class TagServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.TagService/UpdateTag`,
+            path: `/dig_inv.TagService/UpdateTag`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1TagToJSON(requestParameters['body']),
+            body: DigInvTagToJSON(requestParameters['body']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1TagFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvTagFromJSON(jsonValue));
     }
 
     /**
      */
-    async tagServiceUpdateTag(requestParameters: TagServiceUpdateTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1Tag> {
+    async tagServiceUpdateTag(requestParameters: TagServiceUpdateTagRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvTag> {
         const response = await this.tagServiceUpdateTagRaw(requestParameters, initOverrides);
         return await response.value();
     }

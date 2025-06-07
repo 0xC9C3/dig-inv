@@ -39,4 +39,16 @@
     input[type="search"]::-webkit-search-cancel-button {
         display: none;
     }
+
+    button:where(:not([disabled])) {
+        cursor: pointer;
+    }
+
+    .colorPicker {
+        --cp-bg-color: #333;
+        --cp-border-color: white;
+        --cp-text-color: white;
+        --cp-input-color: #555;
+        --cp-button-hover-color: #777;
+    }
 }

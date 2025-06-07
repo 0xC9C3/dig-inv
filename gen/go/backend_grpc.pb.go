@@ -19,17 +19,17 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	OpenIdAuthService_GetUserInfo_FullMethodName  = "/your.service.v1.OpenIdAuthService/GetUserInfo"
-	OpenIdAuthService_BeginAuth_FullMethodName    = "/your.service.v1.OpenIdAuthService/BeginAuth"
-	OpenIdAuthService_ExchangeCode_FullMethodName = "/your.service.v1.OpenIdAuthService/ExchangeCode"
-	OpenIdAuthService_Logout_FullMethodName       = "/your.service.v1.OpenIdAuthService/Logout"
+	OpenIdAuthService_GetUserInfo_FullMethodName  = "/dig_inv.OpenIdAuthService/GetUserInfo"
+	OpenIdAuthService_BeginAuth_FullMethodName    = "/dig_inv.OpenIdAuthService/BeginAuth"
+	OpenIdAuthService_ExchangeCode_FullMethodName = "/dig_inv.OpenIdAuthService/ExchangeCode"
+	OpenIdAuthService_Logout_FullMethodName       = "/dig_inv.OpenIdAuthService/Logout"
 )
 
 // OpenIdAuthServiceClient is the client API for OpenIdAuthService service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type OpenIdAuthServiceClient interface {
-	GetUserInfo(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserSubjectMessage, error)
+	GetUserInfo(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserInfoMessage, error)
 	BeginAuth(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*AuthUrlMessage, error)
 	ExchangeCode(ctx context.Context, in *ExchangeCodeMessage, opts ...grpc.CallOption) (*EmptyMessage, error)
 	Logout(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*EmptyMessage, error)
@@ -43,9 +43,9 @@ func NewOpenIdAuthServiceClient(cc grpc.ClientConnInterface) OpenIdAuthServiceCl
 	return &openIdAuthServiceClient{cc}
 }
 
-func (c *openIdAuthServiceClient) GetUserInfo(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserSubjectMessage, error) {
+func (c *openIdAuthServiceClient) GetUserInfo(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*UserInfoMessage, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(UserSubjectMessage)
+	out := new(UserInfoMessage)
 	err := c.cc.Invoke(ctx, OpenIdAuthService_GetUserInfo_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -87,7 +87,7 @@ func (c *openIdAuthServiceClient) Logout(ctx context.Context, in *EmptyMessage, 
 // All implementations must embed UnimplementedOpenIdAuthServiceServer
 // for forward compatibility.
 type OpenIdAuthServiceServer interface {
-	GetUserInfo(context.Context, *EmptyMessage) (*UserSubjectMessage, error)
+	GetUserInfo(context.Context, *EmptyMessage) (*UserInfoMessage, error)
 	BeginAuth(context.Context, *EmptyMessage) (*AuthUrlMessage, error)
 	ExchangeCode(context.Context, *ExchangeCodeMessage) (*EmptyMessage, error)
 	Logout(context.Context, *EmptyMessage) (*EmptyMessage, error)
@@ -101,7 +101,7 @@ type OpenIdAuthServiceServer interface {
 // pointer dereference when methods are called.
 type UnimplementedOpenIdAuthServiceServer struct{}
 
-func (UnimplementedOpenIdAuthServiceServer) GetUserInfo(context.Context, *EmptyMessage) (*UserSubjectMessage, error) {
+func (UnimplementedOpenIdAuthServiceServer) GetUserInfo(context.Context, *EmptyMessage) (*UserInfoMessage, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetUserInfo not implemented")
 }
 func (UnimplementedOpenIdAuthServiceServer) BeginAuth(context.Context, *EmptyMessage) (*AuthUrlMessage, error) {
@@ -210,7 +210,7 @@ func _OpenIdAuthService_Logout_Handler(srv interface{}, ctx context.Context, dec
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var OpenIdAuthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "your.service.v1.OpenIdAuthService",
+	ServiceName: "dig_inv.OpenIdAuthService",
 	HandlerType: (*OpenIdAuthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -235,11 +235,11 @@ var OpenIdAuthService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	ItemService_GetItem_FullMethodName    = "/your.service.v1.ItemService/GetItem"
-	ItemService_GetItems_FullMethodName   = "/your.service.v1.ItemService/GetItems"
-	ItemService_CreateItem_FullMethodName = "/your.service.v1.ItemService/CreateItem"
-	ItemService_UpdateItem_FullMethodName = "/your.service.v1.ItemService/UpdateItem"
-	ItemService_DeleteItem_FullMethodName = "/your.service.v1.ItemService/DeleteItem"
+	ItemService_GetItem_FullMethodName    = "/dig_inv.ItemService/GetItem"
+	ItemService_GetItems_FullMethodName   = "/dig_inv.ItemService/GetItems"
+	ItemService_CreateItem_FullMethodName = "/dig_inv.ItemService/CreateItem"
+	ItemService_UpdateItem_FullMethodName = "/dig_inv.ItemService/UpdateItem"
+	ItemService_DeleteItem_FullMethodName = "/dig_inv.ItemService/DeleteItem"
 )
 
 // ItemServiceClient is the client API for ItemService service.
@@ -460,7 +460,7 @@ func _ItemService_DeleteItem_Handler(srv interface{}, ctx context.Context, dec f
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var ItemService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "your.service.v1.ItemService",
+	ServiceName: "dig_inv.ItemService",
 	HandlerType: (*ItemServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -489,12 +489,12 @@ var ItemService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	UserGroupService_GetGroup_FullMethodName       = "/your.service.v1.UserGroupService/GetGroup"
-	UserGroupService_GetGroups_FullMethodName      = "/your.service.v1.UserGroupService/GetGroups"
-	UserGroupService_CreateGroup_FullMethodName    = "/your.service.v1.UserGroupService/CreateGroup"
-	UserGroupService_UpdateGroup_FullMethodName    = "/your.service.v1.UserGroupService/UpdateGroup"
-	UserGroupService_DeleteGroup_FullMethodName    = "/your.service.v1.UserGroupService/DeleteGroup"
-	UserGroupService_AddItemToGroup_FullMethodName = "/your.service.v1.UserGroupService/AddItemToGroup"
+	UserGroupService_GetGroup_FullMethodName       = "/dig_inv.UserGroupService/GetGroup"
+	UserGroupService_GetGroups_FullMethodName      = "/dig_inv.UserGroupService/GetGroups"
+	UserGroupService_CreateGroup_FullMethodName    = "/dig_inv.UserGroupService/CreateGroup"
+	UserGroupService_UpdateGroup_FullMethodName    = "/dig_inv.UserGroupService/UpdateGroup"
+	UserGroupService_DeleteGroup_FullMethodName    = "/dig_inv.UserGroupService/DeleteGroup"
+	UserGroupService_AddItemToGroup_FullMethodName = "/dig_inv.UserGroupService/AddItemToGroup"
 )
 
 // UserGroupServiceClient is the client API for UserGroupService service.
@@ -748,7 +748,7 @@ func _UserGroupService_AddItemToGroup_Handler(srv interface{}, ctx context.Conte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var UserGroupService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "your.service.v1.UserGroupService",
+	ServiceName: "dig_inv.UserGroupService",
 	HandlerType: (*UserGroupServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -781,7 +781,7 @@ var UserGroupService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	HealthService_HealthCheck_FullMethodName = "/your.service.v1.HealthService/HealthCheck"
+	HealthService_HealthCheck_FullMethodName = "/dig_inv.HealthService/HealthCheck"
 )
 
 // HealthServiceClient is the client API for HealthService service.
@@ -870,7 +870,7 @@ func _HealthService_HealthCheck_Handler(srv interface{}, ctx context.Context, de
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var HealthService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "your.service.v1.HealthService",
+	ServiceName: "dig_inv.HealthService",
 	HandlerType: (*HealthServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -883,12 +883,12 @@ var HealthService_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	TagService_GetTag_FullMethodName       = "/your.service.v1.TagService/GetTag"
-	TagService_GetTags_FullMethodName      = "/your.service.v1.TagService/GetTags"
-	TagService_CreateTag_FullMethodName    = "/your.service.v1.TagService/CreateTag"
-	TagService_UpdateTag_FullMethodName    = "/your.service.v1.TagService/UpdateTag"
-	TagService_DeleteTag_FullMethodName    = "/your.service.v1.TagService/DeleteTag"
-	TagService_AddItemToTag_FullMethodName = "/your.service.v1.TagService/AddItemToTag"
+	TagService_GetTag_FullMethodName       = "/dig_inv.TagService/GetTag"
+	TagService_GetTags_FullMethodName      = "/dig_inv.TagService/GetTags"
+	TagService_CreateTag_FullMethodName    = "/dig_inv.TagService/CreateTag"
+	TagService_UpdateTag_FullMethodName    = "/dig_inv.TagService/UpdateTag"
+	TagService_DeleteTag_FullMethodName    = "/dig_inv.TagService/DeleteTag"
+	TagService_AddItemToTag_FullMethodName = "/dig_inv.TagService/AddItemToTag"
 )
 
 // TagServiceClient is the client API for TagService service.
@@ -1142,7 +1142,7 @@ func _TagService_AddItemToTag_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var TagService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "your.service.v1.TagService",
+	ServiceName: "dig_inv.TagService",
 	HandlerType: (*TagServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
@@ -1168,6 +1168,260 @@ var TagService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "AddItemToTag",
 			Handler:    _TagService_AddItemToTag_Handler,
+		},
+	},
+	Streams:  []grpc.StreamDesc{},
+	Metadata: "backend.proto",
+}
+
+const (
+	AssetClassService_GetAssetClass_FullMethodName    = "/dig_inv.AssetClassService/GetAssetClass"
+	AssetClassService_GetAssetClasses_FullMethodName  = "/dig_inv.AssetClassService/GetAssetClasses"
+	AssetClassService_CreateAssetClass_FullMethodName = "/dig_inv.AssetClassService/CreateAssetClass"
+	AssetClassService_UpdateAssetClass_FullMethodName = "/dig_inv.AssetClassService/UpdateAssetClass"
+	AssetClassService_DeleteAssetClass_FullMethodName = "/dig_inv.AssetClassService/DeleteAssetClass"
+)
+
+// AssetClassServiceClient is the client API for AssetClassService service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
+type AssetClassServiceClient interface {
+	GetAssetClass(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*AssetClass, error)
+	GetAssetClasses(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*AssetClasses, error)
+	CreateAssetClass(ctx context.Context, in *AssetClass, opts ...grpc.CallOption) (*AssetClass, error)
+	UpdateAssetClass(ctx context.Context, in *AssetClass, opts ...grpc.CallOption) (*AssetClass, error)
+	DeleteAssetClass(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error)
+}
+
+type assetClassServiceClient struct {
+	cc grpc.ClientConnInterface
+}
+
+func NewAssetClassServiceClient(cc grpc.ClientConnInterface) AssetClassServiceClient {
+	return &assetClassServiceClient{cc}
+}
+
+func (c *assetClassServiceClient) GetAssetClass(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*AssetClass, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AssetClass)
+	err := c.cc.Invoke(ctx, AssetClassService_GetAssetClass_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetClassServiceClient) GetAssetClasses(ctx context.Context, in *EmptyMessage, opts ...grpc.CallOption) (*AssetClasses, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AssetClasses)
+	err := c.cc.Invoke(ctx, AssetClassService_GetAssetClasses_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetClassServiceClient) CreateAssetClass(ctx context.Context, in *AssetClass, opts ...grpc.CallOption) (*AssetClass, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AssetClass)
+	err := c.cc.Invoke(ctx, AssetClassService_CreateAssetClass_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetClassServiceClient) UpdateAssetClass(ctx context.Context, in *AssetClass, opts ...grpc.CallOption) (*AssetClass, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(AssetClass)
+	err := c.cc.Invoke(ctx, AssetClassService_UpdateAssetClass_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *assetClassServiceClient) DeleteAssetClass(ctx context.Context, in *ElementId, opts ...grpc.CallOption) (*EmptyMessage, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmptyMessage)
+	err := c.cc.Invoke(ctx, AssetClassService_DeleteAssetClass_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// AssetClassServiceServer is the server API for AssetClassService service.
+// All implementations must embed UnimplementedAssetClassServiceServer
+// for forward compatibility.
+type AssetClassServiceServer interface {
+	GetAssetClass(context.Context, *EmptyMessage) (*AssetClass, error)
+	GetAssetClasses(context.Context, *EmptyMessage) (*AssetClasses, error)
+	CreateAssetClass(context.Context, *AssetClass) (*AssetClass, error)
+	UpdateAssetClass(context.Context, *AssetClass) (*AssetClass, error)
+	DeleteAssetClass(context.Context, *ElementId) (*EmptyMessage, error)
+	mustEmbedUnimplementedAssetClassServiceServer()
+}
+
+// UnimplementedAssetClassServiceServer must be embedded to have
+// forward compatible implementations.
+//
+// NOTE: this should be embedded by value instead of pointer to avoid a nil
+// pointer dereference when methods are called.
+type UnimplementedAssetClassServiceServer struct{}
+
+func (UnimplementedAssetClassServiceServer) GetAssetClass(context.Context, *EmptyMessage) (*AssetClass, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAssetClass not implemented")
+}
+func (UnimplementedAssetClassServiceServer) GetAssetClasses(context.Context, *EmptyMessage) (*AssetClasses, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetAssetClasses not implemented")
+}
+func (UnimplementedAssetClassServiceServer) CreateAssetClass(context.Context, *AssetClass) (*AssetClass, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateAssetClass not implemented")
+}
+func (UnimplementedAssetClassServiceServer) UpdateAssetClass(context.Context, *AssetClass) (*AssetClass, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateAssetClass not implemented")
+}
+func (UnimplementedAssetClassServiceServer) DeleteAssetClass(context.Context, *ElementId) (*EmptyMessage, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteAssetClass not implemented")
+}
+func (UnimplementedAssetClassServiceServer) mustEmbedUnimplementedAssetClassServiceServer() {}
+func (UnimplementedAssetClassServiceServer) testEmbeddedByValue()                           {}
+
+// UnsafeAssetClassServiceServer may be embedded to opt out of forward compatibility for this service.
+// Use of this interface is not recommended, as added methods to AssetClassServiceServer will
+// result in compilation errors.
+type UnsafeAssetClassServiceServer interface {
+	mustEmbedUnimplementedAssetClassServiceServer()
+}
+
+func RegisterAssetClassServiceServer(s grpc.ServiceRegistrar, srv AssetClassServiceServer) {
+	// If the following call pancis, it indicates UnimplementedAssetClassServiceServer was
+	// embedded by pointer and is nil.  This will cause panics if an
+	// unimplemented method is ever invoked, so we test this at initialization
+	// time to prevent it from happening at runtime later due to I/O.
+	if t, ok := srv.(interface{ testEmbeddedByValue() }); ok {
+		t.testEmbeddedByValue()
+	}
+	s.RegisterService(&AssetClassService_ServiceDesc, srv)
+}
+
+func _AssetClassService_GetAssetClass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetClassServiceServer).GetAssetClass(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetClassService_GetAssetClass_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetClassServiceServer).GetAssetClass(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetClassService_GetAssetClasses_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmptyMessage)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetClassServiceServer).GetAssetClasses(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetClassService_GetAssetClasses_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetClassServiceServer).GetAssetClasses(ctx, req.(*EmptyMessage))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetClassService_CreateAssetClass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AssetClass)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetClassServiceServer).CreateAssetClass(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetClassService_CreateAssetClass_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetClassServiceServer).CreateAssetClass(ctx, req.(*AssetClass))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetClassService_UpdateAssetClass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AssetClass)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetClassServiceServer).UpdateAssetClass(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetClassService_UpdateAssetClass_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetClassServiceServer).UpdateAssetClass(ctx, req.(*AssetClass))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AssetClassService_DeleteAssetClass_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ElementId)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AssetClassServiceServer).DeleteAssetClass(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AssetClassService_DeleteAssetClass_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AssetClassServiceServer).DeleteAssetClass(ctx, req.(*ElementId))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+// AssetClassService_ServiceDesc is the grpc.ServiceDesc for AssetClassService service.
+// It's only intended for direct use with grpc.RegisterService,
+// and not to be introspected or modified (even as a copy)
+var AssetClassService_ServiceDesc = grpc.ServiceDesc{
+	ServiceName: "dig_inv.AssetClassService",
+	HandlerType: (*AssetClassServiceServer)(nil),
+	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "GetAssetClass",
+			Handler:    _AssetClassService_GetAssetClass_Handler,
+		},
+		{
+			MethodName: "GetAssetClasses",
+			Handler:    _AssetClassService_GetAssetClasses_Handler,
+		},
+		{
+			MethodName: "CreateAssetClass",
+			Handler:    _AssetClassService_CreateAssetClass_Handler,
+		},
+		{
+			MethodName: "UpdateAssetClass",
+			Handler:    _AssetClassService_UpdateAssetClass_Handler,
+		},
+		{
+			MethodName: "DeleteAssetClass",
+			Handler:    _AssetClassService_DeleteAssetClass_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

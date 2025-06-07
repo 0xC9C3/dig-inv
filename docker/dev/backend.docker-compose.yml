@@ -28,7 +28,7 @@ services:
       OIDC_CLIENT_SECRET: "ZXhhbXBsZS1hcHAtc2VjcmV0"
       OIDC_REDIRECT_URL: "${BACKEND_REDIRECT_URL:-http://localhost:5173/login}"
       OIDC_ISSUER_URL: "${OIDC_ISSUER_URL:-http://dex:5556/dex}"
-      OIDC_SCOPES: "openid email profile offline_access"
+      OIDC_SCOPES: "openid email profile"
   watch-dev-worker:
     <<: *app-common
     entrypoint: "just watch-dev-worker"

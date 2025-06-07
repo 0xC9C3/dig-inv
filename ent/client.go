@@ -11,8 +11,10 @@ import (
 
 	"dig-inv/ent/migrate"
 
+	"dig-inv/ent/assetclass"
 	"dig-inv/ent/item"
 	"dig-inv/ent/tag"
+	"dig-inv/ent/usergroup"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
@@ -26,10 +28,14 @@ type Client struct {
 	config
 	// Schema is the client for creating, migrating and dropping schema.
 	Schema *migrate.Schema
+	// AssetClass is the client for interacting with the AssetClass builders.
+	AssetClass *AssetClassClient
 	// Item is the client for interacting with the Item builders.
 	Item *ItemClient
 	// Tag is the client for interacting with the Tag builders.
 	Tag *TagClient
+	// UserGroup is the client for interacting with the UserGroup builders.
+	UserGroup *UserGroupClient
 }
 
 // NewClient creates a new client configured with the given options.
@@ -41,8 +47,10 @@ func NewClient(opts ...Option) *Client {
 
 func (c *Client) init() {
 	c.Schema = migrate.NewSchema(c.driver)
+	c.AssetClass = NewAssetClassClient(c.config)
 	c.Item = NewItemClient(c.config)
 	c.Tag = NewTagClient(c.config)
+	c.UserGroup = NewUserGroupClient(c.config)
 }
 
 type (
@@ -133,10 +141,12 @@ func (c *Client) Tx(ctx context.Context) (*Tx, error) {
 	cfg := c.config
 	cfg.driver = tx
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		Item:   NewItemClient(cfg),
-		Tag:    NewTagClient(cfg),
+		ctx:        ctx,
+		config:     cfg,
+		AssetClass: NewAssetClassClient(cfg),
+		Item:       NewItemClient(cfg),
+		Tag:        NewTagClient(cfg),
+		UserGroup:  NewUserGroupClient(cfg),
 	}, nil
 }
 
@@ -154,17 +164,19 @@ func (c *Client) BeginTx(ctx context.Context, opts *sql.TxOptions) (*Tx, error) 
 	cfg := c.config
 	cfg.driver = &txDriver{tx: tx, drv: c.driver}
 	return &Tx{
-		ctx:    ctx,
-		config: cfg,
-		Item:   NewItemClient(cfg),
-		Tag:    NewTagClient(cfg),
+		ctx:        ctx,
+		config:     cfg,
+		AssetClass: NewAssetClassClient(cfg),
+		Item:       NewItemClient(cfg),
+		Tag:        NewTagClient(cfg),
+		UserGroup:  NewUserGroupClient(cfg),
 	}, nil
 }
 
 // Debug returns a new debug-client. It's used to get verbose logging on specific operations.
 //
 //	client.Debug().
-//		Item.
+//		AssetClass.
 //		Query().
 //		Count(ctx)
 func (c *Client) Debug() *Client {
@@ -186,26 +198,167 @@ func (c *Client) Close() error {
 // Use adds the mutation hooks to all the entity clients.
 // In order to add hooks to a specific client, call: `client.Node.Use(...)`.
 func (c *Client) Use(hooks ...Hook) {
+	c.AssetClass.Use(hooks...)
 	c.Item.Use(hooks...)
 	c.Tag.Use(hooks...)
+	c.UserGroup.Use(hooks...)
 }
 
 // Intercept adds the query interceptors to all the entity clients.
 // In order to add interceptors to a specific client, call: `client.Node.Intercept(...)`.
 func (c *Client) Intercept(interceptors ...Interceptor) {
+	c.AssetClass.Intercept(interceptors...)
 	c.Item.Intercept(interceptors...)
 	c.Tag.Intercept(interceptors...)
+	c.UserGroup.Intercept(interceptors...)
 }
 
 // Mutate implements the ent.Mutator interface.
 func (c *Client) Mutate(ctx context.Context, m Mutation) (Value, error) {
 	switch m := m.(type) {
+	case *AssetClassMutation:
+		return c.AssetClass.mutate(ctx, m)
 	case *ItemMutation:
 		return c.Item.mutate(ctx, m)
 	case *TagMutation:
 		return c.Tag.mutate(ctx, m)
+	case *UserGroupMutation:
+		return c.UserGroup.mutate(ctx, m)
 	default:
 		return nil, fmt.Errorf("ent: unknown mutation type %T", m)
+	}
+}
+
+// AssetClassClient is a client for the AssetClass schema.
+type AssetClassClient struct {
+	config
+}
+
+// NewAssetClassClient returns a client for the AssetClass from the given config.
+func NewAssetClassClient(c config) *AssetClassClient {
+	return &AssetClassClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `assetclass.Hooks(f(g(h())))`.
+func (c *AssetClassClient) Use(hooks ...Hook) {
+	c.hooks.AssetClass = append(c.hooks.AssetClass, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `assetclass.Intercept(f(g(h())))`.
+func (c *AssetClassClient) Intercept(interceptors ...Interceptor) {
+	c.inters.AssetClass = append(c.inters.AssetClass, interceptors...)
+}
+
+// Create returns a builder for creating a AssetClass entity.
+func (c *AssetClassClient) Create() *AssetClassCreate {
+	mutation := newAssetClassMutation(c.config, OpCreate)
+	return &AssetClassCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of AssetClass entities.
+func (c *AssetClassClient) CreateBulk(builders ...*AssetClassCreate) *AssetClassCreateBulk {
+	return &AssetClassCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *AssetClassClient) MapCreateBulk(slice any, setFunc func(*AssetClassCreate, int)) *AssetClassCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &AssetClassCreateBulk{err: fmt.Errorf("calling to AssetClassClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*AssetClassCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &AssetClassCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for AssetClass.
+func (c *AssetClassClient) Update() *AssetClassUpdate {
+	mutation := newAssetClassMutation(c.config, OpUpdate)
+	return &AssetClassUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *AssetClassClient) UpdateOne(ac *AssetClass) *AssetClassUpdateOne {
+	mutation := newAssetClassMutation(c.config, OpUpdateOne, withAssetClass(ac))
+	return &AssetClassUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *AssetClassClient) UpdateOneID(id uuid.UUID) *AssetClassUpdateOne {
+	mutation := newAssetClassMutation(c.config, OpUpdateOne, withAssetClassID(id))
+	return &AssetClassUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for AssetClass.
+func (c *AssetClassClient) Delete() *AssetClassDelete {
+	mutation := newAssetClassMutation(c.config, OpDelete)
+	return &AssetClassDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *AssetClassClient) DeleteOne(ac *AssetClass) *AssetClassDeleteOne {
+	return c.DeleteOneID(ac.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *AssetClassClient) DeleteOneID(id uuid.UUID) *AssetClassDeleteOne {
+	builder := c.Delete().Where(assetclass.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &AssetClassDeleteOne{builder}
+}
+
+// Query returns a query builder for AssetClass.
+func (c *AssetClassClient) Query() *AssetClassQuery {
+	return &AssetClassQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeAssetClass},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a AssetClass entity by its id.
+func (c *AssetClassClient) Get(ctx context.Context, id uuid.UUID) (*AssetClass, error) {
+	return c.Query().Where(assetclass.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *AssetClassClient) GetX(ctx context.Context, id uuid.UUID) *AssetClass {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// Hooks returns the client hooks.
+func (c *AssetClassClient) Hooks() []Hook {
+	return c.hooks.AssetClass
+}
+
+// Interceptors returns the client interceptors.
+func (c *AssetClassClient) Interceptors() []Interceptor {
+	return c.inters.AssetClass
+}
+
+func (c *AssetClassClient) mutate(ctx context.Context, m *AssetClassMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&AssetClassCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&AssetClassUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&AssetClassUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&AssetClassDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown AssetClass mutation op: %q", m.Op())
 	}
 }
 
@@ -326,6 +479,38 @@ func (c *ItemClient) QueryTags(i *Item) *TagQuery {
 			sqlgraph.From(item.Table, item.FieldID, id),
 			sqlgraph.To(tag.Table, tag.FieldID),
 			sqlgraph.Edge(sqlgraph.O2M, false, item.TagsTable, item.TagsColumn),
+		)
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryUserGroups queries the user_groups edge of a Item.
+func (c *ItemClient) QueryUserGroups(i *Item) *UserGroupQuery {
+	query := (&UserGroupClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(item.Table, item.FieldID, id),
+			sqlgraph.To(usergroup.Table, usergroup.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, item.UserGroupsTable, item.UserGroupsColumn),
+		)
+		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// QueryAssetClass queries the asset_class edge of a Item.
+func (c *ItemClient) QueryAssetClass(i *Item) *AssetClassQuery {
+	query := (&AssetClassClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := i.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(item.Table, item.FieldID, id),
+			sqlgraph.To(assetclass.Table, assetclass.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, item.AssetClassTable, item.AssetClassColumn),
 		)
 		fromV = sqlgraph.Neighbors(i.driver.Dialect(), step)
 		return fromV, nil
@@ -507,12 +692,161 @@ func (c *TagClient) mutate(ctx context.Context, m *TagMutation) (Value, error) {
 	}
 }
 
+// UserGroupClient is a client for the UserGroup schema.
+type UserGroupClient struct {
+	config
+}
+
+// NewUserGroupClient returns a client for the UserGroup from the given config.
+func NewUserGroupClient(c config) *UserGroupClient {
+	return &UserGroupClient{config: c}
+}
+
+// Use adds a list of mutation hooks to the hooks stack.
+// A call to `Use(f, g, h)` equals to `usergroup.Hooks(f(g(h())))`.
+func (c *UserGroupClient) Use(hooks ...Hook) {
+	c.hooks.UserGroup = append(c.hooks.UserGroup, hooks...)
+}
+
+// Intercept adds a list of query interceptors to the interceptors stack.
+// A call to `Intercept(f, g, h)` equals to `usergroup.Intercept(f(g(h())))`.
+func (c *UserGroupClient) Intercept(interceptors ...Interceptor) {
+	c.inters.UserGroup = append(c.inters.UserGroup, interceptors...)
+}
+
+// Create returns a builder for creating a UserGroup entity.
+func (c *UserGroupClient) Create() *UserGroupCreate {
+	mutation := newUserGroupMutation(c.config, OpCreate)
+	return &UserGroupCreate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// CreateBulk returns a builder for creating a bulk of UserGroup entities.
+func (c *UserGroupClient) CreateBulk(builders ...*UserGroupCreate) *UserGroupCreateBulk {
+	return &UserGroupCreateBulk{config: c.config, builders: builders}
+}
+
+// MapCreateBulk creates a bulk creation builder from the given slice. For each item in the slice, the function creates
+// a builder and applies setFunc on it.
+func (c *UserGroupClient) MapCreateBulk(slice any, setFunc func(*UserGroupCreate, int)) *UserGroupCreateBulk {
+	rv := reflect.ValueOf(slice)
+	if rv.Kind() != reflect.Slice {
+		return &UserGroupCreateBulk{err: fmt.Errorf("calling to UserGroupClient.MapCreateBulk with wrong type %T, need slice", slice)}
+	}
+	builders := make([]*UserGroupCreate, rv.Len())
+	for i := 0; i < rv.Len(); i++ {
+		builders[i] = c.Create()
+		setFunc(builders[i], i)
+	}
+	return &UserGroupCreateBulk{config: c.config, builders: builders}
+}
+
+// Update returns an update builder for UserGroup.
+func (c *UserGroupClient) Update() *UserGroupUpdate {
+	mutation := newUserGroupMutation(c.config, OpUpdate)
+	return &UserGroupUpdate{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOne returns an update builder for the given entity.
+func (c *UserGroupClient) UpdateOne(ug *UserGroup) *UserGroupUpdateOne {
+	mutation := newUserGroupMutation(c.config, OpUpdateOne, withUserGroup(ug))
+	return &UserGroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// UpdateOneID returns an update builder for the given id.
+func (c *UserGroupClient) UpdateOneID(id uuid.UUID) *UserGroupUpdateOne {
+	mutation := newUserGroupMutation(c.config, OpUpdateOne, withUserGroupID(id))
+	return &UserGroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// Delete returns a delete builder for UserGroup.
+func (c *UserGroupClient) Delete() *UserGroupDelete {
+	mutation := newUserGroupMutation(c.config, OpDelete)
+	return &UserGroupDelete{config: c.config, hooks: c.Hooks(), mutation: mutation}
+}
+
+// DeleteOne returns a builder for deleting the given entity.
+func (c *UserGroupClient) DeleteOne(ug *UserGroup) *UserGroupDeleteOne {
+	return c.DeleteOneID(ug.ID)
+}
+
+// DeleteOneID returns a builder for deleting the given entity by its id.
+func (c *UserGroupClient) DeleteOneID(id uuid.UUID) *UserGroupDeleteOne {
+	builder := c.Delete().Where(usergroup.ID(id))
+	builder.mutation.id = &id
+	builder.mutation.op = OpDeleteOne
+	return &UserGroupDeleteOne{builder}
+}
+
+// Query returns a query builder for UserGroup.
+func (c *UserGroupClient) Query() *UserGroupQuery {
+	return &UserGroupQuery{
+		config: c.config,
+		ctx:    &QueryContext{Type: TypeUserGroup},
+		inters: c.Interceptors(),
+	}
+}
+
+// Get returns a UserGroup entity by its id.
+func (c *UserGroupClient) Get(ctx context.Context, id uuid.UUID) (*UserGroup, error) {
+	return c.Query().Where(usergroup.ID(id)).Only(ctx)
+}
+
+// GetX is like Get, but panics if an error occurs.
+func (c *UserGroupClient) GetX(ctx context.Context, id uuid.UUID) *UserGroup {
+	obj, err := c.Get(ctx, id)
+	if err != nil {
+		panic(err)
+	}
+	return obj
+}
+
+// QueryItems queries the items edge of a UserGroup.
+func (c *UserGroupClient) QueryItems(ug *UserGroup) *ItemQuery {
+	query := (&ItemClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := ug.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(usergroup.Table, usergroup.FieldID, id),
+			sqlgraph.To(item.Table, item.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, usergroup.ItemsTable, usergroup.ItemsColumn),
+		)
+		fromV = sqlgraph.Neighbors(ug.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
+// Hooks returns the client hooks.
+func (c *UserGroupClient) Hooks() []Hook {
+	return c.hooks.UserGroup
+}
+
+// Interceptors returns the client interceptors.
+func (c *UserGroupClient) Interceptors() []Interceptor {
+	return c.inters.UserGroup
+}
+
+func (c *UserGroupClient) mutate(ctx context.Context, m *UserGroupMutation) (Value, error) {
+	switch m.Op() {
+	case OpCreate:
+		return (&UserGroupCreate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdate:
+		return (&UserGroupUpdate{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpUpdateOne:
+		return (&UserGroupUpdateOne{config: c.config, hooks: c.Hooks(), mutation: m}).Save(ctx)
+	case OpDelete, OpDeleteOne:
+		return (&UserGroupDelete{config: c.config, hooks: c.Hooks(), mutation: m}).Exec(ctx)
+	default:
+		return nil, fmt.Errorf("ent: unknown UserGroup mutation op: %q", m.Op())
+	}
+}
+
 // hooks and interceptors per client, for fast access.
 type (
 	hooks struct {
-		Item, Tag []ent.Hook
+		AssetClass, Item, Tag, UserGroup []ent.Hook
 	}
 	inters struct {
-		Item, Tag []ent.Interceptor
+		AssetClass, Item, Tag, UserGroup []ent.Interceptor
 	}
 )

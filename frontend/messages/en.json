@@ -1,10 +1,25 @@
 {
 	"$schema": "https://inlang.com/schema/inlang-message-format",
-	"hello_world": "Hello, {name} from en!",
 	"app_name": "dig-inv",
 	"app_default_title": "Digital Inventory Management",
 	"app_default_description": "A digital inventory management system",
 	"generic_authentication_error": "Error during authentication. Please consult the logs for more details.",
 	"about": "About",
-	"dashboard": "Dashboard"
+	"overview": "Overview",
+	"users": "Users",
+	"configuration": "Configuration",
+	"providers": "Providers",
+	"assets": "Assets",
+	"groups": "Groups",
+	"logout": "Logout",
+	"asset_classes": "Asset Classes",
+	"asset_classes_subtitle": "Manage the different classes of assets in your inventory",
+	"asset_class_create": "Add a new Asset Class",
+	"asset_classes_load_error": "Error loading asset classes. Please check the logs for more details.",
+	"asset_classes_create_error": "Error creating asset class. Please check the logs for more details.",
+	"name": "Name",
+	"count": "Count",
+	"icon": "Icon",
+	"color": "Color",
+	"asset_count": "Asset Count"
 }

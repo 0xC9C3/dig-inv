@@ -56,6 +56,7 @@ func TestEnvironmentVariables(t *testing.T) {
 		{"OIDC_CLIENT_SECRET", GetOidcClientSecret, "test-client-secret"},
 		{"OIDC_REDIRECT_URL", GetOidcRedirectURL, "http://localhost:8080/auth/callback"},
 		{"OIDC_ISSUER_URL", GetOidcIssuerURL, "https://dig-inv.localhost"},
+		{"OIDC_SCOPE_PREFIX", GetOidcScopePrefix, "dig-inv"},
 		{"OIDC_SCOPES", func() string {
 			scopes := GetOidcScopes()
 			if len(scopes) == 0 {

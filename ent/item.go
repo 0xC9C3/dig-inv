@@ -23,10 +23,6 @@ type Item struct {
 	Name string `json:"name,omitempty"`
 	// A description of the item, which can be used to provide additional information about the item.
 	Description string `json:"description,omitempty"`
-	// The type of the item, which is used to identify the provider of the item. This is used to determine which provider's table to use for storing additional information about the item.
-	Type string `json:"type,omitempty"`
-	// The provider of the item, which is used to identify the provider of the item. This is used to determine which provider's table to use for storing additional information about the item.
-	Provider string `json:"provider,omitempty"`
 	// The user who created the resource in the inventory system. This is used for auditing purposes and to track who added the resource.
 	CreatedBy string `json:"created_by,omitempty"`
 	// When the resource was created in the inventory system.
@@ -41,18 +37,23 @@ type Item struct {
 	DeletedAt *time.Time `json:"deleted_at,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the ItemQuery when eager-loading is set.
-	Edges        ItemEdges `json:"edges"`
-	tag_items    *uuid.UUID
-	selectValues sql.SelectValues
+	Edges            ItemEdges `json:"edges"`
+	tag_items        *uuid.UUID
+	user_group_items *uuid.UUID
+	selectValues     sql.SelectValues
 }
 
 // ItemEdges holds the relations/edges for other nodes in the graph.
 type ItemEdges struct {
 	// The tags that are associated with this item. This edge represents the many-to-many relationship between items and tags, allowing multiple tags to be associated with a single item and vice versa.
 	Tags []*Tag `json:"tags,omitempty"`
+	// The user groups that are associated with this item. This edge represents the many-to-many relationship between items and user groups, allowing multiple user groups to be associated with a single item and vice versa.
+	UserGroups []*UserGroup `json:"user_groups,omitempty"`
+	// The asset class that this item belongs to. This edge represents the many-to-one relationship between items and asset classes, allowing multiple items to be associated with a single asset class. The asset class is defined in the AssetClass schema.
+	AssetClass []*AssetClass `json:"asset_class,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [3]bool
 }
 
 // TagsOrErr returns the Tags value or an error if the edge
@@ -64,18 +65,38 @@ func (e ItemEdges) TagsOrErr() ([]*Tag, error) {
 	return nil, &NotLoadedError{edge: "tags"}
 }
 
+// UserGroupsOrErr returns the UserGroups value or an error if the edge
+// was not loaded in eager-loading.
+func (e ItemEdges) UserGroupsOrErr() ([]*UserGroup, error) {
+	if e.loadedTypes[1] {
+		return e.UserGroups, nil
+	}
+	return nil, &NotLoadedError{edge: "user_groups"}
+}
+
+// AssetClassOrErr returns the AssetClass value or an error if the edge
+// was not loaded in eager-loading.
+func (e ItemEdges) AssetClassOrErr() ([]*AssetClass, error) {
+	if e.loadedTypes[2] {
+		return e.AssetClass, nil
+	}
+	return nil, &NotLoadedError{edge: "asset_class"}
+}
+
 // scanValues returns the types for scanning values from sql.Rows.
 func (*Item) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
-		case item.FieldName, item.FieldDescription, item.FieldType, item.FieldProvider, item.FieldCreatedBy, item.FieldUpdatedBy, item.FieldDeletedBy:
+		case item.FieldName, item.FieldDescription, item.FieldCreatedBy, item.FieldUpdatedBy, item.FieldDeletedBy:
 			values[i] = new(sql.NullString)
 		case item.FieldCreatedAt, item.FieldUpdatedAt, item.FieldDeletedAt:
 			values[i] = new(sql.NullTime)
 		case item.FieldID:
 			values[i] = new(uuid.UUID)
 		case item.ForeignKeys[0]: // tag_items
+			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
+		case item.ForeignKeys[1]: // user_group_items
 			values[i] = &sql.NullScanner{S: new(uuid.UUID)}
 		default:
 			values[i] = new(sql.UnknownType)
@@ -109,18 +130,6 @@ func (i *Item) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field description", values[j])
 			} else if value.Valid {
 				i.Description = value.String
-			}
-		case item.FieldType:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field type", values[j])
-			} else if value.Valid {
-				i.Type = value.String
-			}
-		case item.FieldProvider:
-			if value, ok := values[j].(*sql.NullString); !ok {
-				return fmt.Errorf("unexpected type %T for field provider", values[j])
-			} else if value.Valid {
-				i.Provider = value.String
 			}
 		case item.FieldCreatedBy:
 			if value, ok := values[j].(*sql.NullString); !ok {
@@ -166,6 +175,13 @@ func (i *Item) assignValues(columns []string, values []any) error {
 				i.tag_items = new(uuid.UUID)
 				*i.tag_items = *value.S.(*uuid.UUID)
 			}
+		case item.ForeignKeys[1]:
+			if value, ok := values[j].(*sql.NullScanner); !ok {
+				return fmt.Errorf("unexpected type %T for field user_group_items", values[j])
+			} else if value.Valid {
+				i.user_group_items = new(uuid.UUID)
+				*i.user_group_items = *value.S.(*uuid.UUID)
+			}
 		default:
 			i.selectValues.Set(columns[j], values[j])
 		}
@@ -182,6 +198,16 @@ func (i *Item) Value(name string) (ent.Value, error) {
 // QueryTags queries the "tags" edge of the Item entity.
 func (i *Item) QueryTags() *TagQuery {
 	return NewItemClient(i.config).QueryTags(i)
+}
+
+// QueryUserGroups queries the "user_groups" edge of the Item entity.
+func (i *Item) QueryUserGroups() *UserGroupQuery {
+	return NewItemClient(i.config).QueryUserGroups(i)
+}
+
+// QueryAssetClass queries the "asset_class" edge of the Item entity.
+func (i *Item) QueryAssetClass() *AssetClassQuery {
+	return NewItemClient(i.config).QueryAssetClass(i)
 }
 
 // Update returns a builder for updating this Item.
@@ -212,12 +238,6 @@ func (i *Item) String() string {
 	builder.WriteString(", ")
 	builder.WriteString("description=")
 	builder.WriteString(i.Description)
-	builder.WriteString(", ")
-	builder.WriteString("type=")
-	builder.WriteString(i.Type)
-	builder.WriteString(", ")
-	builder.WriteString("provider=")
-	builder.WriteString(i.Provider)
 	builder.WriteString(", ")
 	builder.WriteString("created_by=")
 	builder.WriteString(i.CreatedBy)

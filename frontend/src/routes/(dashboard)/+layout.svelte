@@ -1,6 +1,7 @@
 <script lang="ts">
     import '../../app.css';
     import {
+        Avatar,
         DarkMode,
         Navbar,
         NavBrand,
@@ -15,12 +16,16 @@
         uiHelpers
     } from "flowbite-svelte";
     import {
+        AdjustmentsHorizontalSolid,
         ArrowRightToBracketOutline,
+        CandyCaneOutline,
         ChartOutline,
         InfoCircleOutline,
         OpenDoorOutline,
         SearchOutline,
         ShoppingBagSolid,
+        ToolsOutline,
+        UsersGroupOutline,
         UserSolid
     } from "flowbite-svelte-icons";
     import {fade} from "svelte/transition";
@@ -29,7 +34,7 @@
     import {m} from '$lib/paraglide/messages.js';
 
     let activeUrl = $state(page.url.pathname);
-    const spanClass = "flex-1 ms-3 whitespace-nowrap";
+    const iconClass = "h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white";
     const sidebar = uiHelpers();
     let isDemoOpen = $state(false);
     const closeDemoSidebar = sidebar.close;
@@ -37,6 +42,24 @@
         isDemoOpen = sidebar.isOpen;
         activeUrl = page.url.pathname;
     });
+
+    const assetClasses = [
+        {
+            label: 'domains',
+            icon: ShoppingBagSolid,
+            href: "/assets/domains",
+        },
+        {
+            label: 'servers',
+            icon: ShoppingBagSolid,
+            href: "/assets/servers",
+        },
+        {
+            label: 'custom-1',
+            icon: ShoppingBagSolid,
+            href: "/assets/custom-1",
+        }
+    ]
 
 
     let { children } = $props();
@@ -78,94 +101,78 @@
 
     <div class="relative grow">
         <Sidebar activeClass="p-2" {activeUrl} backdrop={false} class="z-50 h-full" closeSidebar={closeDemoSidebar} isOpen={isDemoOpen} nonActiveClass="p-2" params={{ x: -50, duration: 50 }} position="absolute">
+            <div class="pb-2 flex items-center justify-start gap-2">
+                <Avatar >
+                    <UserSolid />
+                </Avatar>
+                <span class="ml-2 text-lg font-semibold dark:text-white overflow-hidden text-ellipsis whitespace-nowrap">
+                    {auth.getUserInfo()?.email || '-'}
+                </span>
+            </div>
+
+            <hr class="pb-2" />
+
             <SidebarGroup>
-                <SidebarItem href="/" label={m.dashboard()}>
+                <SidebarItem href="/" label={m.overview()}>
                     {#snippet icon()}
-                        <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        <ChartOutline class={iconClass} />
                     {/snippet}
                 </SidebarItem>
 
-                <SidebarDropdownWrapper btnClass="p-2"  label="assets">
+                <!-- <SidebarDropdownWrapper btnClass="p-2"  label={m.assets()}>
                     {#snippet icon()}
-                        <ShoppingBagSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        <ClipboardListSolid class={iconClass} />
+                    {/snippet}-->
+
+                    {#each assetClasses as asset (asset.label)}
+                        <SidebarItem href={asset.href} label={asset.label}>
+                            {#snippet icon()}
+                                <asset.icon class={iconClass} />
+                            {/snippet}
+                        </SidebarItem>
+                    {/each}
+
+                <!-- </SidebarDropdownWrapper> -->
+
+                <SidebarDropdownWrapper btnClass="p-2" label={m.configuration()}>
+                    {#snippet icon()}
+                        <ToolsOutline class={iconClass} />
                     {/snippet}
-                    <SidebarItem href="/" label="domains">
+                    <SidebarItem href="/config/user-groups" label={m.groups()}>
                         {#snippet icon()}
-                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                            <UsersGroupOutline class={iconClass} />
                         {/snippet}
                     </SidebarItem>
 
-                    <SidebarItem href="/" label="servers">
+                    <SidebarItem href="/config/providers" label={m.providers()}>
                         {#snippet icon()}
-                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                            <CandyCaneOutline class={iconClass} />
                         {/snippet}
                     </SidebarItem>
 
-                    <SidebarItem href="/" label="other">
+                    <SidebarItem href="/config/asset-classes" label={m.asset_classes()}>
                         {#snippet icon()}
-                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                            <AdjustmentsHorizontalSolid class={iconClass} />
                         {/snippet}
                     </SidebarItem>
                 </SidebarDropdownWrapper>
 
-                <SidebarDropdownWrapper btnClass="p-2" label="configuration">
-                    {#snippet icon()}
-                        <ShoppingBagSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                    {/snippet}
-                    <SidebarItem href="/" label="groups">
-                        {#snippet icon()}
-                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                        {/snippet}
-                    </SidebarItem>
+                <hr />
 
-                    <SidebarItem href="/" label="providers">
-                        {#snippet icon()}
-                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                        {/snippet}
-                    </SidebarItem>
-
-                    <SidebarItem href="/" label="about">
-                        {#snippet icon()}
-                            <ChartOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                        {/snippet}
-                    </SidebarItem>
-                </SidebarDropdownWrapper>
-
-                <!-- <SidebarItem href="/" label="Kanban" {spanClass}>
+                <SidebarItem class="cursor-pointer" label={m.logout()} onclick={() => auth.logout()}>
                     {#snippet icon()}
-                        <GridSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                    {/snippet}
-                    {#snippet subtext()}
-                        <span class="ms-3 inline-flex items-center justify-center rounded-full bg-gray-200 px-2 text-sm font-medium text-gray-800 dark:bg-gray-700 dark:text-gray-300">Pro</span>
-                    {/snippet}
-                </SidebarItem>
-                <SidebarItem href="/" label="Inbox" {spanClass}>
-                    {#snippet icon()}
-                        <MailBoxSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                    {/snippet}
-                    {#snippet subtext()}
-                        <span class="bg-primary-200 text-primary-600 dark:bg-primary-900 dark:text-primary-200 ms-3 inline-flex h-3 w-3 items-center justify-center rounded-full p-3 text-sm font-medium">3</span>
-                    {/snippet}
-                </SidebarItem> -->
-                <SidebarItem label="Users">
-                    {#snippet icon()}
-                        <UserSolid class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
-                    {/snippet}
-                </SidebarItem>
-                <SidebarItem label="sign out">
-                    {#snippet icon()}
-                        <ArrowRightToBracketOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        <ArrowRightToBracketOutline class={iconClass} />
                     {/snippet}
                 </SidebarItem>
                 <SidebarItem href="/about" label={m.about()}>
                     {#snippet icon()}
-                        <InfoCircleOutline class="h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white" />
+                        <InfoCircleOutline class={iconClass} />
                     {/snippet}
                 </SidebarItem>
             </SidebarGroup>
         </Sidebar>
 
-        <div class="overflow-auto px-4 md:ml-64">
+        <div class="overflow-auto px-4 md:ml-64 h-full overflow-y-auto">
             {@render children()}
         </div>
     </div>

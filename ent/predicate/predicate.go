@@ -6,8 +6,14 @@ import (
 	"entgo.io/ent/dialect/sql"
 )
 
+// AssetClass is the predicate function for assetclass builders.
+type AssetClass func(*sql.Selector)
+
 // Item is the predicate function for item builders.
 type Item func(*sql.Selector)
 
 // Tag is the predicate function for tag builders.
 type Tag func(*sql.Selector)
+
+// UserGroup is the predicate function for usergroup builders.
+type UserGroup func(*sql.Selector)

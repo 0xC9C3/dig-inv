@@ -116,7 +116,7 @@ func TestHttpCookieResponseModifier(t *testing.T) {
 
 	ctx = AddMockServerTransportStreamToContext(ctx, "set-cookie", "test_cookie=test_value")
 
-	err := httpCookieResponseModifier(ctx, w, &gen.UserSubjectMessage{})
+	err := httpCookieResponseModifier(ctx, w, &gen.UserInfoMessage{})
 	if err != nil {
 		t.Errorf("httpCookieResponseModifier failed: %v", err)
 	} else {
@@ -128,7 +128,7 @@ func TestHttpCookieResponseModifierNoContext(t *testing.T) {
 	ctx := context.Background()
 	w := httptest.NewRecorder()
 
-	err := httpCookieResponseModifier(ctx, w, &gen.UserSubjectMessage{})
+	err := httpCookieResponseModifier(ctx, w, &gen.UserInfoMessage{})
 	if err != nil {
 		t.Errorf("httpCookieResponseModifier failed: %v", err)
 	} else {
@@ -142,7 +142,7 @@ func TestHttpCookieResponseModifierBrokenCookie(t *testing.T) {
 
 	ctx = AddMockServerTransportStreamToContext(ctx, "set-cookie", "broken_cookie")
 
-	err := httpCookieResponseModifier(ctx, w, &gen.UserSubjectMessage{})
+	err := httpCookieResponseModifier(ctx, w, &gen.UserInfoMessage{})
 	if err != nil {
 		t.Errorf("httpCookieResponseModifier failed: %v", err)
 	} else {

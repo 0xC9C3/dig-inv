@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/coreos/go-oidc/v3/oidc"
+	"github.com/grpc-ecosystem/grpc-gateway/v2/runtime"
 	"golang.org/x/oauth2"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -17,13 +18,18 @@ import (
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"net/http"
+	"strings"
+	"time"
 )
 
+type AuthenticatedSubjectContextKey string
+
+const AuthenticatedSubjectKey AuthenticatedSubjectContextKey = "authenticatedSubject"
+
 const (
-	TokenCookieName        = "token"
-	RefreshTokenCookieName = "refresh_token"
-	VerifierCookieName     = "verifier"
-	StateCookieName        = "state"
+	TokenCookieName    = "token"
+	VerifierCookieName = "verifier"
+	StateCookieName    = "state"
 )
 
 type openidAuthServer struct {
@@ -37,7 +43,7 @@ func NewOpenIdAuthServer() gw.OpenIdAuthServiceServer {
 	}
 }
 
-func (s *openidAuthServer) GetUserInfo(ctx context.Context, _ *gw.EmptyMessage) (*gw.UserSubjectMessage, error) {
+func (s *openidAuthServer) GetUserInfo(ctx context.Context, _ *gw.EmptyMessage) (*gw.UserInfoMessage, error) {
 	_, provider, _, err := s.getOAuth2ContextImpl(ctx)
 
 	if err != nil {
@@ -59,7 +65,7 @@ func (s *openidAuthServer) GetUserInfo(ctx context.Context, _ *gw.EmptyMessage) 
 		return nil, status.Errorf(codes.Unauthenticated, "Failed to get user info")
 	}
 
-	return &gw.UserSubjectMessage{Subject: userInfo.Subject}, nil
+	return &gw.UserInfoMessage{Subject: userInfo.Subject, Email: userInfo.Email}, nil
 }
 
 func (s *openidAuthServer) ExchangeCode(ctx context.Context, msg *gw.ExchangeCodeMessage) (*gw.EmptyMessage, error) {
@@ -94,7 +100,6 @@ func (s *openidAuthServer) ExchangeCode(ctx context.Context, msg *gw.ExchangeCod
 	}
 
 	if err := setCookies(ctx, []string{TokenCookieName, token.AccessToken},
-		[]string{RefreshTokenCookieName, token.RefreshToken},
 		[]string{VerifierCookieName, ""},
 		[]string{StateCookieName, ""}); err != nil {
 		grpclog.Errorf("Failed to set cookies: %v", err)
@@ -115,7 +120,6 @@ func (s *openidAuthServer) BeginAuth(ctx context.Context, _ *gw.EmptyMessage) (*
 
 	authURL := oauth2Config.AuthCodeURL(
 		state,
-		oauth2.AccessTypeOffline,
 		oauth2.ApprovalForce,
 		oauth2.S256ChallengeOption(verifier),
 	)
@@ -131,7 +135,7 @@ func (s *openidAuthServer) BeginAuth(ctx context.Context, _ *gw.EmptyMessage) (*
 }
 
 func (s *openidAuthServer) Logout(ctx context.Context, _ *gw.EmptyMessage) (*gw.EmptyMessage, error) {
-	cookiesToClear := []string{TokenCookieName, RefreshTokenCookieName, VerifierCookieName, StateCookieName}
+	cookiesToClear := []string{TokenCookieName, VerifierCookieName, StateCookieName}
 
 	for _, cookie := range cookiesToClear {
 		if err := setCookie(ctx, cookie, ""); err != nil {
@@ -234,4 +238,57 @@ func generateState() string {
 	//  an error is returned."
 	_, _ = rand.Read(state)
 	return base64.RawURLEncoding.EncodeToString(state)
+}
+
+func verifyAuthenticationMiddleware(next runtime.HandlerFunc) runtime.HandlerFunc {
+	return func(w http.ResponseWriter, r *http.Request, pathParams map[string]string) {
+		ctx := r.Context()
+
+		log.S.Debugw("Verifying authentication", "path", r.URL.Path, "method", r.Method)
+
+		// allow auth service without authentication
+		if strings.HasPrefix(r.URL.Path, "/dig_inv.OpenIdAuthService/") {
+			next(w, r, pathParams)
+			return
+		}
+
+		accessToken, err := r.Cookie(TokenCookieName)
+		if err != nil {
+			log.S.Errorw("Access token cookie not found", "error", err)
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		if accessToken.Value == "" {
+			log.S.Errorw("Access token cookie is empty")
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		config, provider, _, err := getOAuth2Context(ctx)
+		if err != nil {
+			log.S.Errorw("Failed to get OAuth2 context", "error", err)
+			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			return
+		}
+
+		token, err := provider.Verifier(&oidc.Config{ClientID: config.ClientID}).Verify(ctx, accessToken.Value)
+
+		if err != nil {
+			log.S.Errorw("Failed to verify access token", "error", err)
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		if token.Expiry.Before(time.Now()) {
+			log.S.Errorw("Access token has expired", "expiry", token.Expiry)
+			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			return
+		}
+
+		ctx = context.WithValue(ctx, AuthenticatedSubjectKey, token.Subject)
+		r = r.WithContext(ctx)
+
+		next(w, r, pathParams)
+	}
 }

@@ -29,13 +29,6 @@ func (Item) Fields() []ent.Field {
 		field.String("description").
 			Optional().
 			Comment("A description of the item, which can be used to provide additional information about the item."),
-		field.String("type").
-			NotEmpty().
-			// polymorphism does not seem to be supported in ent https://github.com/ent/ent/issues/1048
-			Comment("The type of the item, which is used to identify the provider of the item. This is used to determine which provider's table to use for storing additional information about the item."),
-		field.String("provider").
-			NotEmpty().
-			Comment("The provider of the item, which is used to identify the provider of the item. This is used to determine which provider's table to use for storing additional information about the item."),
 	})
 }
 
@@ -45,5 +38,8 @@ func (Item) Edges() []ent.Edge {
 			Comment("The tags that are associated with this item. This edge represents the many-to-many relationship between items and tags, allowing multiple tags to be associated with a single item and vice versa."),
 		edge.To("user_groups", UserGroup.Type).
 			Comment("The user groups that are associated with this item. This edge represents the many-to-many relationship between items and user groups, allowing multiple user groups to be associated with a single item and vice versa."),
+		edge.To("asset_class", AssetClass.Type).
+			Required().
+			Comment("The asset class that this item belongs to. This edge represents the many-to-one relationship between items and asset classes, allowing multiple items to be associated with a single asset class. The asset class is defined in the AssetClass schema."),
 	}
 }

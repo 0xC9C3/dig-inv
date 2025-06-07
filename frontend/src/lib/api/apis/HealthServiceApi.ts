@@ -48,7 +48,7 @@ export class HealthServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.HealthService/HealthCheck`,
+            path: `/dig_inv.HealthService/HealthCheck`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,

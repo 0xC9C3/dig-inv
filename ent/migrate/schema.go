@@ -8,13 +8,41 @@ import (
 )
 
 var (
+	// AssetClassesColumns holds the columns for the "asset_classes" table.
+	AssetClassesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "icon", Type: field.TypeString, Nullable: true},
+		{Name: "color", Type: field.TypeString, Nullable: true},
+		{Name: "provider", Type: field.TypeString, Nullable: true},
+		{Name: "created_by", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "item_asset_class", Type: field.TypeUUID, Nullable: true},
+	}
+	// AssetClassesTable holds the schema information for the "asset_classes" table.
+	AssetClassesTable = &schema.Table{
+		Name:       "asset_classes",
+		Columns:    AssetClassesColumns,
+		PrimaryKey: []*schema.Column{AssetClassesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "asset_classes_items_asset_class",
+				Columns:    []*schema.Column{AssetClassesColumns[12]},
+				RefColumns: []*schema.Column{ItemsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// ItemsColumns holds the columns for the "items" table.
 	ItemsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
-		{Name: "type", Type: field.TypeString},
-		{Name: "provider", Type: field.TypeString},
 		{Name: "created_by", Type: field.TypeString},
 		{Name: "created_at", Type: field.TypeTime},
 		{Name: "updated_by", Type: field.TypeString},
@@ -22,6 +50,7 @@ var (
 		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
 		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
 		{Name: "tag_items", Type: field.TypeUUID, Nullable: true},
+		{Name: "user_group_items", Type: field.TypeUUID, Nullable: true},
 	}
 	// ItemsTable holds the schema information for the "items" table.
 	ItemsTable = &schema.Table{
@@ -31,8 +60,14 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "items_tags_items",
-				Columns:    []*schema.Column{ItemsColumns[11]},
+				Columns:    []*schema.Column{ItemsColumns[9]},
 				RefColumns: []*schema.Column{TagsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+			{
+				Symbol:     "items_user_groups_items",
+				Columns:    []*schema.Column{ItemsColumns[10]},
+				RefColumns: []*schema.Column{UserGroupsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
 		},
@@ -64,14 +99,47 @@ var (
 			},
 		},
 	}
+	// UserGroupsColumns holds the columns for the "user_groups" table.
+	UserGroupsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeUUID},
+		{Name: "name", Type: field.TypeString},
+		{Name: "description", Type: field.TypeString, Nullable: true},
+		{Name: "oidc_scope", Type: field.TypeString},
+		{Name: "created_by", Type: field.TypeString},
+		{Name: "created_at", Type: field.TypeTime},
+		{Name: "updated_by", Type: field.TypeString},
+		{Name: "updated_at", Type: field.TypeTime},
+		{Name: "deleted_by", Type: field.TypeString, Nullable: true},
+		{Name: "deleted_at", Type: field.TypeTime, Nullable: true},
+		{Name: "item_user_groups", Type: field.TypeUUID, Nullable: true},
+	}
+	// UserGroupsTable holds the schema information for the "user_groups" table.
+	UserGroupsTable = &schema.Table{
+		Name:       "user_groups",
+		Columns:    UserGroupsColumns,
+		PrimaryKey: []*schema.Column{UserGroupsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "user_groups_items_user_groups",
+				Columns:    []*schema.Column{UserGroupsColumns[10]},
+				RefColumns: []*schema.Column{ItemsColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
+		AssetClassesTable,
 		ItemsTable,
 		TagsTable,
+		UserGroupsTable,
 	}
 )
 
 func init() {
+	AssetClassesTable.ForeignKeys[0].RefTable = ItemsTable
 	ItemsTable.ForeignKeys[0].RefTable = TagsTable
+	ItemsTable.ForeignKeys[1].RefTable = UserGroupsTable
 	TagsTable.ForeignKeys[0].RefTable = ItemsTable
+	UserGroupsTable.ForeignKeys[0].RefTable = ItemsTable
 }

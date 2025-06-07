@@ -4,8 +4,10 @@ package ent
 
 import (
 	"context"
+	"dig-inv/ent/assetclass"
 	"dig-inv/ent/item"
 	"dig-inv/ent/tag"
+	"dig-inv/ent/usergroup"
 	"errors"
 	"fmt"
 	"reflect"
@@ -74,8 +76,10 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			item.Table: item.ValidColumn,
-			tag.Table:  tag.ValidColumn,
+			assetclass.Table: assetclass.ValidColumn,
+			item.Table:       item.ValidColumn,
+			tag.Table:        tag.ValidColumn,
+			usergroup.Table:  usergroup.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

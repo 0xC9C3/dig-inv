@@ -5,7 +5,7 @@
 TODO: Screenshots / Demo
 
 > **Note:** This is a learning project to explore go, grpc, and other technologies. Don't expect it to be production ready.
-> This is pretty overengineered for a simple inventory system, but it serves as a good exercise in building a full-stack application with some 
+> This is pretty overengineered & under engineered for a simple inventory system, but it serves as a good exercise in building a full-stack application with some 
 > of the chosen technologies.
 
 ## Features
@@ -21,13 +21,13 @@ TODO: Screenshots / Demo
 
 ## Supported Providers
 
+- **Custom Providers**
+  - Create your own custom asset classes to manage assets that are not supported out of the box.
 - **DNS Providers**
   - Cloudflare
   - Namecheap
 - **Server Providers**
   - Hetzner
-- **Other Providers**
-  - Custom asset (e.g., hardware, software)
 
 
 

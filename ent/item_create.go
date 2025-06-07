@@ -4,8 +4,10 @@ package ent
 
 import (
 	"context"
+	"dig-inv/ent/assetclass"
 	"dig-inv/ent/item"
 	"dig-inv/ent/tag"
+	"dig-inv/ent/usergroup"
 	"errors"
 	"fmt"
 	"time"
@@ -39,18 +41,6 @@ func (ic *ItemCreate) SetNillableDescription(s *string) *ItemCreate {
 	if s != nil {
 		ic.SetDescription(*s)
 	}
-	return ic
-}
-
-// SetType sets the "type" field.
-func (ic *ItemCreate) SetType(s string) *ItemCreate {
-	ic.mutation.SetType(s)
-	return ic
-}
-
-// SetProvider sets the "provider" field.
-func (ic *ItemCreate) SetProvider(s string) *ItemCreate {
-	ic.mutation.SetProvider(s)
 	return ic
 }
 
@@ -151,6 +141,36 @@ func (ic *ItemCreate) AddTags(t ...*Tag) *ItemCreate {
 	return ic.AddTagIDs(ids...)
 }
 
+// AddUserGroupIDs adds the "user_groups" edge to the UserGroup entity by IDs.
+func (ic *ItemCreate) AddUserGroupIDs(ids ...uuid.UUID) *ItemCreate {
+	ic.mutation.AddUserGroupIDs(ids...)
+	return ic
+}
+
+// AddUserGroups adds the "user_groups" edges to the UserGroup entity.
+func (ic *ItemCreate) AddUserGroups(u ...*UserGroup) *ItemCreate {
+	ids := make([]uuid.UUID, len(u))
+	for i := range u {
+		ids[i] = u[i].ID
+	}
+	return ic.AddUserGroupIDs(ids...)
+}
+
+// AddAssetClasIDs adds the "asset_class" edge to the AssetClass entity by IDs.
+func (ic *ItemCreate) AddAssetClasIDs(ids ...uuid.UUID) *ItemCreate {
+	ic.mutation.AddAssetClasIDs(ids...)
+	return ic
+}
+
+// AddAssetClass adds the "asset_class" edges to the AssetClass entity.
+func (ic *ItemCreate) AddAssetClass(a ...*AssetClass) *ItemCreate {
+	ids := make([]uuid.UUID, len(a))
+	for i := range a {
+		ids[i] = a[i].ID
+	}
+	return ic.AddAssetClasIDs(ids...)
+}
+
 // Mutation returns the ItemMutation object of the builder.
 func (ic *ItemCreate) Mutation() *ItemMutation {
 	return ic.mutation
@@ -210,22 +230,6 @@ func (ic *ItemCreate) check() error {
 			return &ValidationError{Name: "name", err: fmt.Errorf(`ent: validator failed for field "Item.name": %w`, err)}
 		}
 	}
-	if _, ok := ic.mutation.GetType(); !ok {
-		return &ValidationError{Name: "type", err: errors.New(`ent: missing required field "Item.type"`)}
-	}
-	if v, ok := ic.mutation.GetType(); ok {
-		if err := item.TypeValidator(v); err != nil {
-			return &ValidationError{Name: "type", err: fmt.Errorf(`ent: validator failed for field "Item.type": %w`, err)}
-		}
-	}
-	if _, ok := ic.mutation.Provider(); !ok {
-		return &ValidationError{Name: "provider", err: errors.New(`ent: missing required field "Item.provider"`)}
-	}
-	if v, ok := ic.mutation.Provider(); ok {
-		if err := item.ProviderValidator(v); err != nil {
-			return &ValidationError{Name: "provider", err: fmt.Errorf(`ent: validator failed for field "Item.provider": %w`, err)}
-		}
-	}
 	if _, ok := ic.mutation.CreatedBy(); !ok {
 		return &ValidationError{Name: "created_by", err: errors.New(`ent: missing required field "Item.created_by"`)}
 	}
@@ -237,6 +241,9 @@ func (ic *ItemCreate) check() error {
 	}
 	if _, ok := ic.mutation.UpdatedAt(); !ok {
 		return &ValidationError{Name: "updated_at", err: errors.New(`ent: missing required field "Item.updated_at"`)}
+	}
+	if len(ic.mutation.AssetClassIDs()) == 0 {
+		return &ValidationError{Name: "asset_class", err: errors.New(`ent: missing required edge "Item.asset_class"`)}
 	}
 	return nil
 }
@@ -281,14 +288,6 @@ func (ic *ItemCreate) createSpec() (*Item, *sqlgraph.CreateSpec) {
 		_spec.SetField(item.FieldDescription, field.TypeString, value)
 		_node.Description = value
 	}
-	if value, ok := ic.mutation.GetType(); ok {
-		_spec.SetField(item.FieldType, field.TypeString, value)
-		_node.Type = value
-	}
-	if value, ok := ic.mutation.Provider(); ok {
-		_spec.SetField(item.FieldProvider, field.TypeString, value)
-		_node.Provider = value
-	}
 	if value, ok := ic.mutation.CreatedBy(); ok {
 		_spec.SetField(item.FieldCreatedBy, field.TypeString, value)
 		_node.CreatedBy = value
@@ -322,6 +321,38 @@ func (ic *ItemCreate) createSpec() (*Item, *sqlgraph.CreateSpec) {
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
 				IDSpec: sqlgraph.NewFieldSpec(tag.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ic.mutation.UserGroupsIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.UserGroupsTable,
+			Columns: []string{item.UserGroupsColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(usergroup.FieldID, field.TypeUUID),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges = append(_spec.Edges, edge)
+	}
+	if nodes := ic.mutation.AssetClassIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.O2M,
+			Inverse: false,
+			Table:   item.AssetClassTable,
+			Columns: []string{item.AssetClassColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(assetclass.FieldID, field.TypeUUID),
 			},
 		}
 		for _, k := range nodes {

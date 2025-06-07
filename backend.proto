@@ -1,9 +1,10 @@
 syntax = "proto3";
-package your.service.v1;
+package dig_inv;
 option go_package = "dig-inv/gen/go";
 
-message UserSubjectMessage {
+message UserInfoMessage {
   string subject = 1;
+  string email = 2;
 }
 
 message AuthUrlMessage {
@@ -18,7 +19,7 @@ message ExchangeCodeMessage {
 }
 
 service OpenIdAuthService {
-  rpc GetUserInfo(EmptyMessage) returns (UserSubjectMessage) {}
+  rpc GetUserInfo(EmptyMessage) returns (UserInfoMessage) {}
   rpc BeginAuth(EmptyMessage) returns (AuthUrlMessage) {}
   rpc ExchangeCode(ExchangeCodeMessage) returns (EmptyMessage) {}
   rpc Logout(EmptyMessage) returns (EmptyMessage) {}
@@ -85,4 +86,25 @@ service TagService {
   rpc UpdateTag(Tag) returns (Tag) {}
   rpc DeleteTag(ElementId) returns (EmptyMessage) {}
   rpc AddItemToTag(ElementId) returns (EmptyMessage) {}
+}
+
+
+message AssetClass {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+  string icon = 4;
+  string color = 5;
+}
+
+message AssetClasses {
+  repeated AssetClass classes = 1;
+}
+
+service AssetClassService {
+  rpc GetAssetClass(EmptyMessage) returns (AssetClass) {}
+  rpc GetAssetClasses(EmptyMessage) returns (AssetClasses) {}
+  rpc CreateAssetClass(AssetClass) returns (AssetClass) {}
+  rpc UpdateAssetClass(AssetClass) returns (AssetClass) {}
+  rpc DeleteAssetClass(ElementId) returns (EmptyMessage) {}
 }

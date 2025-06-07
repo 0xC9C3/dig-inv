@@ -1,6 +1,5 @@
 import {goto} from "$app/navigation";
-import {Configuration, DefaultConfig, OpenIdAuthServiceApi} from "$lib/api";
-import {PUBLIC_BACKEND_URL} from '$env/static/public';
+import {OpenIdAuthServiceApi} from "$lib/api";
 import toasts from "$lib/state/Toast.svelte";
 import {m} from '$lib/paraglide/messages.js';
 
@@ -12,13 +11,15 @@ const EmptyBody = {
 class Auth {
     public loading: boolean = $state(true);
     private readonly authServiceApi: OpenIdAuthServiceApi;
-    private subject: string | undefined;
+    private userInfo: {
+        subject?: string;
+        email?: string;
+    } = $state({
+        subject: undefined,
+        email: undefined
+    });
 
     constructor() {
-        DefaultConfig.config = new Configuration({
-            basePath: PUBLIC_BACKEND_URL || '/',
-            credentials: 'include',
-        })
         this.authServiceApi = new OpenIdAuthServiceApi()
 
         this.initialize()
@@ -32,6 +33,10 @@ class Auth {
             });
     }
 
+    public getUserInfo(): typeof this.userInfo {
+        return this.userInfo;
+    }
+
     async initialize() {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
@@ -41,11 +46,14 @@ class Auth {
         }
 
         try {
-            const userInfo = await this.authServiceApi.openIdAuthServiceGetUserInfo(EmptyBody)
-
-            this.subject = userInfo.subject;
+            this.userInfo = await this.authServiceApi.openIdAuthServiceGetUserInfo(EmptyBody);
             this.loading = false;
-            return this.toDashboard();
+
+            if (window.location.pathname.startsWith('/login')) {
+                return this.toDashboard();
+            }
+
+            return;
         }
         catch (error) {
             console.error('Error fetching user info:', error);
@@ -108,7 +116,10 @@ class Auth {
             );
         }
 
-        this.subject = undefined;
+        this.userInfo = {
+            subject: undefined,
+            email: undefined
+        }
         await this.toLogin();
     }
 

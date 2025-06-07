@@ -202,10 +202,9 @@ func TestOpenidAuthServer_ExchangeCodeA(t *testing.T) {
 	}
 
 	expectedValues := map[string]bool{
-		fmt.Sprintf("%s=%s", TokenCookieName, "test_access_token"):         false,
-		fmt.Sprintf("%s=%s", RefreshTokenCookieName, "test_refresh_token"): false,
-		fmt.Sprintf("%s=", VerifierCookieName):                             false,
-		fmt.Sprintf("%s=", StateCookieName):                                false,
+		fmt.Sprintf("%s=%s", TokenCookieName, "test_access_token"): false,
+		fmt.Sprintf("%s=", VerifierCookieName):                     false,
+		fmt.Sprintf("%s=", StateCookieName):                        false,
 	}
 
 	for cookieName := range expectedValues {

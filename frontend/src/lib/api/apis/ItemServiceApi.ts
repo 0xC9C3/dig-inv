@@ -15,28 +15,28 @@
 
 import * as runtime from '../runtime';
 import type {
+  DigInvElementId,
+  DigInvItem,
+  DigInvItems,
   RpcStatus,
-  V1ElementId,
-  V1Item,
-  V1Items,
 } from '../models/index';
 import {
+    DigInvElementIdFromJSON,
+    DigInvElementIdToJSON,
+    DigInvItemFromJSON,
+    DigInvItemToJSON,
+    DigInvItemsFromJSON,
+    DigInvItemsToJSON,
     RpcStatusFromJSON,
     RpcStatusToJSON,
-    V1ElementIdFromJSON,
-    V1ElementIdToJSON,
-    V1ItemFromJSON,
-    V1ItemToJSON,
-    V1ItemsFromJSON,
-    V1ItemsToJSON,
 } from '../models/index';
 
 export interface ItemServiceCreateItemRequest {
-    body: V1Item;
+    body: DigInvItem;
 }
 
 export interface ItemServiceDeleteItemRequest {
-    body: V1ElementId;
+    body: DigInvElementId;
 }
 
 export interface ItemServiceGetItemRequest {
@@ -48,7 +48,7 @@ export interface ItemServiceGetItemsRequest {
 }
 
 export interface ItemServiceUpdateItemRequest {
-    body: V1Item;
+    body: DigInvItem;
 }
 
 /**
@@ -58,7 +58,7 @@ export class ItemServiceApi extends runtime.BaseAPI {
 
     /**
      */
-    async itemServiceCreateItemRaw(requestParameters: ItemServiceCreateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1Item>> {
+    async itemServiceCreateItemRaw(requestParameters: ItemServiceCreateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvItem>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -73,19 +73,19 @@ export class ItemServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.ItemService/CreateItem`,
+            path: `/dig_inv.ItemService/CreateItem`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1ItemToJSON(requestParameters['body']),
+            body: DigInvItemToJSON(requestParameters['body']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1ItemFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvItemFromJSON(jsonValue));
     }
 
     /**
      */
-    async itemServiceCreateItem(requestParameters: ItemServiceCreateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1Item> {
+    async itemServiceCreateItem(requestParameters: ItemServiceCreateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvItem> {
         const response = await this.itemServiceCreateItemRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -107,11 +107,11 @@ export class ItemServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.ItemService/DeleteItem`,
+            path: `/dig_inv.ItemService/DeleteItem`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1ElementIdToJSON(requestParameters['body']),
+            body: DigInvElementIdToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -126,7 +126,7 @@ export class ItemServiceApi extends runtime.BaseAPI {
 
     /**
      */
-    async itemServiceGetItemRaw(requestParameters: ItemServiceGetItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1Item>> {
+    async itemServiceGetItemRaw(requestParameters: ItemServiceGetItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvItem>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -141,26 +141,26 @@ export class ItemServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.ItemService/GetItem`,
+            path: `/dig_inv.ItemService/GetItem`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1ItemFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvItemFromJSON(jsonValue));
     }
 
     /**
      */
-    async itemServiceGetItem(requestParameters: ItemServiceGetItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1Item> {
+    async itemServiceGetItem(requestParameters: ItemServiceGetItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvItem> {
         const response = await this.itemServiceGetItemRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async itemServiceGetItemsRaw(requestParameters: ItemServiceGetItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1Items>> {
+    async itemServiceGetItemsRaw(requestParameters: ItemServiceGetItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvItems>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -175,26 +175,26 @@ export class ItemServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.ItemService/GetItems`,
+            path: `/dig_inv.ItemService/GetItems`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1ItemsFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvItemsFromJSON(jsonValue));
     }
 
     /**
      */
-    async itemServiceGetItems(requestParameters: ItemServiceGetItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1Items> {
+    async itemServiceGetItems(requestParameters: ItemServiceGetItemsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvItems> {
         const response = await this.itemServiceGetItemsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async itemServiceUpdateItemRaw(requestParameters: ItemServiceUpdateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1Item>> {
+    async itemServiceUpdateItemRaw(requestParameters: ItemServiceUpdateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvItem>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -209,19 +209,19 @@ export class ItemServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.ItemService/UpdateItem`,
+            path: `/dig_inv.ItemService/UpdateItem`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1ItemToJSON(requestParameters['body']),
+            body: DigInvItemToJSON(requestParameters['body']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1ItemFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvItemFromJSON(jsonValue));
     }
 
     /**
      */
-    async itemServiceUpdateItem(requestParameters: ItemServiceUpdateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1Item> {
+    async itemServiceUpdateItem(requestParameters: ItemServiceUpdateItemRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvItem> {
         const response = await this.itemServiceUpdateItemRaw(requestParameters, initOverrides);
         return await response.value();
     }

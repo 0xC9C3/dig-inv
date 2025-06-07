@@ -15,29 +15,29 @@
 
 import * as runtime from '../runtime';
 import type {
+  DigInvElementId,
+  DigInvUserGroup,
   RpcStatus,
-  V1ElementId,
-  V1UserGroup,
 } from '../models/index';
 import {
+    DigInvElementIdFromJSON,
+    DigInvElementIdToJSON,
+    DigInvUserGroupFromJSON,
+    DigInvUserGroupToJSON,
     RpcStatusFromJSON,
     RpcStatusToJSON,
-    V1ElementIdFromJSON,
-    V1ElementIdToJSON,
-    V1UserGroupFromJSON,
-    V1UserGroupToJSON,
 } from '../models/index';
 
 export interface UserGroupServiceAddItemToGroupRequest {
-    body: V1ElementId;
+    body: DigInvElementId;
 }
 
 export interface UserGroupServiceCreateGroupRequest {
-    body: V1UserGroup;
+    body: DigInvUserGroup;
 }
 
 export interface UserGroupServiceDeleteGroupRequest {
-    body: V1ElementId;
+    body: DigInvElementId;
 }
 
 export interface UserGroupServiceGetGroupRequest {
@@ -49,7 +49,7 @@ export interface UserGroupServiceGetGroupsRequest {
 }
 
 export interface UserGroupServiceUpdateGroupRequest {
-    body: V1UserGroup;
+    body: DigInvUserGroup;
 }
 
 /**
@@ -74,11 +74,11 @@ export class UserGroupServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.UserGroupService/AddItemToGroup`,
+            path: `/dig_inv.UserGroupService/AddItemToGroup`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1ElementIdToJSON(requestParameters['body']),
+            body: DigInvElementIdToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -93,7 +93,7 @@ export class UserGroupServiceApi extends runtime.BaseAPI {
 
     /**
      */
-    async userGroupServiceCreateGroupRaw(requestParameters: UserGroupServiceCreateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1UserGroup>> {
+    async userGroupServiceCreateGroupRaw(requestParameters: UserGroupServiceCreateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvUserGroup>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -108,19 +108,19 @@ export class UserGroupServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.UserGroupService/CreateGroup`,
+            path: `/dig_inv.UserGroupService/CreateGroup`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1UserGroupToJSON(requestParameters['body']),
+            body: DigInvUserGroupToJSON(requestParameters['body']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1UserGroupFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvUserGroupFromJSON(jsonValue));
     }
 
     /**
      */
-    async userGroupServiceCreateGroup(requestParameters: UserGroupServiceCreateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1UserGroup> {
+    async userGroupServiceCreateGroup(requestParameters: UserGroupServiceCreateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvUserGroup> {
         const response = await this.userGroupServiceCreateGroupRaw(requestParameters, initOverrides);
         return await response.value();
     }
@@ -142,11 +142,11 @@ export class UserGroupServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.UserGroupService/DeleteGroup`,
+            path: `/dig_inv.UserGroupService/DeleteGroup`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1ElementIdToJSON(requestParameters['body']),
+            body: DigInvElementIdToJSON(requestParameters['body']),
         }, initOverrides);
 
         return new runtime.JSONApiResponse<any>(response);
@@ -161,7 +161,7 @@ export class UserGroupServiceApi extends runtime.BaseAPI {
 
     /**
      */
-    async userGroupServiceGetGroupRaw(requestParameters: UserGroupServiceGetGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1UserGroup>> {
+    async userGroupServiceGetGroupRaw(requestParameters: UserGroupServiceGetGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvUserGroup>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -176,26 +176,26 @@ export class UserGroupServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.UserGroupService/GetGroup`,
+            path: `/dig_inv.UserGroupService/GetGroup`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1UserGroupFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvUserGroupFromJSON(jsonValue));
     }
 
     /**
      */
-    async userGroupServiceGetGroup(requestParameters: UserGroupServiceGetGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1UserGroup> {
+    async userGroupServiceGetGroup(requestParameters: UserGroupServiceGetGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvUserGroup> {
         const response = await this.userGroupServiceGetGroupRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async userGroupServiceGetGroupsRaw(requestParameters: UserGroupServiceGetGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1UserGroup>> {
+    async userGroupServiceGetGroupsRaw(requestParameters: UserGroupServiceGetGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvUserGroup>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -210,26 +210,26 @@ export class UserGroupServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.UserGroupService/GetGroups`,
+            path: `/dig_inv.UserGroupService/GetGroups`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
             body: requestParameters['body'] as any,
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1UserGroupFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvUserGroupFromJSON(jsonValue));
     }
 
     /**
      */
-    async userGroupServiceGetGroups(requestParameters: UserGroupServiceGetGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1UserGroup> {
+    async userGroupServiceGetGroups(requestParameters: UserGroupServiceGetGroupsRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvUserGroup> {
         const response = await this.userGroupServiceGetGroupsRaw(requestParameters, initOverrides);
         return await response.value();
     }
 
     /**
      */
-    async userGroupServiceUpdateGroupRaw(requestParameters: UserGroupServiceUpdateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<V1UserGroup>> {
+    async userGroupServiceUpdateGroupRaw(requestParameters: UserGroupServiceUpdateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<runtime.ApiResponse<DigInvUserGroup>> {
         if (requestParameters['body'] == null) {
             throw new runtime.RequiredError(
                 'body',
@@ -244,19 +244,19 @@ export class UserGroupServiceApi extends runtime.BaseAPI {
         headerParameters['Content-Type'] = 'application/json';
 
         const response = await this.request({
-            path: `/your.service.v1.UserGroupService/UpdateGroup`,
+            path: `/dig_inv.UserGroupService/UpdateGroup`,
             method: 'POST',
             headers: headerParameters,
             query: queryParameters,
-            body: V1UserGroupToJSON(requestParameters['body']),
+            body: DigInvUserGroupToJSON(requestParameters['body']),
         }, initOverrides);
 
-        return new runtime.JSONApiResponse(response, (jsonValue) => V1UserGroupFromJSON(jsonValue));
+        return new runtime.JSONApiResponse(response, (jsonValue) => DigInvUserGroupFromJSON(jsonValue));
     }
 
     /**
      */
-    async userGroupServiceUpdateGroup(requestParameters: UserGroupServiceUpdateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<V1UserGroup> {
+    async userGroupServiceUpdateGroup(requestParameters: UserGroupServiceUpdateGroupRequest, initOverrides?: RequestInit | runtime.InitOverrideFunction): Promise<DigInvUserGroup> {
         const response = await this.userGroupServiceUpdateGroupRaw(requestParameters, initOverrides);
         return await response.value();
     }

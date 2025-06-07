@@ -19,10 +19,6 @@ const (
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
 	FieldDescription = "description"
-	// FieldType holds the string denoting the type field in the database.
-	FieldType = "type"
-	// FieldProvider holds the string denoting the provider field in the database.
-	FieldProvider = "provider"
 	// FieldCreatedBy holds the string denoting the created_by field in the database.
 	FieldCreatedBy = "created_by"
 	// FieldCreatedAt holds the string denoting the created_at field in the database.
@@ -37,6 +33,10 @@ const (
 	FieldDeletedAt = "deleted_at"
 	// EdgeTags holds the string denoting the tags edge name in mutations.
 	EdgeTags = "tags"
+	// EdgeUserGroups holds the string denoting the user_groups edge name in mutations.
+	EdgeUserGroups = "user_groups"
+	// EdgeAssetClass holds the string denoting the asset_class edge name in mutations.
+	EdgeAssetClass = "asset_class"
 	// Table holds the table name of the item in the database.
 	Table = "items"
 	// TagsTable is the table that holds the tags relation/edge.
@@ -46,6 +46,20 @@ const (
 	TagsInverseTable = "tags"
 	// TagsColumn is the table column denoting the tags relation/edge.
 	TagsColumn = "item_tags"
+	// UserGroupsTable is the table that holds the user_groups relation/edge.
+	UserGroupsTable = "user_groups"
+	// UserGroupsInverseTable is the table name for the UserGroup entity.
+	// It exists in this package in order to avoid circular dependency with the "usergroup" package.
+	UserGroupsInverseTable = "user_groups"
+	// UserGroupsColumn is the table column denoting the user_groups relation/edge.
+	UserGroupsColumn = "item_user_groups"
+	// AssetClassTable is the table that holds the asset_class relation/edge.
+	AssetClassTable = "asset_classes"
+	// AssetClassInverseTable is the table name for the AssetClass entity.
+	// It exists in this package in order to avoid circular dependency with the "assetclass" package.
+	AssetClassInverseTable = "asset_classes"
+	// AssetClassColumn is the table column denoting the asset_class relation/edge.
+	AssetClassColumn = "item_asset_class"
 )
 
 // Columns holds all SQL columns for item fields.
@@ -53,8 +67,6 @@ var Columns = []string{
 	FieldID,
 	FieldName,
 	FieldDescription,
-	FieldType,
-	FieldProvider,
 	FieldCreatedBy,
 	FieldCreatedAt,
 	FieldUpdatedBy,
@@ -67,6 +79,7 @@ var Columns = []string{
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
 	"tag_items",
+	"user_group_items",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).
@@ -87,10 +100,6 @@ func ValidColumn(column string) bool {
 var (
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
-	// TypeValidator is a validator for the "type" field. It is called by the builders before save.
-	TypeValidator func(string) error
-	// ProviderValidator is a validator for the "provider" field. It is called by the builders before save.
-	ProviderValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
 	DefaultCreatedAt func() time.Time
 	// DefaultUpdatedAt holds the default value on creation for the "updated_at" field.
@@ -117,16 +126,6 @@ func ByName(opts ...sql.OrderTermOption) OrderOption {
 // ByDescription orders the results by the description field.
 func ByDescription(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldDescription, opts...).ToFunc()
-}
-
-// ByType orders the results by the type field.
-func ByType(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldType, opts...).ToFunc()
-}
-
-// ByProvider orders the results by the provider field.
-func ByProvider(opts ...sql.OrderTermOption) OrderOption {
-	return sql.OrderByField(FieldProvider, opts...).ToFunc()
 }
 
 // ByCreatedBy orders the results by the created_by field.
@@ -172,10 +171,52 @@ func ByTags(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 		sqlgraph.OrderByNeighborTerms(s, newTagsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
+
+// ByUserGroupsCount orders the results by user_groups count.
+func ByUserGroupsCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newUserGroupsStep(), opts...)
+	}
+}
+
+// ByUserGroups orders the results by user_groups terms.
+func ByUserGroups(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newUserGroupsStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
+
+// ByAssetClassCount orders the results by asset_class count.
+func ByAssetClassCount(opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborsCount(s, newAssetClassStep(), opts...)
+	}
+}
+
+// ByAssetClass orders the results by asset_class terms.
+func ByAssetClass(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newAssetClassStep(), append([]sql.OrderTerm{term}, terms...)...)
+	}
+}
 func newTagsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
 		sqlgraph.To(TagsInverseTable, FieldID),
 		sqlgraph.Edge(sqlgraph.O2M, false, TagsTable, TagsColumn),
+	)
+}
+func newUserGroupsStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(UserGroupsInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, UserGroupsTable, UserGroupsColumn),
+	)
+}
+func newAssetClassStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(AssetClassInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, AssetClassTable, AssetClassColumn),
 	)
 }
