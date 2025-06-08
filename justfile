@@ -37,6 +37,12 @@ install-tools:
 ent-gen:
     go generate ./ent
 
+go-lint:
+    {{go-lint}}
+
+go-tests:
+    {{go-tests}} && {{go-coverage}}
+
 init-git-hooks:
     cp pre-commit.sh .git/hooks/pre-commit
     chmod +x .git/hooks/pre-commit

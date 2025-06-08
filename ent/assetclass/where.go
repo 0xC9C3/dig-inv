@@ -55,6 +55,11 @@ func IDLTE(id uuid.UUID) predicate.AssetClass {
 	return predicate.AssetClass(sql.FieldLTE(FieldID, id))
 }
 
+// Order applies equality check predicate on the "order" field. It's identical to OrderEQ.
+func Order(v int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldEQ(FieldOrder, v))
+}
+
 // Name applies equality check predicate on the "name" field. It's identical to NameEQ.
 func Name(v string) predicate.AssetClass {
 	return predicate.AssetClass(sql.FieldEQ(FieldName, v))
@@ -108,6 +113,46 @@ func DeletedBy(v string) predicate.AssetClass {
 // DeletedAt applies equality check predicate on the "deleted_at" field. It's identical to DeletedAtEQ.
 func DeletedAt(v time.Time) predicate.AssetClass {
 	return predicate.AssetClass(sql.FieldEQ(FieldDeletedAt, v))
+}
+
+// OrderEQ applies the EQ predicate on the "order" field.
+func OrderEQ(v int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldEQ(FieldOrder, v))
+}
+
+// OrderNEQ applies the NEQ predicate on the "order" field.
+func OrderNEQ(v int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldNEQ(FieldOrder, v))
+}
+
+// OrderIn applies the In predicate on the "order" field.
+func OrderIn(vs ...int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldIn(FieldOrder, vs...))
+}
+
+// OrderNotIn applies the NotIn predicate on the "order" field.
+func OrderNotIn(vs ...int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldNotIn(FieldOrder, vs...))
+}
+
+// OrderGT applies the GT predicate on the "order" field.
+func OrderGT(v int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldGT(FieldOrder, v))
+}
+
+// OrderGTE applies the GTE predicate on the "order" field.
+func OrderGTE(v int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldGTE(FieldOrder, v))
+}
+
+// OrderLT applies the LT predicate on the "order" field.
+func OrderLT(v int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldLT(FieldOrder, v))
+}
+
+// OrderLTE applies the LTE predicate on the "order" field.
+func OrderLTE(v int) predicate.AssetClass {
+	return predicate.AssetClass(sql.FieldLTE(FieldOrder, v))
 }
 
 // NameEQ applies the EQ predicate on the "name" field.

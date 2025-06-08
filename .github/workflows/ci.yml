@@ -1,0 +1,49 @@
+name: "CI Workflow"
+on:
+  push:
+    branches:
+      - "*"
+      - "*/*"
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  APP_IMAGE_NAME: ${{ github.repository }}/app
+
+jobs:
+  test-frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Run tests
+        env:
+          PUBLIC_BACKEND_URL: "http://localhost:8080"
+        run: |
+          cd frontend
+          npm ci
+          npx playwright install
+          npm run test
+  test-lint-backend:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '^1.24'
+      - name: Install dependencies
+        run: |
+          curl --proto '=https' --tlsv1.2 -sSf https://just.systems/install.sh | bash -s -- --to /usr/local/bin
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin v2.1.6
+          go mod download
+      - name: Run linter
+        run: just go-lint
+      - name: Run tests
+        run: just go-tests
+      - name: Upload coverage report
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage-report
+          path: 'coverage.html'

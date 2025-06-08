@@ -49,6 +49,18 @@ export interface DigInvAssetClass {
      * @memberof DigInvAssetClass
      */
     color?: string;
+    /**
+     * 
+     * @type {number}
+     * @memberof DigInvAssetClass
+     */
+    order?: number;
+    /**
+     * 
+     * @type {string}
+     * @memberof DigInvAssetClass
+     */
+    provider?: string;
 }
 
 /**
@@ -73,6 +85,8 @@ export function DigInvAssetClassFromJSONTyped(json: any, ignoreDiscriminator: bo
         'description': json['description'] == null ? undefined : json['description'],
         'icon': json['icon'] == null ? undefined : json['icon'],
         'color': json['color'] == null ? undefined : json['color'],
+        'order': json['order'] == null ? undefined : json['order'],
+        'provider': json['provider'] == null ? undefined : json['provider'],
     };
 }
 
@@ -92,6 +106,8 @@ export function DigInvAssetClassToJSONTyped(value?: DigInvAssetClass | null, ign
         'description': value['description'],
         'icon': value['icon'],
         'color': value['color'],
+        'order': value['order'],
+        'provider': value['provider'],
     };
 }
 

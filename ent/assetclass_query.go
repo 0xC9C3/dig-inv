@@ -264,12 +264,12 @@ func (acq *AssetClassQuery) Clone() *AssetClassQuery {
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Order int `json:"order,omitempty"`
 //		Count int `json:"count,omitempty"`
 //	}
 //
 //	client.AssetClass.Query().
-//		GroupBy(assetclass.FieldName).
+//		GroupBy(assetclass.FieldOrder).
 //		Aggregate(ent.Count()).
 //		Scan(ctx, &v)
 func (acq *AssetClassQuery) GroupBy(field string, fields ...string) *AssetClassGroupBy {
@@ -287,11 +287,11 @@ func (acq *AssetClassQuery) GroupBy(field string, fields ...string) *AssetClassG
 // Example:
 //
 //	var v []struct {
-//		Name string `json:"name,omitempty"`
+//		Order int `json:"order,omitempty"`
 //	}
 //
 //	client.AssetClass.Query().
-//		Select(assetclass.FieldName).
+//		Select(assetclass.FieldOrder).
 //		Scan(ctx, &v)
 func (acq *AssetClassQuery) Select(fields ...string) *AssetClassSelect {
 	acq.ctx.Fields = append(acq.ctx.Fields, fields...)

@@ -914,6 +914,13 @@
         },
         "color": {
           "type": "string"
+        },
+        "order": {
+          "type": "integer",
+          "format": "int32"
+        },
+        "provider": {
+          "type": "string"
         }
       }
     },

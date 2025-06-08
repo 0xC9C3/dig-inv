@@ -2,7 +2,6 @@
     import '../../app.css';
     import {DarkMode} from "flowbite-svelte";
     import {m} from '$lib/paraglide/messages.js';
-    import Credits from "$lib/components/Credits.svelte";
     import Logo from "$lib/components/Logo.svelte";
 
     let { children } = $props();
@@ -17,5 +16,4 @@
     <Logo />
     <DarkMode />
     {@render children()}
-    <Credits />
 </div>

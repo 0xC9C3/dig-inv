@@ -19,6 +19,9 @@ func (AssetClass) Fields() []ent.Field {
 			Default(uuid.New).
 			Immutable().
 			Comment("The unique identifier for the asset class."),
+		field.Int("order").
+			Default(0).
+			Comment("The order of the asset class, which is used to determine the order in which asset classes are displayed in the user interface. This is an integer value that can be used to sort asset classes."),
 		field.String("name").
 			NotEmpty().
 			Comment("The name of the asset class, which is used to identify it in the inventory system."),

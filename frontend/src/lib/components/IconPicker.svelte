@@ -2,6 +2,7 @@
     import * as Icons from "flowbite-svelte-icons";
     import {Button, Input, Label} from "flowbite-svelte";
     import DynamicIcon from "$lib/components/DynamicIcon.svelte";
+    import {m} from '$lib/paraglide/messages.js';
 
     let {
         selectedIcon = $bindable("PlusOutline"),
@@ -17,9 +18,17 @@
         <Input
             bind:value={searchString}
             class="mt-2"
-            placeholder="Type to search icons..."
+            placeholder={m.type_to_search_icons()}
         />
     </Label>
+
+    {#if selectedIcon}
+        <div class="flex items-center gap-2">
+            <DynamicIcon iconName={selectedIcon} />
+            <span class="text-sm font-bold">{selectedIcon}</span>
+        </div>
+    {/if}
+
     <div class="grid auto-cols-auto grid-cols-2 sm:grid-cols-1 md:grid-cols-2 gap-4 h-96 max-h-96 overflow-y-auto">
         {#each Object.keys(Icons).filter(
             iconName =>

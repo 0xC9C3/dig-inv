@@ -79,4 +79,32 @@ class AssetClassesCreate extends AssetClassesBase {
     }
 }
 
-export const createAssetClasses: AssetClassesCreate = new AssetClassesCreate();
+export const createAssetClass: AssetClassesCreate = new AssetClassesCreate();
+
+class AssetClassesUpdate extends AssetClassesBase {
+    public async update(assetClass: DigInvAssetClass): Promise<void> {
+        const response = await this.withDefaults(
+            this.apiInstance.assetClassServiceUpdateAssetClass({ body: assetClass })
+        );
+        const index = assetClasses.assetClasses.findIndex(ac => ac.id === response.id);
+        if (index !== -1) {
+            assetClasses.assetClasses[index] = response;
+        }
+    }
+}
+
+export const updateAssetClass: AssetClassesUpdate = new AssetClassesUpdate();
+
+class AssetClassDelete extends AssetClassesBase {
+    public async delete(assetClassId: string): Promise<void> {
+        await this.withDefaults(
+            this.apiInstance.assetClassServiceDeleteAssetClass({ body: {
+                id: assetClassId,
+                }
+            })
+        );
+        assetClasses.assetClasses = assetClasses.assetClasses.filter(ac => ac.id !== assetClassId);
+    }
+}
+
+export const deleteAssetClass: AssetClassDelete = new AssetClassDelete();

@@ -11,6 +11,7 @@ var (
 	// AssetClassesColumns holds the columns for the "asset_classes" table.
 	AssetClassesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeUUID},
+		{Name: "order", Type: field.TypeInt, Default: 0},
 		{Name: "name", Type: field.TypeString},
 		{Name: "description", Type: field.TypeString, Nullable: true},
 		{Name: "icon", Type: field.TypeString, Nullable: true},
@@ -32,7 +33,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "asset_classes_items_asset_class",
-				Columns:    []*schema.Column{AssetClassesColumns[12]},
+				Columns:    []*schema.Column{AssetClassesColumns[13]},
 				RefColumns: []*schema.Column{ItemsColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

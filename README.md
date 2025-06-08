@@ -1,15 +1,24 @@
 # dig-inv
 *digital inventory*
+
+<p align="center">
+  <img width="200" alt="logo" src="https://github.com/0xC9C3/dig-inv/blob/main/frontend/static/favicon.png?raw=true">
+</p>
+
+###### [Logo created by Nikita Golubev - Flaticon](https://www.flaticon.com/free-icon/library_363252?term=library&page=1&position=18&origin=tag&related_id=363252)
+
 ### A system for keeping track of assets like domains, servers, and more with as little friction as possible.
+
+This project is in early development and none of the features are fully implemented yet.</b>
+
 
 TODO: Screenshots / Demo
 
 > **Note:** This is a learning project to explore go, grpc, and other technologies. Don't expect it to be production ready.
-> This is pretty overengineered & under engineered for a simple inventory system, but it serves as a good exercise in building a full-stack application with some 
+> This is pretty overengineered & under engineered for a simple inventory system, but it serves as a good exercise in building a full-stack application with some
 > of the chosen technologies.
 
 ## Features
-
 - **Domain Management**: Keep track of your domains, their expiration dates, and associated DNS records.
 - **Server Inventory**: Manage your servers, their IP addresses, and associated metadata.
 - **Asset Tracking**: Record and manage various assets, including hardware and software.
@@ -18,6 +27,7 @@ TODO: Screenshots / Demo
 - **Web Interface**: A simple web interface to view and manage your inventory.
 - **Exports**: Export your inventory data in various formats for reporting or backup purposes.
 - **Helm Chart**: Deploy the application easily on Kubernetes using a Helm chart.
+- **Single Binary**: The entire application can be run as a single binary, making deployment and management easy.
 
 ## Supported Providers
 

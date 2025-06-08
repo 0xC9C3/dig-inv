@@ -19,16 +19,20 @@ import (
 func init() {
 	assetclassFields := schema.AssetClass{}.Fields()
 	_ = assetclassFields
+	// assetclassDescOrder is the schema descriptor for order field.
+	assetclassDescOrder := assetclassFields[1].Descriptor()
+	// assetclass.DefaultOrder holds the default value on creation for the order field.
+	assetclass.DefaultOrder = assetclassDescOrder.Default.(int)
 	// assetclassDescName is the schema descriptor for name field.
-	assetclassDescName := assetclassFields[1].Descriptor()
+	assetclassDescName := assetclassFields[2].Descriptor()
 	// assetclass.NameValidator is a validator for the "name" field. It is called by the builders before save.
 	assetclass.NameValidator = assetclassDescName.Validators[0].(func(string) error)
 	// assetclassDescCreatedAt is the schema descriptor for created_at field.
-	assetclassDescCreatedAt := assetclassFields[7].Descriptor()
+	assetclassDescCreatedAt := assetclassFields[8].Descriptor()
 	// assetclass.DefaultCreatedAt holds the default value on creation for the created_at field.
 	assetclass.DefaultCreatedAt = assetclassDescCreatedAt.Default.(func() time.Time)
 	// assetclassDescUpdatedAt is the schema descriptor for updated_at field.
-	assetclassDescUpdatedAt := assetclassFields[9].Descriptor()
+	assetclassDescUpdatedAt := assetclassFields[10].Descriptor()
 	// assetclass.DefaultUpdatedAt holds the default value on creation for the updated_at field.
 	assetclass.DefaultUpdatedAt = assetclassDescUpdatedAt.Default.(func() time.Time)
 	// assetclass.UpdateDefaultUpdatedAt holds the default value on update for the updated_at field.

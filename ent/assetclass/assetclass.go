@@ -14,6 +14,8 @@ const (
 	Label = "asset_class"
 	// FieldID holds the string denoting the id field in the database.
 	FieldID = "id"
+	// FieldOrder holds the string denoting the order field in the database.
+	FieldOrder = "order"
 	// FieldName holds the string denoting the name field in the database.
 	FieldName = "name"
 	// FieldDescription holds the string denoting the description field in the database.
@@ -43,6 +45,7 @@ const (
 // Columns holds all SQL columns for assetclass fields.
 var Columns = []string{
 	FieldID,
+	FieldOrder,
 	FieldName,
 	FieldDescription,
 	FieldIcon,
@@ -78,6 +81,8 @@ func ValidColumn(column string) bool {
 }
 
 var (
+	// DefaultOrder holds the default value on creation for the "order" field.
+	DefaultOrder int
 	// NameValidator is a validator for the "name" field. It is called by the builders before save.
 	NameValidator func(string) error
 	// DefaultCreatedAt holds the default value on creation for the "created_at" field.
@@ -96,6 +101,11 @@ type OrderOption func(*sql.Selector)
 // ByID orders the results by the id field.
 func ByID(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldID, opts...).ToFunc()
+}
+
+// ByOrder orders the results by the order field.
+func ByOrder(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldOrder, opts...).ToFunc()
 }
 
 // ByName orders the results by the name field.

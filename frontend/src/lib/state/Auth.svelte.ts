@@ -2,6 +2,7 @@ import {goto} from "$app/navigation";
 import {OpenIdAuthServiceApi} from "$lib/api";
 import toasts from "$lib/state/Toast.svelte";
 import {m} from '$lib/paraglide/messages.js';
+import {assetClasses} from "$lib/state/AssetClasses.svelte";
 
 const EmptyBody = {
     body: {
@@ -37,6 +38,10 @@ class Auth {
         return this.userInfo;
     }
 
+    async loadInitialData(): Promise<void> {
+        await assetClasses.load()
+    }
+
     async initialize() {
         const urlParams = new URLSearchParams(window.location.search);
         const code = urlParams.get('code');
@@ -47,6 +52,15 @@ class Auth {
 
         try {
             this.userInfo = await this.authServiceApi.openIdAuthServiceGetUserInfo(EmptyBody);
+
+            this.loadInitialData().catch((error) => {
+                console.error('Error loading initial data:', error);
+                toasts.addToast(
+                    m.generic_initialization_error(),
+                    'error'
+                );
+            })
+
             this.loading = false;
 
             if (window.location.pathname.startsWith('/login')) {

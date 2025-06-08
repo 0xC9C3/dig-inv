@@ -1,9 +1,6 @@
 <script lang="ts">
     import {
         Button,
-        Input,
-        Label,
-        Modal,
         Spinner,
         Table,
         TableBody,
@@ -12,21 +9,20 @@
         TableHead,
         TableHeadCell
     } from "flowbite-svelte";
-    import {PlusOutline} from "flowbite-svelte-icons";
+    import {EditSolid, PlusOutline, TrashBinSolid} from "flowbite-svelte-icons";
     import {m} from '$lib/paraglide/messages.js';
-    import {mount, onMount} from "svelte";
+    import {type Component, mount, onMount} from "svelte";
     import AssetClassEditModal from "$lib/components/AssetClassEditModal.svelte";
-    import {assetClasses, createAssetClasses} from "$lib/state/AssetClasses.svelte";
+    import {assetClasses, createAssetClass, updateAssetClass, deleteAssetClass} from "$lib/state/AssetClasses.svelte";
     import toasts from "$lib/state/Toast.svelte";
-    import ColorPicker from 'svelte-awesome-color-picker';
-    import IconPicker from "$lib/components/IconPicker.svelte";
     import DynamicIcon from "$lib/components/DynamicIcon.svelte";
+    import type {DigInvAssetClass} from "$lib/api";
+    import ConfirmModal from "$lib/components/ConfirmModal.svelte";
+    import {fromKey} from "$lib/providers";
 
-    let createAssetClassModal = $state(false);
     let modalBase: HTMLDivElement;
-    let editModalInstance: ReturnType<typeof mount> | undefined = $state(undefined);
-    let hex: string = $state("#ffffff");
-    let icon: string = $state("PlusOutline");
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    let modalInstance: ReturnType<typeof mount> | undefined = $state(undefined);
 
     const loadAssetClasses = () => {
         assetClasses.load()
@@ -40,43 +36,79 @@
         loadAssetClasses();
     })
 
-    const openEditModal = () => {
-        editModalInstance = mount(
-            AssetClassEditModal, {
+    const openModal = <T extends Record<string, unknown>>(
+        component: Component<T>,
+        props: Omit<T, 'onclose'> & { onclose?: () => void; } = {} as never
+    ) => {
+        modalInstance = mount(
+            component, {
                 target: modalBase,
                 props: {
+                    ...props,
                     onclose: () => {
-                        if (editModalInstance) {
-                            // lifecycle_double_unmount?
-                            // unmount(editModalInstance);
-                            editModalInstance = undefined;
-                        }
+                        // lifecycle_double_unmount?
+                        // unmount(modalInstance);
+                        modalInstance = undefined;
                     },
                 },
-        })
+            } as never)
+    }
+
+    const openEditModal = (editClass: DigInvAssetClass) => {
+        openModal(AssetClassEditModal, {
+            actionName: m.asset_class_edit(),
+            assetClass: JSON.parse(JSON.stringify(editClass)),
+            onSubmit: async (updatedClass: DigInvAssetClass) => {
+                await updateAssetClassAction(updatedClass);
+            },
+        });
     };
 
-    const saveNewAssetClass = async (e: Event) => {
-        e.preventDefault();
-        const formData = new FormData(e.target as HTMLFormElement);
-        const name = formData.get("name") as string;
-        const description = formData.get("description") as string;
+    const openNewAssetClassModal = () => {
+        openModal(AssetClassEditModal, {
+            actionName: m.asset_class_create(),
+            onSubmit: async (newClass: DigInvAssetClass) => {
+                await saveNewAssetClassAction(newClass);
+            },
+        });
+    };
 
+    const openDeleteConfirmationModal = (assetClass: DigInvAssetClass) => {
+        openModal(ConfirmModal, {
+            text: m.confirm_delete({name: assetClass.name || m.asset_class()}),
+            onConfirm: async () => {
+                await deleteAssetClassAction(assetClass);
+            },
+        });
+    };
+
+    const assetClassAction = (
+        method: (targetClass: DigInvAssetClass) => Promise<void>,
+        errorMessage: string
+    ) =>  async (targetClass: DigInvAssetClass) => {
         try {
-            await createAssetClasses.create({
-                    name,
-                    description,
-                    icon: icon,
-                    color: hex
-            });
-            createAssetClassModal = false;
+            await method(targetClass);
             loadAssetClasses();
         } catch (error) {
-            console.error("Failed to create asset class:", error);
-            toasts.addToast(m.asset_classes_create_error(), "error");
+            console.error(errorMessage, error);
+            toasts.addToast(errorMessage, "error");
         }
     };
 
+    const saveNewAssetClassAction = assetClassAction(
+        async (assetClass) => createAssetClass.create(assetClass),
+        m.asset_classes_create_error()
+    );
+
+    const deleteAssetClassAction = assetClassAction(
+        async (assetClass) => assetClass?.id ? deleteAssetClass.delete(assetClass.id) : Promise.reject(new Error("Asset class ID is required")),
+        m.asset_classes_delete_error()
+    );
+
+    const updateAssetClassAction = assetClassAction(
+        async (assetClass) => updateAssetClass.update(assetClass),
+        m.asset_classes_update_error()
+    );
 </script>
 
 
@@ -94,10 +126,10 @@
         <div class="flex flex-col justify-center">
             <Button
                 color="primary"
-                disabled={createAssetClasses.loading}
-                onclick={() => createAssetClassModal = true}
+                disabled={createAssetClass.loading}
+                onclick={() => openNewAssetClassModal()}
                 >
-                {#if createAssetClasses.loading}
+                {#if createAssetClass.loading}
                     <Spinner size="5" />
                 {:else}
                     <PlusOutline class="mr-2" />
@@ -112,65 +144,47 @@
     </div>
 </div>
 
-<Modal bind:open={createAssetClassModal} size="xs">
-    <form action="#" class="flex flex-col space-y-6" method="dialog"
-        onsubmit={async (e) => saveNewAssetClass(e)}
-    >
-        <h3 class="mb-4 text-xl font-medium text-gray-900 dark:text-white">Create Asset Class</h3>
-        <Label class="space-y-2">
-            <span>Name</span>
-            <Input name="name" placeholder="Asset Class Name" required />
-        </Label>
-        <Label class="space-y-2">
-            <span>Description</span>
-            <Input name="description" placeholder="Description of the asset class" />
-        </Label>
-        <Label class="space-y-2">
-            <span>Icon</span>
-
-            <div>
-                <IconPicker
-                    bind:selectedIcon={icon}
-                    />
-            </div>
-        </Label>
-        <Label class="space-y-2">
-            <span>Color</span>
-
-            <div class="colorPicker flex flex-col justify-center items-center">
-                <ColorPicker
-                        bind:hex
-                        isDialog={false}
-                        position="responsive"
-                />
-            </div>
-        </Label>
-
-        <Button class="w-full1" type="submit">
-            Create Asset Class
-        </Button>
-        <Button class="w-full1" color="gray" onclick={() => createAssetClassModal = false} type="button">Cancel</Button>
-    </form>
-</Modal>
-
 <Table hoverable={true}>
     <TableHead>
-    <TableHeadCell>{m.icon()}</TableHeadCell>
-    <TableHeadCell>{m.color()}</TableHeadCell>
+        <TableHeadCell>{m.icon()}</TableHeadCell>
+        <TableHeadCell>{m.order()}</TableHeadCell>
+        <TableHeadCell>{m.provider()}</TableHeadCell>
+        <TableHeadCell>{m.color()}</TableHeadCell>
         <TableHeadCell>{m.name()}</TableHeadCell>
-        <TableHeadCell>{m.asset_count()}</TableHeadCell>
+        <TableHeadCell></TableHeadCell>
     </TableHead>
     <TableBody>
         {#each assetClasses.assetClasses as assetClass (assetClass.id)}
-            <TableBodyRow onclick={openEditModal} class="cursor-pointer">
+            <TableBodyRow>
                 <TableBodyCell>
                     <DynamicIcon iconName={assetClass.icon} />
+                </TableBodyCell>
+                <TableBodyCell>{assetClass.order}</TableBodyCell>
+                <TableBodyCell>
+                    {fromKey(assetClass.provider)?.name || assetClass.provider}
                 </TableBodyCell>
                 <TableBodyCell>
                     <div class="w-6 h-6 rounded-full" style="background-color: {assetClass.color};"></div>
                 </TableBodyCell>
-                <TableBodyCell>{assetClass.name}</TableBodyCell>
-                <TableBodyCell>Sliver</TableBodyCell>
+                <TableBodyCell class="w-full">{assetClass.name}</TableBodyCell>
+                <TableBodyCell class="flex gap-4">
+                    <Button
+                            color="primary"
+                            class="gap-2"
+                            onclick={() => openEditModal(assetClass)}
+                    >
+                        <EditSolid />
+                        {m.edit()}
+                    </Button>
+                    <Button
+                            color="red"
+                            class="gap-2"
+                            onclick={() => openDeleteConfirmationModal(assetClass)}
+                    >
+                        <TrashBinSolid />
+                        {m.delete()}
+                    </Button>
+                </TableBodyCell>
             </TableBodyRow>
         {/each}
     </TableBody>

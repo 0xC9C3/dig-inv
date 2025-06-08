@@ -18,12 +18,10 @@
     import {
         AdjustmentsHorizontalSolid,
         ArrowRightToBracketOutline,
-        CandyCaneOutline,
         ChartOutline,
         InfoCircleOutline,
         OpenDoorOutline,
         SearchOutline,
-        ShoppingBagSolid,
         ToolsOutline,
         UsersGroupOutline,
         UserSolid
@@ -32,6 +30,8 @@
     import {page} from "$app/state";
     import auth from "$lib/state/Auth.svelte";
     import {m} from '$lib/paraglide/messages.js';
+    import {assetClasses} from "$lib/state/AssetClasses.svelte";
+    import DynamicIcon from "$lib/components/DynamicIcon.svelte";
 
     let activeUrl = $state(page.url.pathname);
     const iconClass = "h-5 w-5 text-gray-500 transition duration-75 group-hover:text-gray-900 dark:text-gray-400 dark:group-hover:text-white";
@@ -43,31 +43,14 @@
         activeUrl = page.url.pathname;
     });
 
-    const assetClasses = [
-        {
-            label: 'domains',
-            icon: ShoppingBagSolid,
-            href: "/assets/domains",
-        },
-        {
-            label: 'servers',
-            icon: ShoppingBagSolid,
-            href: "/assets/servers",
-        },
-        {
-            label: 'custom-1',
-            icon: ShoppingBagSolid,
-            href: "/assets/custom-1",
-        }
-    ]
-
 
     let { children } = $props();
 </script>
 
 <div class="h-screen flex flex-col">
     <Navbar>
-        {#snippet children({ hidden, toggle, NavContainer })}
+        
+        {#snippet children({ hidden, toggle })}
             <SidebarButton class="mb-2" onclick={sidebar.toggle} />
             <NavBrand href="/">
                 <img src="/favicon.png" alt="Logo" class="h-8 mr-3" />
@@ -119,20 +102,13 @@
                     {/snippet}
                 </SidebarItem>
 
-                <!-- <SidebarDropdownWrapper btnClass="p-2"  label={m.assets()}>
-                    {#snippet icon()}
-                        <ClipboardListSolid class={iconClass} />
-                    {/snippet}-->
-
-                    {#each assetClasses as asset (asset.label)}
-                        <SidebarItem href={asset.href} label={asset.label}>
-                            {#snippet icon()}
-                                <asset.icon class={iconClass} />
-                            {/snippet}
-                        </SidebarItem>
-                    {/each}
-
-                <!-- </SidebarDropdownWrapper> -->
+                {#each assetClasses.assetClasses as asset (asset.id)}
+                    <SidebarItem href={`/assets/${asset.id}`} label={asset.name} class="overflow-hidden text-ellipsis whitespace-nowrap">
+                        {#snippet icon()}
+                            <DynamicIcon iconName={asset.icon} />
+                        {/snippet}
+                    </SidebarItem>
+                {/each}
 
                 <SidebarDropdownWrapper btnClass="p-2" label={m.configuration()}>
                     {#snippet icon()}
@@ -141,12 +117,6 @@
                     <SidebarItem href="/config/user-groups" label={m.groups()}>
                         {#snippet icon()}
                             <UsersGroupOutline class={iconClass} />
-                        {/snippet}
-                    </SidebarItem>
-
-                    <SidebarItem href="/config/providers" label={m.providers()}>
-                        {#snippet icon()}
-                            <CandyCaneOutline class={iconClass} />
                         {/snippet}
                     </SidebarItem>
 

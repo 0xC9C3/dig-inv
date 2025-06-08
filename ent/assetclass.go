@@ -19,6 +19,8 @@ type AssetClass struct {
 	// ID of the ent.
 	// The unique identifier for the asset class.
 	ID uuid.UUID `json:"id,omitempty"`
+	// The order of the asset class, which is used to determine the order in which asset classes are displayed in the user interface. This is an integer value that can be used to sort asset classes.
+	Order int `json:"order,omitempty"`
 	// The name of the asset class, which is used to identify it in the inventory system.
 	Name string `json:"name,omitempty"`
 	// A description of the asset class, which can be used to provide additional information about the asset class.
@@ -50,6 +52,8 @@ func (*AssetClass) scanValues(columns []string) ([]any, error) {
 	values := make([]any, len(columns))
 	for i := range columns {
 		switch columns[i] {
+		case assetclass.FieldOrder:
+			values[i] = new(sql.NullInt64)
 		case assetclass.FieldName, assetclass.FieldDescription, assetclass.FieldIcon, assetclass.FieldColor, assetclass.FieldProvider, assetclass.FieldCreatedBy, assetclass.FieldUpdatedBy, assetclass.FieldDeletedBy:
 			values[i] = new(sql.NullString)
 		case assetclass.FieldCreatedAt, assetclass.FieldUpdatedAt, assetclass.FieldDeletedAt:
@@ -78,6 +82,12 @@ func (ac *AssetClass) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field id", values[i])
 			} else if value != nil {
 				ac.ID = *value
+			}
+		case assetclass.FieldOrder:
+			if value, ok := values[i].(*sql.NullInt64); !ok {
+				return fmt.Errorf("unexpected type %T for field order", values[i])
+			} else if value.Valid {
+				ac.Order = int(value.Int64)
 			}
 		case assetclass.FieldName:
 			if value, ok := values[i].(*sql.NullString); !ok {
@@ -189,6 +199,9 @@ func (ac *AssetClass) String() string {
 	var builder strings.Builder
 	builder.WriteString("AssetClass(")
 	builder.WriteString(fmt.Sprintf("id=%v, ", ac.ID))
+	builder.WriteString("order=")
+	builder.WriteString(fmt.Sprintf("%v", ac.Order))
+	builder.WriteString(", ")
 	builder.WriteString("name=")
 	builder.WriteString(ac.Name)
 	builder.WriteString(", ")

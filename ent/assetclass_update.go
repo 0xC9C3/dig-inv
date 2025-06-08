@@ -28,6 +28,27 @@ func (acu *AssetClassUpdate) Where(ps ...predicate.AssetClass) *AssetClassUpdate
 	return acu
 }
 
+// SetOrder sets the "order" field.
+func (acu *AssetClassUpdate) SetOrder(i int) *AssetClassUpdate {
+	acu.mutation.ResetOrder()
+	acu.mutation.SetOrder(i)
+	return acu
+}
+
+// SetNillableOrder sets the "order" field if the given value is not nil.
+func (acu *AssetClassUpdate) SetNillableOrder(i *int) *AssetClassUpdate {
+	if i != nil {
+		acu.SetOrder(*i)
+	}
+	return acu
+}
+
+// AddOrder adds i to the "order" field.
+func (acu *AssetClassUpdate) AddOrder(i int) *AssetClassUpdate {
+	acu.mutation.AddOrder(i)
+	return acu
+}
+
 // SetName sets the "name" field.
 func (acu *AssetClassUpdate) SetName(s string) *AssetClassUpdate {
 	acu.mutation.SetName(s)
@@ -259,6 +280,12 @@ func (acu *AssetClassUpdate) sqlSave(ctx context.Context) (n int, err error) {
 			}
 		}
 	}
+	if value, ok := acu.mutation.Order(); ok {
+		_spec.SetField(assetclass.FieldOrder, field.TypeInt, value)
+	}
+	if value, ok := acu.mutation.AddedOrder(); ok {
+		_spec.AddField(assetclass.FieldOrder, field.TypeInt, value)
+	}
 	if value, ok := acu.mutation.Name(); ok {
 		_spec.SetField(assetclass.FieldName, field.TypeString, value)
 	}
@@ -325,6 +352,27 @@ type AssetClassUpdateOne struct {
 	fields   []string
 	hooks    []Hook
 	mutation *AssetClassMutation
+}
+
+// SetOrder sets the "order" field.
+func (acuo *AssetClassUpdateOne) SetOrder(i int) *AssetClassUpdateOne {
+	acuo.mutation.ResetOrder()
+	acuo.mutation.SetOrder(i)
+	return acuo
+}
+
+// SetNillableOrder sets the "order" field if the given value is not nil.
+func (acuo *AssetClassUpdateOne) SetNillableOrder(i *int) *AssetClassUpdateOne {
+	if i != nil {
+		acuo.SetOrder(*i)
+	}
+	return acuo
+}
+
+// AddOrder adds i to the "order" field.
+func (acuo *AssetClassUpdateOne) AddOrder(i int) *AssetClassUpdateOne {
+	acuo.mutation.AddOrder(i)
+	return acuo
 }
 
 // SetName sets the "name" field.
@@ -587,6 +635,12 @@ func (acuo *AssetClassUpdateOne) sqlSave(ctx context.Context) (_node *AssetClass
 				ps[i](selector)
 			}
 		}
+	}
+	if value, ok := acuo.mutation.Order(); ok {
+		_spec.SetField(assetclass.FieldOrder, field.TypeInt, value)
+	}
+	if value, ok := acuo.mutation.AddedOrder(); ok {
+		_spec.AddField(assetclass.FieldOrder, field.TypeInt, value)
 	}
 	if value, ok := acuo.mutation.Name(); ok {
 		_spec.SetField(assetclass.FieldName, field.TypeString, value)

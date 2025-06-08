@@ -95,6 +95,8 @@ message AssetClass {
   string description = 3;
   string icon = 4;
   string color = 5;
+  int32 order = 6;
+  string provider = 7;
 }
 
 message AssetClasses {

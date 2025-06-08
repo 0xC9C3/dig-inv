@@ -21,6 +21,20 @@ type AssetClassCreate struct {
 	hooks    []Hook
 }
 
+// SetOrder sets the "order" field.
+func (acc *AssetClassCreate) SetOrder(i int) *AssetClassCreate {
+	acc.mutation.SetOrder(i)
+	return acc
+}
+
+// SetNillableOrder sets the "order" field if the given value is not nil.
+func (acc *AssetClassCreate) SetNillableOrder(i *int) *AssetClassCreate {
+	if i != nil {
+		acc.SetOrder(*i)
+	}
+	return acc
+}
+
 // SetName sets the "name" field.
 func (acc *AssetClassCreate) SetName(s string) *AssetClassCreate {
 	acc.mutation.SetName(s)
@@ -200,6 +214,10 @@ func (acc *AssetClassCreate) ExecX(ctx context.Context) {
 
 // defaults sets the default values of the builder before save.
 func (acc *AssetClassCreate) defaults() {
+	if _, ok := acc.mutation.Order(); !ok {
+		v := assetclass.DefaultOrder
+		acc.mutation.SetOrder(v)
+	}
 	if _, ok := acc.mutation.CreatedAt(); !ok {
 		v := assetclass.DefaultCreatedAt()
 		acc.mutation.SetCreatedAt(v)
@@ -216,6 +234,9 @@ func (acc *AssetClassCreate) defaults() {
 
 // check runs all checks and user-defined validators on the builder.
 func (acc *AssetClassCreate) check() error {
+	if _, ok := acc.mutation.Order(); !ok {
+		return &ValidationError{Name: "order", err: errors.New(`ent: missing required field "AssetClass.order"`)}
+	}
 	if _, ok := acc.mutation.Name(); !ok {
 		return &ValidationError{Name: "name", err: errors.New(`ent: missing required field "AssetClass.name"`)}
 	}
@@ -270,6 +291,10 @@ func (acc *AssetClassCreate) createSpec() (*AssetClass, *sqlgraph.CreateSpec) {
 	if id, ok := acc.mutation.ID(); ok {
 		_node.ID = id
 		_spec.ID.Value = &id
+	}
+	if value, ok := acc.mutation.Order(); ok {
+		_spec.SetField(assetclass.FieldOrder, field.TypeInt, value)
+		_node.Order = value
 	}
 	if value, ok := acc.mutation.Name(); ok {
 		_spec.SetField(assetclass.FieldName, field.TypeString, value)
