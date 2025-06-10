@@ -30,7 +30,7 @@ FROM $BASE_IMAGE AS build
 COPY . /app
 WORKDIR /app
 RUN go mod download && \
-    CGO_ENABLED=0 GOOS=linux go build -o /app/bin/app ./cmd/app
+    CGO_ENABLED=0 GOOS=linux go build -o /app/bin/app main.go
 
 FROM scratch AS prod
 
