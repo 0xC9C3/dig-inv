@@ -62,7 +62,7 @@
                    placeholder={m.name()} required/>
         </Label>
 
-        <div class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4 border rounded-lg p-4">
             <Label class="space-y-2">
                 <span>{m.provider()}</span>
                 <Select bind:value={formAssetClass.provider}
