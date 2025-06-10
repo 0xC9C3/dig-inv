@@ -14,6 +14,17 @@ jobs:
   test-frontend:
     runs-on: ubuntu-latest
     steps:
+      - name: Get npm cache directory
+        id: npm-cache-dir
+        shell: bash
+        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
+      - uses: actions/cache@v4
+        id: npm-cache
+        with:
+          path: ${{ steps.npm-cache-dir.outputs.dir }}
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
       - name: Checkout repository
         uses: actions/checkout@v4
       - name: Run tests
@@ -22,6 +33,7 @@ jobs:
         run: |
           cd frontend
           npm ci
+          npx playwright install-deps
           npx playwright install
           npm run test
   test-lint-backend:
